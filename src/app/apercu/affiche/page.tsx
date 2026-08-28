@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Branche, Cerise } from "@/components/Cerisier";
 import { books, collections, pages } from "@/lib/content";
 
 const index = collections
@@ -14,9 +15,18 @@ const couvertures = pages.nouveautes
 export default function VarianteAffiche() {
   return (
     <div className="bg-white text-ecorce-900">
-      {/* Aplat jaune, composition décalée */}
-      <section className="bg-cerise-400">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
+      {/* Aplat jaune, composition décalée.
+          La branche traverse tout le champ et sort par les deux bords : on n'en
+          voit qu'un fragment, comme depuis une fenêtre. Elle passe DERRIÈRE le
+          titre, elle ne l'illustre pas. */}
+      <section className="relative overflow-hidden bg-cerise-400">
+        {/* Elle entre par le bord droit, au-dessus du titre, et reste franche :
+            un aplat d'affiche ne supporte pas le filet timide.
+            Sur mobile il n'y a pas de place à droite du titre : elle passe en
+            bas, débordant largement du cadre pour rester coupée. */}
+        <Branche className="pointer-events-none absolute bottom-0 -left-8 h-[10rem] w-[34rem] text-ecorce-900 sm:hidden" />
+        <Branche className="pointer-events-none absolute -top-10 right-0 hidden h-[19rem] w-[38rem] -scale-x-100 text-ecorce-900 sm:block lg:h-[22rem] lg:w-[46rem]" />
+        <div className="relative mx-auto max-w-6xl px-4 pt-20 pb-44 sm:px-6 sm:py-24">
           <p className="text-[0.7rem] font-bold tracking-[0.24em] text-ecorce-900 uppercase">
             Société coopérative d’édition · Cuesmes · Belgique · Depuis 1985
           </p>
@@ -83,7 +93,13 @@ export default function VarianteAffiche() {
                 <span className="flex-1 text-xl leading-none font-black tracking-tight text-ecorce-900 uppercase group-hover:text-white sm:text-3xl">
                   {c.name}
                 </span>
-                <span className="shrink-0 text-sm font-bold text-ecorce-400 tabular-nums group-hover:text-cerise-400">
+                {/* Le fruit mûrit au survol : cercle ouvert, puis plein. */}
+                <Cerise className="h-5 w-5 shrink-0 text-ecorce-300 transition-colors group-hover:hidden" />
+                <Cerise
+                  filled
+                  className="hidden h-5 w-5 shrink-0 text-griotte-400 group-hover:block"
+                />
+                <span className="w-6 shrink-0 text-right text-sm font-bold text-ecorce-400 tabular-nums group-hover:text-cerise-400">
                   {c.count}
                 </span>
               </Link>

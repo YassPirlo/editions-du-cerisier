@@ -20,6 +20,14 @@
   --color-ecorce-800: #3a2e1e;
   --color-ecorce-900: #241d13;
 
+  /* Accent tertiaire : « l'acidité et le jetueux du fruit rouge » (Jean Delval).
+     Le jaune et le marron restent la base imposée ; ce rouge n'intervient que
+     sur les états vivants (survol, page courante) et sur la lettrine.
+     Supprimer ces trois lignes suffit à revenir à deux couleurs. */
+  --color-griotte-400: #c2183a;
+  --color-griotte-500: #a5112b;
+  --color-griotte-600: #7d0c20;
+
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
 }
@@ -118,7 +126,9 @@
   border-bottom: 1px dotted var(--color-ecorce-300);
 }
 
-/* Lettrine sur le premier paragraphe du texte de présentation */
+/* Lettrine sur le premier paragraphe du texte de présentation.
+   En rouge griotte : dans le livre imprimé, la lettrine est l'endroit
+   traditionnel de la seconde encre. */
 .lettrine > p:first-of-type::first-letter {
   float: left;
   margin: 0.28rem 0.55rem 0 0;
@@ -126,6 +136,7 @@
   font-size: 3.4em;
   line-height: 0.78;
   font-weight: 600;
+  color: var(--color-griotte-500);
 }
 
 .line-clamp-4-safe {

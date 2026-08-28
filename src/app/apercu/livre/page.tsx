@@ -1,7 +1,32 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Cerise } from "@/components/Cerisier";
 import { Prose } from "@/components/Prose";
 import { books, collections, pages } from "@/lib/content";
+
+/**
+ * Titre courant : le fruit tient lieu de pied-de-mouche. Dans un imprimé, le
+ * signe qui ouvre la section est aussi celui qui porte la seconde encre.
+ */
+function TitreCourant({
+  children,
+  droite,
+}: {
+  children: React.ReactNode;
+  droite?: React.ReactNode;
+}) {
+  return (
+    <div className="mb-8 flex items-baseline gap-3 border-b border-ecorce-200 pb-3">
+      <Cerise className="h-3.5 w-3.5 shrink-0 translate-y-1 text-griotte-500" />
+      <p className="text-[0.7rem] tracking-[0.28em] text-ecorce-500 uppercase">
+        {children}
+      </p>
+      {droite && (
+        <p className="ml-auto font-serif text-sm text-ecorce-500">{droite}</p>
+      )}
+    </div>
+  );
+}
 
 const presentation = pages.presentation[0];
 
@@ -19,6 +44,7 @@ export default function VarianteLivre() {
     <div className="bg-[#faf7f2] text-ecorce-900">
       {/* Page de titre */}
       <section className="mx-auto max-w-3xl px-6 pt-20 pb-24 text-center sm:pt-28">
+        <Cerise className="mx-auto mb-6 h-7 w-7 text-griotte-500" />
         <p className="text-[0.7rem] tracking-[0.35em] text-ecorce-500 uppercase">
           Éditions du Cerisier
         </p>
@@ -41,27 +67,22 @@ export default function VarianteLivre() {
       {/* Le texte d'origine est composé en lignes courtes manuelles : une seule
           colonne large les respecte, deux colonnes les réduisent à des moignons. */}
       <section className="mx-auto max-w-2xl px-6 pb-24">
-        <p className="mb-8 border-b border-ecorce-200 pb-3 text-[0.7rem] tracking-[0.28em] text-ecorce-500 uppercase">
-          Avant-propos
-        </p>
+        <TitreCourant>Avant-propos</TitreCourant>
         <Prose html={presentation.html} className="lettrine font-serif text-[1.0625rem] leading-[1.9]" />
       </section>
 
       {/* Index des collections, avec conduite pointillée */}
       <section className="mx-auto max-w-3xl px-6 pb-24">
-        <div className="mb-8 flex items-baseline justify-between border-b border-ecorce-200 pb-3">
-          <p className="text-[0.7rem] tracking-[0.28em] text-ecorce-500 uppercase">
-            Table des collections
-          </p>
-          <p className="font-serif text-sm text-ecorce-500">{books.length} titres</p>
-        </div>
+        <TitreCourant droite={`${books.length} titres`}>
+          Table des collections
+        </TitreCourant>
 
         <ol>
           {index.map((c, i) => (
             <li key={c.slug}>
               <Link
                 href={`/catalogue/${c.slug}`}
-                className="group flex items-baseline py-3.5 transition-colors hover:text-ecorce-500"
+                className="group flex items-baseline py-3.5 transition-colors hover:text-griotte-600"
               >
                 <span className="w-9 shrink-0 font-serif text-sm text-ecorce-400 tabular-nums">
                   {String(i + 1).padStart(2, "0")}
@@ -81,9 +102,7 @@ export default function VarianteLivre() {
 
       {/* Parutions : pas de cartes, seulement des couvertures posées sur la page */}
       <section className="mx-auto max-w-5xl px-6 pb-24">
-        <p className="mb-10 border-b border-ecorce-200 pb-3 text-[0.7rem] tracking-[0.28em] text-ecorce-500 uppercase">
-          Dernières parutions
-        </p>
+        <TitreCourant>Dernières parutions</TitreCourant>
         <ul className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-3">
           {parutions.map((b) => (
             <li key={`${b.collection}/${b.slug}`}>
