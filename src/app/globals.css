@@ -24,9 +24,33 @@
      Le jaune et le marron restent la base imposée ; ce rouge n'intervient que
      sur les états vivants (survol, page courante) et sur la lettrine.
      Supprimer ces trois lignes suffit à revenir à deux couleurs. */
+  /* Le 300 est le fruit pris par la lumière : sur le feuillage sombre, le
+     griotte-500 s'éteint et devient illisible. */
+  --color-griotte-300: #e4566b;
   --color-griotte-400: #c2183a;
   --color-griotte-500: #a5112b;
   --color-griotte-600: #7d0c20;
+
+  /* Le feuillage. Un cerisier n'est pas qu'un fruit : c'est d'abord un vert
+     sombre et mat, celui qui fait ressortir le rouge. Sert de fond, jamais
+     de texte. */
+  --color-feuille-50: #f3f7ee;
+  --color-feuille-100: #e3ecd8;
+  --color-feuille-200: #c8d9b6;
+  --color-feuille-300: #a3bb8c;
+  --color-feuille-400: #7c9a63;
+  --color-feuille-500: #5c7a46;
+  --color-feuille-600: #466034;
+  --color-feuille-700: #334926;
+  --color-feuille-800: #22331a;
+  --color-feuille-900: #17240f;
+
+  /* La fleur : le blanc rosé du cerisier en avril. C'est la couleur du texte
+     sur le feuillage — un blanc pur serait une lampe, celui-ci est un pétale. */
+  --color-fleur-50: #fdf8f5;
+  --color-fleur-100: #f7ece5;
+  --color-fleur-200: #ecd8ce;
+  --color-fleur-300: #ddbdb1;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
@@ -137,6 +161,114 @@
   line-height: 0.78;
   font-weight: 600;
   color: var(--color-griotte-500);
+}
+
+/* ------------------------------------------------------------------------
+   Le livre en volume.
+
+   Trois faces suffisent. On regarde le volume d'en haut et de la droite :
+   le dos, le plat inférieur et le mors ne seront jamais dans le champ.
+   En composer six reviendrait à en payer trois pour rien.
+
+   La couverture n'est pas une texture : elle porte le titre et l'emblème de
+   l'éditeur. Elle est donc posée en `object-contain` sur un fond papier,
+   jamais rognée pour remplir la face.
+   ------------------------------------------------------------------------ */
+.livre3d {
+  --ep: 1.75rem; /* épaisseur du volume */
+  position: relative;
+  perspective: 1700px;
+}
+
+.livre3d__ombre {
+  position: absolute;
+  right: -3%;
+  bottom: -3.5%;
+  left: 7%;
+  height: 10%;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.5);
+  filter: blur(17px);
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.livre3d__corps {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  transform: rotateX(4deg) rotateY(-26deg);
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Au survol, le volume se referme vers le lecteur : le geste de quelqu'un
+   qui redresse un livre sur la table pour en lire le titre. */
+.livre3d:hover .livre3d__corps,
+.livre3d:focus-within .livre3d__corps {
+  transform: rotateX(2deg) rotateY(-12deg);
+}
+.livre3d:hover .livre3d__ombre,
+.livre3d:focus-within .livre3d__ombre {
+  transform: scaleX(0.93);
+}
+
+.livre3d__plat,
+.livre3d__tranche,
+.livre3d__tete {
+  position: absolute;
+  inset: 0;
+}
+
+.livre3d__plat {
+  overflow: hidden;
+  background: #f6f1e8;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.1);
+  transform: translateZ(calc(var(--ep) / 2));
+}
+
+/* Le mors : l'ombre du pli côté dos, et l'arête lumineuse côté tranche.
+   Sans ces deux traits, la face reste une image plate posée en biais. */
+.livre3d__plat::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgb(0 0 0 / 0.24) 0%,
+    rgb(0 0 0 / 0.06) 3.5%,
+    rgb(0 0 0 / 0) 9%,
+    rgb(0 0 0 / 0) 87%,
+    rgb(255 255 255 / 0.22) 100%
+  );
+}
+
+/* La tranche : un empilement de feuilles, pas un aplat beige. */
+.livre3d__tranche {
+  right: auto;
+  left: 100%;
+  width: var(--ep);
+  background:
+    linear-gradient(to right, rgb(0 0 0 / 0) 0%, rgb(0 0 0 / 0.34) 100%),
+    repeating-linear-gradient(to right, #efe7d8 0 2px, #d5c8b1 2px 3px);
+  transform: translateZ(calc(var(--ep) / 2)) rotateY(90deg);
+  transform-origin: left center;
+}
+
+.livre3d__tete {
+  top: auto;
+  bottom: 100%;
+  height: var(--ep);
+  background:
+    linear-gradient(to bottom, rgb(0 0 0 / 0.28) 0%, rgb(0 0 0 / 0) 100%),
+    repeating-linear-gradient(to bottom, #efe7d8 0 2px, #d5c8b1 2px 3px);
+  transform: translateZ(calc(var(--ep) / 2)) rotateX(90deg);
+  transform-origin: center bottom;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .livre3d__corps,
+  .livre3d__ombre {
+    transition: none;
+  }
 }
 
 .line-clamp-4-safe {

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const VARIANTS = [
   { href: "/apercu/livre", label: "Maquette de livre" },
   { href: "/apercu/affiche", label: "Affiche" },
+  { href: "/apercu/verger", label: "Verger" },
 ];
 
 export function VariantSwitcher() {
