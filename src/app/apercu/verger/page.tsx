@@ -34,8 +34,17 @@ export default function VarianteVerger() {
             Sur mobile, une pleine largeur ne laisse voir qu'un tronçon rectiligne
             au milieu du tracé : on donne au SVG une largeur plus grande que le
             viewport pour qu'il retombe sur une portion qui porte des fruits. */}
-        <Branche className="pointer-events-none absolute -top-16 -left-8 h-[13rem] w-[34rem] text-feuille-700 sm:hidden" />
-        <Branche className="pointer-events-none absolute -top-24 left-0 hidden h-[22rem] w-full text-feuille-700 sm:block" />
+        {/* La dérive est portée par un conteneur, pas par le SVG : le
+            `transform` de l'animation écraserait celui des classes de
+            positionnement. */}
+        <div className="branche-derive pointer-events-none absolute -top-16 -left-8 h-[13rem] w-[34rem] sm:hidden">
+          <Branche className="h-full w-full text-feuille-700" />
+        </div>
+        {/* 110 % de large : la branche doit déborder des deux côtés en fin de
+            dérive, sinon elle découvre son bord droit en glissant. */}
+        <div className="branche-derive pointer-events-none absolute -top-24 left-0 hidden h-[22rem] w-[110%] sm:block">
+          <Branche className="h-full w-full text-feuille-700" />
+        </div>
         <div className="relative mx-auto grid max-w-6xl gap-16 px-4 pt-28 pb-24 sm:px-6 lg:grid-cols-12 lg:gap-10 lg:pt-40 lg:pb-32">
           <div className="lg:col-span-6 lg:pt-6">
             <p className="flex items-center gap-3 text-[0.7rem] tracking-[0.28em] text-feuille-300 uppercase">

@@ -24,8 +24,16 @@ export default function VarianteAffiche() {
             un aplat d'affiche ne supporte pas le filet timide.
             Sur mobile il n'y a pas de place à droite du titre : elle passe en
             bas, débordant largement du cadre pour rester coupée. */}
-        <Branche className="pointer-events-none absolute bottom-0 -left-8 h-[10rem] w-[34rem] text-ecorce-900 sm:hidden" />
-        <Branche className="pointer-events-none absolute -top-10 right-0 hidden h-[19rem] w-[38rem] -scale-x-100 text-ecorce-900 sm:block lg:h-[22rem] lg:w-[46rem]" />
+        {/* La dérive est portée par un conteneur : sur la version bureau, le
+            SVG utilise déjà son `transform` pour le miroir. */}
+        <div className="branche-derive pointer-events-none absolute bottom-0 -left-8 h-[10rem] w-[34rem] sm:hidden">
+          <Branche className="h-full w-full text-ecorce-900" />
+        </div>
+        {/* Décalée hors cadre à droite : la dérive la ramène vers le bord au
+            lieu de découvrir le fond derrière elle. */}
+        <div className="branche-derive pointer-events-none absolute -top-10 -right-16 hidden h-[19rem] w-[38rem] sm:block lg:h-[22rem] lg:w-[46rem]">
+          <Branche className="h-full w-full -scale-x-100 text-ecorce-900" />
+        </div>
         <div className="relative mx-auto max-w-6xl px-4 pt-20 pb-44 sm:px-6 sm:py-24">
           <p className="text-[0.7rem] font-bold tracking-[0.24em] text-ecorce-900 uppercase">
             Société coopérative d’édition · Cuesmes · Belgique · Depuis 1985

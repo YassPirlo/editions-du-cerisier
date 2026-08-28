@@ -164,6 +164,40 @@
 }
 
 /* ------------------------------------------------------------------------
+   La dérive de la branche.
+
+   Au défilement, la branche glisse latéralement pendant que la page monte :
+   elle est plus proche du lecteur que le texte, donc elle bouge autrement.
+   C'est le parallaxe d'une branche vue depuis une fenêtre — le motif du
+   composant `Branche` depuis le début.
+
+   Piloté par `animation-timeline: scroll()` : pas une seule ligne de JS, pas
+   d'écouteur de scroll, et le navigateur anime hors du fil principal. Les
+   navigateurs qui ne connaissent pas encore les timelines de défilement
+   affichent la branche fixe — c'est l'état actuel, pas une dégradation.
+   ------------------------------------------------------------------------ */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .branche-derive {
+      animation: branche-derive linear both;
+      animation-timeline: scroll(root block);
+      /* Toute la dérive se joue sur le premier écran : au-delà, la branche
+         est sortie du champ et continuer serait animer dans le vide. */
+      animation-range: 0 100vh;
+    }
+  }
+}
+
+@keyframes branche-derive {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-9%, 2.75rem, 0);
+  }
+}
+
+/* ------------------------------------------------------------------------
    Le livre en volume.
 
    Trois faces suffisent. On regarde le volume d'en haut et de la droite :
