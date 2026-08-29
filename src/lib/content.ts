@@ -1,7 +1,7 @@
 import booksData from "@/data/books.json";
 import collectionsData from "@/data/collections.json";
 import pagesData from "@/data/pages.json";
-import { nettoieIsbn, repareAncresVides } from "./reparation";
+import { nettoieIsbn, relieCliquezIci, repareAncresVides } from "./reparation";
 
 export type Book = {
   slug: string;
@@ -45,7 +45,7 @@ export const pages: Record<string, Entry[]> = Object.fromEntries(
   Object.entries(pagesData as Record<string, Entry[]>).map(
     ([rubrique, entries]): [string, Entry[]] => [
       rubrique,
-      entries.map((e) => ({ ...e, html: repareAncresVides(e.html) })),
+      entries.map((e) => ({ ...e, html: relieCliquezIci(repareAncresVides(e.html)) })),
     ],
   ),
 );

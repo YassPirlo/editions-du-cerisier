@@ -63,3 +63,14 @@ export function nettoieIsbn(isbn: string): string {
   }
   return isbn;
 }
+
+/* La page contact promet « Pour nous envoyer un manuscrit ? Cliquez ici » :
+   sous SPIP, « ici » menait à la rubrique manuscrit ; l'extraction n'a gardé
+   que le gras. La chaîne nue n'apparaît qu'à cet endroit du corpus (l'autre
+   « cliquez ici » de la page, celui du plan d'accès, a conservé son lien). */
+export function relieCliquezIci(html: string): string {
+  return html.replace(
+    "Cliquez <strong>ici</strong>",
+    'Cliquez <a href="/envoyer-un-manuscrit"><strong>ici</strong></a>',
+  );
+}
