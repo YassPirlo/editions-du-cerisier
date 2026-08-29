@@ -1,6 +1,7 @@
 import booksData from "@/data/books.json";
 import collectionsData from "@/data/collections.json";
 import pagesData from "@/data/pages.json";
+import { repareAncresVides } from "./reparation";
 
 export type Book = {
   slug: string;
@@ -32,9 +33,21 @@ export type Entry = {
   links: string[];
 };
 
-export const books = booksData as Book[];
+/* Les artefacts d'extraction se réparent ici, au chargement — jamais dans
+   les JSON, qui restent la copie fidèle du site d'origine. */
+export const books = (booksData as Book[]).map((b) => ({
+  ...b,
+  html: repareAncresVides(b.html),
+}));
 export const collections = collectionsData as Collection[];
-export const pages = pagesData as Record<string, Entry[]>;
+export const pages = Object.fromEntries(
+  Object.entries(pagesData as Record<string, Entry[]>).map(
+    ([rubrique, entries]): [string, Entry[]] => [
+      rubrique,
+      entries.map((e) => ({ ...e, html: repareAncresVides(e.html) })),
+    ],
+  ),
+);
 
 export const getCollection = (slug: string) =>
   collections.find((c) => c.slug === slug);

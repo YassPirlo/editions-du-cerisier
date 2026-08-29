@@ -142,31 +142,11 @@ export default async function BookPage({
             {b.title}
           </h1>
 
+          {/* Les liens de presse vivent dans le texte lui-même depuis que
+              l'extraction est réparée : plus besoin d'un bloc d'URL brutes. */}
           <div className="mt-8">
             <Prose html={b.html} />
           </div>
-
-          {b.links.length > 0 && (
-            <div className="mt-10 rounded-xl border border-ecorce-100 bg-ecorce-50 p-5">
-              <h2 className="text-xs font-semibold tracking-[0.12em] text-ecorce-400 uppercase">
-                En savoir plus
-              </h2>
-              <ul className="mt-3 space-y-2">
-                {b.links.map((l) => (
-                  <li key={l}>
-                    <a
-                      href={l}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm break-all text-ecorce-600 underline decoration-cerise-400 decoration-2 underline-offset-2 hover:text-ecorce-900"
-                    >
-                      {l}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
         </div>
       </div>
 

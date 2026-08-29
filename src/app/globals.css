@@ -105,6 +105,14 @@
   color: var(--color-ecorce-900);
   text-decoration-color: var(--color-cerise-500);
 }
+/* Les liens de presse récupérés de SPIP arrivent hors paragraphe, en file
+   indienne à la fin des fiches. Chacun sur sa ligne : c'est la liste de
+   mentions qu'ils formaient sur l'ancien site, pas une phrase. */
+.prose-cerisier > a {
+  display: block;
+  width: fit-content;
+  margin-top: 0.65rem;
+}
 .prose-cerisier ul,
 .prose-cerisier ol {
   margin-bottom: 1rem;
