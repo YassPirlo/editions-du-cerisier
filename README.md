@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Éditions du Cerisier — refonte du site
 
-## Getting Started
+Refonte du site des [Éditions du Cerisier](https://editions-du-cerisier.be),
+maison d'édition coopérative fondée en 1985 à Cuesmes (Mons). Le site
+d'origine, sous SPIP, est aujourd'hui hors ligne : l'extraction de son contenu
+datée du 19 août 2026 (`src/data/`) sert de copie de référence.
 
-First, run the development server:
+## Principes
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Les textes existants sont repris mot pour mot.** On ne réécrit rien, on ne
+  supprime rien : les neuf collections et les rubriques d'origine sont
+  préservées telles quelles.
+- **Les données extraites ne se corrigent pas sur place.** Les JSON restent la
+  copie fidèle du site d'origine ; les artefacts d'extraction (liens vidés de
+  leur libellé, ISBN abîmés) se réparent à la lecture, dans
+  `src/lib/reparation.ts`, où chaque correction est justifiée.
+- **Pas d'e-commerce.** Les commandes passent par courriel, téléphone ou
+  courrier, comme avant.
+- Couleurs de la maison : le jaune `#ffc107` et le brun `#8b6f47` du bandeau
+  historique.
+
+## Stack
+
+Next.js (App Router), React, TypeScript, Tailwind CSS v4 — les jetons de
+couleur vivent dans le bloc `@theme` de `src/app/globals.css`, il n'y a pas de
+`tailwind.config.js`. Aucune dépendance de production en dehors de
+`next`/`react`/`react-dom`, volontairement. Le site est entièrement statique :
+283 pages générées au build.
+
+## Arborescence
+
+```
+src/data/        extraction SPIP figée : 253 livres, 9 collections, 13 rubriques
+public/covers/   279 images (couvertures et visuels d'articles)
+public/documents/  le catalogue PDF
+src/lib/         lecture des données (content.ts) et réparations (reparation.ts)
+src/app/         les pages ; /apercu/* : maquettes d'accueil non publiées
+src/components/  dont Cerisier.tsx (vocabulaire graphique) et Livre3D.tsx
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Commandes
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm ci         # installer
+npm run dev    # développer sur http://localhost:3000
+npm run build  # générer le site statique
+npm run start  # servir le build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Reste à faire
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Déploiement, interface d'édition pour la maison (le contenu est figé en JSON
+pour l'instant), vrai logo vectoriel, en-têtes de sécurité, statistiques sans
+cookies.
