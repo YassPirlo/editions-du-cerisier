@@ -27,3 +27,39 @@ export function repareAncresVides(html: string): string {
     .replace(ANCRE_VIDE_PUIS_LIBELLE, "<a $1><strong>$2</strong></a>")
     .replace(ANCRE_ENCORE_VIDE, '<a $1href="$2"$3>$2</a>');
 }
+
+/* Deux dégâts distincts sur les ISBN, tous deux vérifiables par la clé de
+   contrôle — on ne corrige que ce que l'arithmétique confirme :
+
+   – onze ISBN-13 ont avalé le nombre voisin de la fiche, prix ou pagination
+     (« 9782872672455-13 ») : on ne garde les treize chiffres que si leur clé
+     est valide. Elle l'est pour les onze.
+
+   – treize ISBN-10 d'avant 2007 ont perdu leur dernier caractère… parce que
+     c'était un X : l'extracteur ne retenait que chiffres et tirets. La clé
+     recalculée (modulo 11) retombe sur X pour chacun des treize, ce qui
+     confirme le diagnostic.
+
+   Les deux ISBN-10 du catalogue dont la clé imprimée est fausse à la source
+   restent tels quels : ce site recopie, il n'invente pas. */
+const cleIsbn13Valide = (treize: string) => {
+  let somme = 0;
+  for (let i = 0; i < 12; i++) somme += Number(treize[i]) * (i % 2 ? 3 : 1);
+  return (10 - (somme % 10)) % 10 === Number(treize[12]);
+};
+
+const cleIsbn10 = (neuf: string) => {
+  let somme = 0;
+  for (let i = 0; i < 9; i++) somme += Number(neuf[i]) * (10 - i);
+  const cle = (11 - (somme % 11)) % 11;
+  return cle === 10 ? "X" : String(cle);
+};
+
+export function nettoieIsbn(isbn: string): string {
+  const colle = isbn.match(/^(\d{13})-\d+$/);
+  if (colle && cleIsbn13Valide(colle[1])) return colle[1];
+  if (/^\d-\d{5}-\d{3}$/.test(isbn)) {
+    return `${isbn}-${cleIsbn10(isbn.replace(/-/g, ""))}`;
+  }
+  return isbn;
+}
