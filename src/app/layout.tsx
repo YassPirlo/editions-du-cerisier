@@ -5,7 +5,9 @@ import { Footer } from "@/components/Footer";
 import "./globals.css";
 
 const inter = Inter({
-  subsets: ["latin"],
+  /* latin-ext : le ı sans point du mot « Cerısıer », dont les cerises font
+     les points (voir .i-cerise). */
+  subsets: ["latin", "latin-ext"],
   variable: "--font-inter",
   display: "swap",
 });
@@ -13,7 +15,9 @@ const inter = Inter({
 /* Les axes SOFT et WONK de Fraunces sont chargés pour les grands titres
    (.titre-verger) : le trait d'enseigne peinte à la main. Voir globals.css. */
 const fraunces = Fraunces({
-  subsets: ["latin"],
+  /* latin-ext : le ı sans point du mot « Cerısıer », dont les cerises font
+     les points (voir .i-cerise). */
+  subsets: ["latin", "latin-ext"],
   variable: "--font-fraunces",
   display: "swap",
   axes: ["SOFT", "WONK", "opsz"],

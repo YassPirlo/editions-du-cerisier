@@ -125,6 +125,38 @@ export function Branche({ className = "" }: { className?: string }) {
   );
 }
 
+/**
+ * Le fleuron : l'ornement qu'un imprimeur pose entre deux textes — ici un
+ * rameau court portant sa paire de fruits. Centré, discret, il signe la fin
+ * d'un passage comme au colophon.
+ */
+export function Fleuron({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 96 34" fill="none" className={className} aria-hidden="true">
+      <path
+        d="M4 14 C28 8 68 8 92 14"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+      />
+      <path
+        d="M48 11 q-1.5 4 -4 7 M48 11 q2.5 4 5 6.5"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <circle cx="41" cy="24" r="5.4" stroke="currentColor" strokeWidth="2.4" />
+      <circle
+        cx="56"
+        cy="23.4"
+        r="4.6"
+        fill="var(--color-griotte-500)"
+        stroke="none"
+      />
+    </svg>
+  );
+}
+
 /** Un pétale de fleur de cerisier : celui d'avril, qui tombe au moindre vent. */
 export function Petale({ className = "" }: { className?: string }) {
   return (

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Fleuron } from "@/components/Cerisier";
 import { epaisseurDe, Livre3D } from "@/components/Livre3D";
 import { RackCouvertures } from "@/components/RackCouvertures";
 import { Prose } from "@/components/Prose";
@@ -151,6 +152,8 @@ export default async function BookPage({
           <div className="entree tempo-2 mt-8">
             <Prose html={b.html} />
           </div>
+          {/* Le fleuron referme la fiche, comme en fin de chapitre. */}
+          <Fleuron className="mt-14 h-8 w-24 text-ecorce-400" />
         </div>
       </div>
 

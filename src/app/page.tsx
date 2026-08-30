@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Cerise, Petale } from "@/components/Cerisier";
+import { Branche, Cerise, Fleuron, Petale } from "@/components/Cerisier";
 import { FluxCouvertures } from "@/components/FluxCouvertures";
 import { LampeDeLecture } from "@/components/LampeDeLecture";
 import { epaisseurDe, Livre3D } from "@/components/Livre3D";
@@ -79,6 +79,16 @@ export default function Home() {
             aria-hidden="true"
             className="absolute inset-0 z-[4] bg-[radial-gradient(ellipse_55%_60%_at_50%_46%,rgba(23,16,8,0.9)_0%,rgba(23,16,8,0.45)_55%,transparent_78%)]"
           />
+          {/* L'enseigne veille sur le couloir : la branche se trace à l'or
+              au-dessus des couvertures, et dérive au défilement. */}
+          <div
+            aria-hidden="true"
+            className="entree-opacite tempo-1 pointer-events-none absolute inset-0 z-[5] text-cerise-600/60"
+          >
+            <div className="branche-derive absolute -top-10 left-[-8%] h-[12rem] w-[135%] sm:-top-16 sm:h-[18rem]">
+              <Branche className="branche-trace h-full w-full" />
+            </div>
+          </div>
           {/* Les pétales d'avril. */}
           <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-[6]">
             {petales.map((p, i) => (
@@ -116,7 +126,21 @@ export default function Home() {
                   className="ligne entree tempo-2"
                   style={{ "--souleve": "1.15em" } as React.CSSProperties}
                 >
-                  Éditions du Cerisier
+                  {/* Comme sur l'enseigne historique : les cerises font les
+                      points des deux i de « Cerisier ». Lettres sans point
+                      (ı) pour l'œil, mot entier pour les lecteurs d'écran. */}
+                  <span aria-hidden="true">
+                    Éditions du Cer
+                    <span className="i-cerise">
+                      ı<Cerise filled className="text-griotte-300" />
+                    </span>
+                    s
+                    <span className="i-cerise">
+                      ı<Cerise filled className="text-griotte-300" />
+                    </span>
+                    er
+                  </span>
+                  <span className="sr-only">Éditions du Cerisier</span>
                 </span>
               </span>
             </h1>
@@ -156,6 +180,8 @@ export default function Home() {
             html={presentation.html}
             className="lettrine mt-9 font-serif text-[1.0625rem] leading-[1.9]"
           />
+          {/* Le fleuron referme l'avant-propos, comme en fin de chapitre. */}
+          <Fleuron className="mx-auto mt-14 h-9 w-28 text-ecorce-400" />
         </div>
       </section>
 

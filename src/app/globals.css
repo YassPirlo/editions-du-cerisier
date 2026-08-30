@@ -81,6 +81,21 @@
   }
 }
 
+/* Les points sur les i : sur le mot « Cerisier », comme sur l'enseigne
+   historique de la maison, les deux i portent leurs cerises — lettre sans
+   point (ı) et fruit posé au-dessus. */
+.i-cerise {
+  position: relative;
+}
+.i-cerise > svg {
+  position: absolute;
+  top: -0.06em;
+  left: 54%;
+  width: 0.4em;
+  height: 0.4em;
+  transform: translateX(-50%);
+}
+
 /* Les grands titres prennent les axes SOFT et WONK de Fraunces : le dessin
    d'une enseigne peinte, un peu penché, un peu rond. Réservé aux titres —
    en corps de texte, ce serait une afféterie. */
@@ -137,8 +152,10 @@
   margin-bottom: 1rem;
   padding-left: 1.25rem;
 }
+/* Les puces sont des cerises : une par entrée de liste, à l'encre griotte. */
 .prose-cerisier ul {
   list-style: disc;
+  list-style-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' width='11' height='11'%3E%3Cpath d='M8.6 1.2C7 3 6.1 4.8 5.7 6.6' stroke='%23a5112b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='5.2' cy='9.6' r='3.4' fill='%23a5112b'/%3E%3C/svg%3E");
 }
 .prose-cerisier ol {
   list-style: decimal;
