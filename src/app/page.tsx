@@ -1,13 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Petale } from "@/components/Cerisier";
+import { Cerise, Petale } from "@/components/Cerisier";
 import { FluxCouvertures } from "@/components/FluxCouvertures";
+import { LampeDeLecture } from "@/components/LampeDeLecture";
 import { epaisseurDe, Livre3D } from "@/components/Livre3D";
 import { Prose } from "@/components/Prose";
 import { type Book, books, collections, excerpt, pages } from "@/lib/content";
 
 const presentation = pages.presentation[0];
 const alaune = pages.alaune[0];
+const presse = pages.presse;
 
 /* Les parutions récentes : les entrées « Nouveautés » raccrochées à leur
    fiche par la couverture. Ici la couverture n'est pas un ornement — sans
@@ -199,7 +201,7 @@ export default function Home() {
 
       {/* Le tronc : la citation, reprise mot pour mot du site. Elle se pose
           en scène, puis la lumière la traverse au fil de la lecture. */}
-      <section className="overflow-hidden bg-ecorce-900">
+      <LampeDeLecture className="bg-ecorce-900">
         <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
           <div className="pousse-scene">
             <blockquote className="balayage-lumiere titre-verger max-w-4xl text-4xl leading-[1.08] text-balance text-fleur-50 sm:text-6xl">
@@ -213,7 +215,7 @@ export default function Home() {
           </p>
           <p className="pousse mt-6 font-serif text-fleur-200 italic">Jean Delval</p>
         </div>
-      </section>
+      </LampeDeLecture>
 
       {/* La table des collections : un index de catalogue imprimé — le nom,
           la conduite pointillée, le nombre de titres. Le chiffre est une
@@ -293,7 +295,7 @@ export default function Home() {
       {/* La récolte : les dernières parutions. Chaque volume se redresse en
           entrant dans le champ — le geste du libraire qui met un livre
           debout (.poser). */}
-      <section className="border-y border-ecorce-800 bg-ecorce-950 text-fleur-100">
+      <LampeDeLecture className="border-y border-ecorce-800 bg-ecorce-950 text-fleur-100">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
           <h2 className="pousse titre-verger text-2xl text-fleur-50 sm:text-3xl">
             Vient de paraître
@@ -327,6 +329,38 @@ export default function Home() {
               Toutes les nouveautés →
             </Link>
           </div>
+        </div>
+      </LampeDeLecture>
+
+      {/* Ce qu'en dit la presse, au long cours : quatre voix passent
+          lentement — mot pour mot, sources à l'appui. */}
+      <section
+        aria-label="Ce qu’en dit la presse"
+        className="rayon-fenetre border-b border-ecorce-200 bg-fleur-100/70 py-10"
+      >
+        <div className="rayon-defilant rayon-lent flex w-max items-center">
+          {[0, 1].map((copie) => (
+            <ul
+              key={copie}
+              aria-hidden={copie === 1 || undefined}
+              className={`flex items-center ${copie === 1 ? "rayon-copie" : ""}`}
+            >
+              {presse.map((e, i) => (
+                <li key={`${copie}-${i}`} className="flex max-w-2xl items-baseline gap-5 pr-24">
+                  <Cerise
+                    filled
+                    className="h-3 w-3 shrink-0 translate-y-0.5 text-griotte-500"
+                  />
+                  <p className="font-serif text-lg leading-snug text-ecorce-800 italic">
+                    {excerpt(e.text, 150)}
+                    <span className="ml-3 text-sm not-italic tracking-wide text-ecorce-500">
+                      — {e.title}
+                    </span>
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ))}
         </div>
       </section>
 

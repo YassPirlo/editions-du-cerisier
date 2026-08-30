@@ -474,6 +474,32 @@
   display: block;
 }
 
+/* La frise lente : la même marche que le rayonnage, au pas des citations. */
+@media (prefers-reduced-motion: no-preference) {
+  .rayon-defilant.rayon-lent {
+    animation-duration: 120s;
+  }
+}
+
+/* ------------------------------------------------------------------------
+   LE RACK. Un coverflow au défilement natif pour les fiches : chaque
+   couverture pivote selon sa position dans la fenêtre (view(inline)) —
+   molette, doigt ou trackpad font tout, aucun code de drag. Inspiré du
+   Coverflow Carousel de ruixen.ui (21st.dev), réécrit en CSS pur. Sans
+   timelines de défilement, le rack reste une étagère plate qui défile.
+   ------------------------------------------------------------------------ */
+/* La rotation, elle, est attachée par l'API Web Animations dans
+   RackCouvertures.tsx : Chromium laisse inerte une timeline view() CSS dont
+   le défilement est horizontal et imbriqué. */
+.rack {
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.rack > * {
+  scroll-snap-align: center;
+}
+
 /* ------------------------------------------------------------------------
    LA PILE. Trois couvertures en main de cartes au bout de chaque ligne de
    l'index des collections ; le survol de la ligne ouvre l'éventail. C'est

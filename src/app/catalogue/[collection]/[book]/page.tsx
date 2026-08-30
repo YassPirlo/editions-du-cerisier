@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BookCard } from "@/components/BookCard";
 import { epaisseurDe, Livre3D } from "@/components/Livre3D";
+import { RackCouvertures } from "@/components/RackCouvertures";
 import { Prose } from "@/components/Prose";
 import { books, booksOf, excerpt, getBook, getCollection } from "@/lib/content";
 import { CONTACT } from "@/lib/nav";
@@ -40,9 +40,11 @@ export default async function BookPage({
   if (!b) notFound();
 
   const c = getCollection(b.collection);
+  /* Le rack du bas de fiche : jusqu'à douze voisins de rayonnage — avec
+     couverture, puisqu'ici on les fait pivoter comme des disques. */
   const voisins = booksOf(b.collection)
-    .filter((x) => x.slug !== b.slug)
-    .slice(0, 4);
+    .filter((x) => x.slug !== b.slug && x.cover)
+    .slice(0, 12);
 
   const specs = [
     b.pages && { label: "Pages", value: `${b.pages} p.` },
@@ -166,13 +168,13 @@ export default async function BookPage({
               {c.name} →
             </Link>
           </div>
-          <ul className="mt-10 grid grid-cols-2 gap-x-6 gap-y-14 sm:gap-x-8 md:grid-cols-3 lg:grid-cols-4">
-            {voisins.map((x) => (
-              <li key={x.slug} className="pousse">
-                <BookCard book={x} />
-              </li>
-            ))}
-          </ul>
+          <RackCouvertures
+            items={voisins.map((x) => ({
+              href: `/catalogue/${x.collection}/${x.slug}`,
+              src: x.cover as string,
+              titre: x.title,
+            }))}
+          />
         </section>
       )}
     </article>
