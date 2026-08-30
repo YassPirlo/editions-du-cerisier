@@ -474,6 +474,38 @@
   display: block;
 }
 
+/* ------------------------------------------------------------------------
+   LA PILE. Trois couvertures en main de cartes au bout de chaque ligne de
+   l'index des collections ; le survol de la ligne ouvre l'éventail. C'est
+   le libraire qui vous tend trois titres de la collection.
+   ------------------------------------------------------------------------ */
+.pile-couvertures > * {
+  transition:
+    transform 0.38s var(--ease-verger),
+    box-shadow 0.38s ease;
+}
+.pile-couvertures > :nth-child(1) {
+  transform: translateX(-0.65rem) rotate(-8deg);
+}
+.pile-couvertures > :nth-child(2) {
+  z-index: 1;
+}
+.pile-couvertures > :nth-child(3) {
+  transform: translateX(0.65rem) rotate(8deg);
+}
+.group:hover .pile-couvertures > :nth-child(1),
+.group:focus-visible .pile-couvertures > :nth-child(1) {
+  transform: translateX(-1.6rem) translateY(-0.2rem) rotate(-14deg);
+}
+.group:hover .pile-couvertures > :nth-child(2),
+.group:focus-visible .pile-couvertures > :nth-child(2) {
+  transform: translateY(-0.35rem) scale(1.09);
+}
+.group:hover .pile-couvertures > :nth-child(3),
+.group:focus-visible .pile-couvertures > :nth-child(3) {
+  transform: translateX(1.6rem) translateY(-0.2rem) rotate(14deg);
+}
+
 /* Le grain du papier : un voile de bruit à peine perceptible sur toute la
    page — c'est lui qui sépare une page imprimée d'un aplat d'écran. */
 .grain {

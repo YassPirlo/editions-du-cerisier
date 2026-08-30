@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Cerise, Petale } from "@/components/Cerisier";
+import { Petale } from "@/components/Cerisier";
 import { FluxCouvertures } from "@/components/FluxCouvertures";
 import { epaisseurDe, Livre3D } from "@/components/Livre3D";
 import { Prose } from "@/components/Prose";
@@ -19,7 +19,15 @@ const parutions = pages.nouveautes
 const recolte = parutions.slice(0, 8);
 
 const index = collections
-  .map((c) => ({ ...c, count: books.filter((b) => b.collection === c.slug).length }))
+  .map((c) => {
+    const siens = books.filter((b) => b.collection === c.slug);
+    return {
+      ...c,
+      count: siens.length,
+      /* Trois couvertures en main de cartes au bout de la ligne. */
+      apercus: siens.filter((b) => b.cover).slice(0, 3),
+    };
+  })
   .filter((c) => c.count > 0);
 
 /* Deux prélèvements réguliers dans tout le catalogue : douze couvertures
@@ -221,23 +229,50 @@ export default function Home() {
               {books.length} titres
             </p>
           </div>
+          {/* Chaque ligne est une vitrine : le nom, une ligne de la ligne
+              éditoriale, l'éventail de trois couvertures qui s'ouvre au
+              survol, et le nombre de titres en folio. */}
           <ol className="mt-10 border-t border-ecorce-200">
             {index.map((c) => (
               <li key={c.slug} className="border-b border-ecorce-200">
                 <Link
                   href={`/catalogue/${c.slug}`}
-                  className="group flex items-baseline gap-4 py-5 focus-visible:outline-2 focus-visible:outline-cerise-400 sm:gap-6"
+                  className="group -mx-4 flex items-center gap-5 px-4 py-4 transition-colors hover:bg-cerise-50 focus-visible:outline-2 focus-visible:outline-cerise-400 sm:gap-8 sm:py-5"
                 >
-                  <span className="font-serif text-xl text-ecorce-900 transition-colors group-hover:text-griotte-500 sm:text-2xl">
-                    {c.name}
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-serif text-2xl leading-snug text-ecorce-900 transition-colors group-hover:text-griotte-500 sm:text-[1.75rem]">
+                      {c.name}
+                    </span>
+                    {c.descriptionText && (
+                      <span className="mt-1.5 hidden max-w-xl truncate text-sm text-ecorce-500 md:block">
+                        {excerpt(c.descriptionText, 110)}
+                      </span>
+                    )}
                   </span>
-                  <span className="leader" aria-hidden="true" />
-                  <Cerise className="h-4 w-4 shrink-0 translate-y-0.5 text-ecorce-300 group-hover:hidden" />
-                  <Cerise
-                    filled
-                    className="hidden h-4 w-4 shrink-0 translate-y-0.5 text-griotte-500 group-hover:block"
-                  />
-                  <span className="w-8 shrink-0 text-right font-serif text-sm text-ecorce-500 tabular-nums">
+
+                  {c.apercus.length > 0 && (
+                    <span
+                      className="pile-couvertures relative hidden h-16 w-28 shrink-0 items-center justify-center sm:flex"
+                      aria-hidden="true"
+                    >
+                      {c.apercus.map((b) => (
+                        <span
+                          key={b.slug}
+                          className="absolute h-16 w-11 overflow-hidden rounded-[2px] bg-fleur-100 shadow-md ring-1 ring-ecorce-900/15"
+                        >
+                          <Image
+                            src={b.cover as string}
+                            alt=""
+                            fill
+                            sizes="44px"
+                            className="object-cover"
+                          />
+                        </span>
+                      ))}
+                    </span>
+                  )}
+
+                  <span className="w-10 shrink-0 text-right font-serif text-base text-ecorce-600 tabular-nums">
                     {c.count}
                   </span>
                 </Link>
