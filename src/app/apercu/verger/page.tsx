@@ -129,7 +129,9 @@ export default function VarianteVerger() {
             Le socle des Editions, constituées en société coopérative, c’est leur
             indépendance matérielle et intellectuelle.
           </p>
-          <p className="mt-6 text-[0.7rem] tracking-[0.22em] text-griotte-300 uppercase">
+          {/* En fleur, pas en griotte : le rose pâle tient le contraste AA
+              sur le feuillage sombre, le rouge n'y arrivait pas (~3,7:1). */}
+          <p className="mt-6 text-[0.7rem] tracking-[0.22em] text-fleur-200 uppercase">
             Jean Delval
           </p>
         </div>

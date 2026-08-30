@@ -10,10 +10,13 @@ const inter = Inter({
   display: "swap",
 });
 
+/* Les axes SOFT et WONK de Fraunces sont chargés pour les grands titres
+   (.titre-verger) : le trait d'enseigne peinte à la main. Voir globals.css. */
 const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-fraunces",
   display: "swap",
+  axes: ["SOFT", "WONK", "opsz"],
 });
 
 export const metadata: Metadata = {

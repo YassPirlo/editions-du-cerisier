@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
+import { epaisseurDe, Livre3D } from "@/components/Livre3D";
 import { PageHeader } from "@/components/PageHeader";
 import { Prose } from "@/components/Prose";
 import { books, collections } from "@/lib/content";
@@ -29,7 +29,7 @@ export default function CataloguePage() {
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
         <a
           href="/documents/cerisier_catalogue_2021.pdf"
-          className="inline-flex items-center gap-2.5 rounded-lg border border-ecorce-200 bg-white px-5 py-3 text-sm font-semibold text-ecorce-700 transition-colors hover:border-cerise-400 hover:bg-cerise-50"
+          className="pousse inline-flex items-center gap-2.5 border border-ecorce-300 bg-white px-5 py-3 text-sm font-semibold text-ecorce-700 transition-colors hover:border-cerise-400 hover:bg-cerise-50 focus-visible:outline-2 focus-visible:outline-cerise-400"
         >
           <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" aria-hidden="true">
             <path
@@ -43,57 +43,53 @@ export default function CataloguePage() {
           Télécharger le catalogue en PDF
         </a>
 
-        <ul className="mt-12 space-y-14">
+        {/* Chaque collection est une table de libraire : l'index en tête
+            (nom … nombre de titres, en conduite pointillée), la ligne
+            éditoriale de la collection, puis quelques volumes posés. */}
+        <ul className="mt-14 space-y-20">
           {items.map((c) => (
-            <li key={c.slug}>
-              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-b border-ecorce-100 pb-4">
-                <h2 className="font-serif text-2xl font-semibold text-ecorce-900">
-                  <Link
-                    href={`/catalogue/${c.slug}`}
-                    className="transition-colors hover:text-ecorce-600"
-                  >
-                    {c.name}
-                  </Link>
+            <li key={c.slug} className="pousse">
+              <Link
+                href={`/catalogue/${c.slug}`}
+                className="group flex items-baseline gap-4 border-b border-ecorce-300 pb-4 focus-visible:outline-2 focus-visible:outline-cerise-400 sm:gap-6"
+              >
+                <h2 className="titre-verger text-2xl text-ecorce-900 transition-colors group-hover:text-griotte-500 sm:text-3xl">
+                  {c.name}
                 </h2>
-                <span className="text-sm text-ecorce-400">
+                <span className="leader" aria-hidden="true" />
+                <span className="shrink-0 font-serif text-sm text-ecorce-500 tabular-nums">
                   {c.livres.length} {c.livres.length > 1 ? "titres" : "titre"}
                 </span>
-              </div>
+              </Link>
 
               {c.descriptionHtml && (
-                <Prose html={c.descriptionHtml} className="mt-5 max-w-3xl" />
+                <Prose html={c.descriptionHtml} className="mt-6 max-w-3xl" />
               )}
 
-              <ul className="mt-6 flex flex-wrap gap-3">
-                {c.livres.slice(0, 7).map((b) => (
-                  <li key={b.slug}>
-                    <Link
-                      href={`/catalogue/${c.slug}/${b.slug}`}
-                      title={b.title}
-                      className="group block"
-                    >
-                      <div className="relative h-32 w-22 overflow-hidden rounded-md border border-ecorce-100 bg-ecorce-50 transition-transform group-hover:-translate-y-1">
-                        {b.cover ? (
-                          <Image
-                            src={b.cover}
-                            alt={`Couverture de « ${b.title} »`}
-                            fill
-                            sizes="88px"
-                            className="object-contain p-1"
-                          />
-                        ) : (
-                          <span className="flex h-full items-center justify-center p-1.5 text-center text-[0.5625rem] leading-tight text-ecorce-300">
-                            {b.title}
-                          </span>
-                        )}
-                      </div>
-                    </Link>
-                  </li>
-                ))}
-                <li>
+              <ul className="mt-8 flex flex-wrap items-end gap-x-6 gap-y-8">
+                {c.livres
+                  .filter((b) => b.cover)
+                  .slice(0, 6)
+                  .map((b) => (
+                    <li key={b.slug} className="w-24 sm:w-28">
+                      <Link
+                        href={`/catalogue/${c.slug}/${b.slug}`}
+                        title={b.title}
+                        className="groupe-livre block focus-visible:outline-2 focus-visible:outline-offset-6 focus-visible:outline-cerise-400"
+                      >
+                        <Livre3D
+                          src={b.cover}
+                          titre={b.title}
+                          sizes="112px"
+                          epaisseur={epaisseurDe(b.pages)}
+                        />
+                      </Link>
+                    </li>
+                  ))}
+                <li className="w-24 sm:w-28">
                   <Link
                     href={`/catalogue/${c.slug}`}
-                    className="flex h-32 w-22 items-center justify-center rounded-md border border-dashed border-ecorce-200 px-2 text-center text-xs font-medium text-ecorce-500 transition-colors hover:border-cerise-400 hover:bg-cerise-50 hover:text-ecorce-800"
+                    className="flex aspect-3/4 items-center justify-center border border-dashed border-ecorce-300 px-2 text-center font-serif text-sm text-ecorce-600 transition-colors hover:border-griotte-400 hover:bg-cerise-50 hover:text-griotte-500 focus-visible:outline-2 focus-visible:outline-cerise-400"
                   >
                     Voir les {c.livres.length}
                   </Link>

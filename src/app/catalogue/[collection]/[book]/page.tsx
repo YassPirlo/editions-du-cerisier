@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BookCard } from "@/components/BookCard";
+import { epaisseurDe, Livre3D } from "@/components/Livre3D";
 import { Prose } from "@/components/Prose";
 import { books, booksOf, excerpt, getBook, getCollection } from "@/lib/content";
 import { CONTACT } from "@/lib/nav";
@@ -41,7 +41,7 @@ export default async function BookPage({
 
   const c = getCollection(b.collection);
   const voisins = booksOf(b.collection)
-    .filter((x) => x.slug !== b.slug && x.cover)
+    .filter((x) => x.slug !== b.slug)
     .slice(0, 4);
 
   const specs = [
@@ -52,16 +52,16 @@ export default async function BookPage({
 
   return (
     <article className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
-      <nav aria-label="Fil d’Ariane" className="mb-8">
+      <nav aria-label="Fil d’Ariane" className="mb-10">
         <ol className="flex flex-wrap items-center gap-1.5 text-sm text-ecorce-400">
           <li className="flex items-center gap-1.5">
-            <Link href="/" className="hover:text-ecorce-700">
+            <Link href="/" className="transition-colors hover:text-ecorce-700">
               Accueil
             </Link>
             <span aria-hidden="true">/</span>
           </li>
           <li className="flex items-center gap-1.5">
-            <Link href="/catalogue" className="hover:text-ecorce-700">
+            <Link href="/catalogue" className="transition-colors hover:text-ecorce-700">
               Catalogue
             </Link>
             <span aria-hidden="true">/</span>
@@ -69,7 +69,7 @@ export default async function BookPage({
           <li className="flex items-center gap-1.5">
             <Link
               href={`/catalogue/${b.collection}`}
-              className="hover:text-ecorce-700"
+              className="transition-colors hover:text-ecorce-700"
             >
               {b.collectionName}
             </Link>
@@ -81,39 +81,35 @@ export default async function BookPage({
         </ol>
       </nav>
 
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,320px)_1fr] lg:gap-14">
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,320px)_1fr] lg:gap-16">
         <div className="lg:sticky lg:top-28 lg:self-start">
-          <div className="relative mx-auto aspect-3/4 w-full max-w-[280px] overflow-hidden rounded-xl border border-ecorce-100 bg-ecorce-50 shadow-sm">
-            {b.cover ? (
-              <Image
-                src={b.cover}
-                alt={`Couverture de « ${b.title} »`}
-                fill
-                sizes="(max-width: 1024px) 280px, 320px"
-                className="object-contain p-2"
-                loading="eager"
-                fetchPriority="high"
-              />
-            ) : (
-              <div className="flex h-full items-center justify-center p-6">
-                <span className="text-center font-serif text-ecorce-300">
-                  {b.title}
-                </span>
-              </div>
-            )}
+          {/* Le livre est en volume ici aussi : c'est l'objet qu'on vend par
+              courrier, pas une vignette. Le survol le redresse pour montrer
+              la couverture bien en face. */}
+          <div className="entree tempo-1 mx-auto w-full max-w-[260px] pt-4">
+            <Livre3D
+              src={b.cover}
+              titre={b.title}
+              collection={b.collectionName}
+              sizes="(max-width: 1024px) 260px, 300px"
+              epaisseur={epaisseurDe(b.pages)}
+            />
           </div>
 
+          {/* Le colophon : pagination, prix, ISBN sur conduites pointillées,
+              comme en fin d'ouvrage. */}
           {specs.length > 0 && (
-            <dl className="mt-6 divide-y divide-ecorce-100 rounded-xl border border-ecorce-100">
+            <dl className="entree tempo-2 mt-12 border-t border-ecorce-200">
               {specs.map((s) => (
                 <div
                   key={s.label}
-                  className="flex items-baseline justify-between gap-4 px-4 py-3"
+                  className="flex items-baseline gap-2 border-b border-ecorce-200 py-3"
                 >
-                  <dt className="text-xs tracking-[0.1em] text-ecorce-400 uppercase">
+                  <dt className="shrink-0 text-xs tracking-[0.14em] text-ecorce-500 uppercase">
                     {s.label}
                   </dt>
-                  <dd className="text-right text-sm font-medium text-ecorce-800">
+                  <span className="leader" aria-hidden="true" />
+                  <dd className="shrink-0 text-sm font-medium text-ecorce-800 tabular-nums">
                     {s.value}
                   </dd>
                 </div>
@@ -123,49 +119,51 @@ export default async function BookPage({
 
           <a
             href={`mailto:${CONTACT.email}?subject=${encodeURIComponent(`Commande : ${b.title}`)}`}
-            className="mt-4 block rounded-lg bg-cerise-400 px-5 py-3 text-center text-sm font-semibold text-ecorce-900 transition-colors hover:bg-cerise-300"
+            className="entree tempo-2 mt-6 block bg-cerise-400 px-5 py-3.5 text-center text-xs font-bold tracking-[0.16em] text-ecorce-900 uppercase transition-colors hover:bg-cerise-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ecorce-900"
           >
             Commander ce livre
           </a>
-          <p className="mt-2 text-center text-xs text-ecorce-400">
+          <p className="mt-3 text-center text-xs text-ecorce-500">
             Envois franco de port · {CONTACT.phone}
           </p>
         </div>
 
         <div>
-          <p className="text-xs font-semibold tracking-[0.14em] text-cerise-600 uppercase">
-            <Link href={`/catalogue/${b.collection}`} className="hover:underline">
+          <p className="entree tempo-1 text-xs font-semibold tracking-[0.2em] text-ecorce-500 uppercase">
+            <Link
+              href={`/catalogue/${b.collection}`}
+              className="transition-colors hover:text-griotte-500"
+            >
               {b.collectionName}
             </Link>
           </p>
-          <h1 className="mt-3 font-serif text-3xl leading-tight font-semibold text-balance text-ecorce-900 sm:text-4xl">
+          <h1 className="titre-verger entree tempo-1 mt-3 text-3xl leading-tight text-balance text-ecorce-900 sm:text-4xl">
             {b.title}
           </h1>
 
-          {/* Les liens de presse vivent dans le texte lui-même depuis que
-              l'extraction est réparée : plus besoin d'un bloc d'URL brutes. */}
-          <div className="mt-8">
+          <div className="entree tempo-2 mt-8">
             <Prose html={b.html} />
           </div>
         </div>
       </div>
 
       {voisins.length > 0 && c && (
-        <section className="mt-20 border-t border-ecorce-100 pt-12">
-          <div className="flex items-end justify-between gap-4">
-            <h2 className="font-serif text-xl font-semibold text-ecorce-900 sm:text-2xl">
-              Dans la même collection
+        <section className="mt-24 border-t border-ecorce-200 pt-12">
+          <div className="flex items-baseline gap-4 sm:gap-6">
+            <h2 className="titre-verger text-xl text-ecorce-900 sm:text-2xl">
+              Sur la même table
             </h2>
+            <span className="leader" aria-hidden="true" />
             <Link
               href={`/catalogue/${c.slug}`}
-              className="shrink-0 text-sm font-semibold text-ecorce-600 underline decoration-cerise-400 decoration-2 underline-offset-4 hover:text-ecorce-900"
+              className="shrink-0 font-serif text-sm text-ecorce-600 underline decoration-cerise-400 decoration-2 underline-offset-4 transition-colors hover:text-griotte-500"
             >
               {c.name} →
             </Link>
           </div>
-          <ul className="mt-6 grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
+          <ul className="mt-10 grid grid-cols-2 gap-x-6 gap-y-14 sm:gap-x-8 md:grid-cols-3 lg:grid-cols-4">
             {voisins.map((x) => (
-              <li key={x.slug}>
+              <li key={x.slug} className="pousse">
                 <BookCard book={x} />
               </li>
             ))}

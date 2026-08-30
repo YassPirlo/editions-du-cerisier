@@ -1,29 +1,35 @@
 import Link from "next/link";
-import { CherryLogo } from "@/components/CherryLogo";
+import { Cerise } from "@/components/Cerisier";
 
+/* La cerise est tombée de la branche : la page demandée n'est plus là. */
 export default function NotFound() {
   return (
-    <div className="mx-auto flex max-w-xl flex-col items-center px-4 py-28 text-center sm:px-6">
-      <CherryLogo className="h-14 w-14" />
-      <h1 className="mt-6 font-serif text-3xl font-semibold text-ecorce-900">
-        Page introuvable
-      </h1>
-      <p className="mt-3 text-ecorce-600">
-        Cette page n’existe pas ou a été déplacée lors de la refonte du site.
-      </p>
-      <div className="mt-8 flex flex-wrap justify-center gap-3">
-        <Link
-          href="/"
-          className="rounded-lg bg-ecorce-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-ecorce-700"
-        >
-          Retour à l’accueil
-        </Link>
-        <Link
-          href="/catalogue"
-          className="rounded-lg border border-ecorce-200 px-6 py-3 text-sm font-semibold text-ecorce-700 transition-colors hover:border-cerise-400 hover:bg-cerise-50"
-        >
-          Voir le catalogue
-        </Link>
+    <div className="flex min-h-[70vh] items-center bg-feuille-900 text-fleur-100">
+      <div className="mx-auto flex max-w-xl flex-col items-center px-4 py-24 text-center sm:px-6">
+        <Cerise
+          filled
+          className="entree h-12 w-12 rotate-[130deg] text-griotte-300"
+        />
+        <h1 className="titre-verger entree tempo-1 mt-8 text-3xl text-fleur-50 sm:text-4xl">
+          Page introuvable
+        </h1>
+        <p className="entree tempo-2 mt-4 leading-relaxed text-fleur-200">
+          Cette page n’existe pas ou a été déplacée lors de la refonte du site.
+        </p>
+        <div className="entree tempo-3 mt-10 flex flex-wrap justify-center gap-4">
+          <Link
+            href="/"
+            className="bg-cerise-400 px-6 py-3 text-xs font-bold tracking-[0.16em] text-ecorce-900 uppercase transition-colors hover:bg-fleur-100"
+          >
+            Retour à l’accueil
+          </Link>
+          <Link
+            href="/catalogue"
+            className="border border-feuille-600 px-6 py-3 text-xs font-bold tracking-[0.16em] text-fleur-200 uppercase transition-colors hover:border-cerise-400 hover:text-fleur-50"
+          >
+            Voir le catalogue
+          </Link>
+        </div>
       </div>
     </div>
   );

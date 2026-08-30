@@ -54,14 +54,21 @@
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  /* La détente commune à tous les gestes du site : un départ franc, une
+     arrivée posée — le geste de quelqu'un qui pose un livre, pas un ressort. */
+  --ease-verger: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
   }
+  /* Le site entier se lit sur papier rosé, jamais sur blanc d'écran : c'est
+     la page du livre. La frondaison sombre (en-tête, bandeaux, pied) fait
+     l'enveloppe autour. */
   body {
-    background-color: #fff;
+    background-color: var(--color-fleur-50);
     color: var(--color-ecorce-900);
     -webkit-font-smoothing: antialiased;
   }
@@ -69,6 +76,15 @@
     background-color: var(--color-cerise-200);
     color: var(--color-ecorce-900);
   }
+}
+
+/* Les grands titres prennent les axes SOFT et WONK de Fraunces : le dessin
+   d'une enseigne peinte, un peu penché, un peu rond. Réservé aux titres —
+   en corps de texte, ce serait une afféterie. */
+.titre-verger {
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 55, "WONK" 1;
 }
 
 /* Contenu éditorial repris tel quel du site d'origine */
@@ -102,7 +118,7 @@
   transition: color 0.15s;
 }
 .prose-cerisier a:hover {
-  color: var(--color-ecorce-900);
+  color: var(--color-griotte-500);
   text-decoration-color: var(--color-cerise-500);
 }
 /* Les liens de presse récupérés de SPIP arrivent hors paragraphe, en file
@@ -157,6 +173,10 @@
   transform: translateY(-0.32em);
   border-bottom: 1px dotted var(--color-ecorce-300);
 }
+/* La même conduite, posée sur la frondaison. */
+.leader-nuit {
+  border-bottom-color: var(--color-feuille-600);
+}
 
 /* Lettrine sur le premier paragraphe du texte de présentation.
    En rouge griotte : dans le livre imprimé, la lettrine est l'endroit
@@ -169,6 +189,68 @@
   line-height: 0.78;
   font-weight: 600;
   color: var(--color-griotte-500);
+}
+
+/* ------------------------------------------------------------------------
+   Le mouvement. Trois gestes, et pas un de plus :
+
+   1. L'ENTRÉE — le premier écran se met en place comme on dresse une table
+      de libraire : le décor, le titre, puis les volumes. Porté par
+      @starting-style : la transition joue à l'insertion dans la page, donc
+      aussi à chaque navigation, sans une ligne de JavaScript.
+   2. La POUSSE — ce qui entre à l'écran lève doucement, piloté par le
+      défilement (animation-timeline: view()).
+   3. La RÉACTION — fruit qui mûrit, volume qui se redresse, au survol.
+
+   Chaque geste est coupé net par prefers-reduced-motion : le site doit se
+   lire aussi bien immobile. Les navigateurs sans timelines de défilement
+   affichent simplement la page posée — un état complet, pas une panne.
+   ------------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  .entree {
+    transition:
+      opacity 0.65s ease-out var(--tempo, 0s),
+      transform 0.65s var(--ease-verger) var(--tempo, 0s);
+  }
+  .entree-opacite {
+    transition: opacity 0.9s ease-out var(--tempo, 0s);
+  }
+}
+@starting-style {
+  @media (prefers-reduced-motion: no-preference) {
+    .entree {
+      opacity: 0;
+      transform: translateY(0.85rem);
+    }
+    .entree-opacite {
+      opacity: 0;
+    }
+  }
+}
+/* Les temps de l'entrée : le décor, le titre, les volumes, le reste. */
+.tempo-1 { --tempo: 0.08s; }
+.tempo-2 { --tempo: 0.2s; }
+.tempo-3 { --tempo: 0.32s; }
+.tempo-4 { --tempo: 0.46s; }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .pousse {
+      animation: pousse linear both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 50%;
+    }
+  }
+}
+@keyframes pousse {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* ------------------------------------------------------------------------
@@ -222,16 +304,22 @@
   perspective: 1700px;
 }
 
+/* L'ombre est un dégradé radial, pas un flou : sur une page de collection,
+   cent volumes s'affichent ensemble, et cent `filter: blur()` mettent à
+   genoux les machines modestes. Le dégradé donne la même tache douce pour
+   un coût de peinture négligeable. */
 .livre3d__ombre {
   position: absolute;
-  right: -3%;
-  bottom: -3.5%;
-  left: 7%;
-  height: 10%;
-  border-radius: 50%;
-  background: rgb(0 0 0 / 0.5);
-  filter: blur(17px);
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  right: -9%;
+  bottom: -7%;
+  left: 1%;
+  height: 16%;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    rgb(0 0 0 / 0.42),
+    rgb(0 0 0 / 0) 72%
+  );
+  transition: transform 0.55s var(--ease-verger);
 }
 
 .livre3d__corps {
@@ -239,17 +327,23 @@
   aspect-ratio: 3 / 4;
   transform: rotateX(4deg) rotateY(-26deg);
   transform-style: preserve-3d;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.55s var(--ease-verger);
 }
 
 /* Au survol, le volume se referme vers le lecteur : le geste de quelqu'un
-   qui redresse un livre sur la table pour en lire le titre. */
+   qui redresse un livre sur la table pour en lire le titre. Le déclencheur
+   peut être le volume lui-même ou toute la vignette qui l'entoure
+   (.groupe-livre) : sur une table, on tend la main vers le livre entier. */
 .livre3d:hover .livre3d__corps,
-.livre3d:focus-within .livre3d__corps {
+.livre3d:focus-within .livre3d__corps,
+.groupe-livre:hover .livre3d__corps,
+.groupe-livre:focus-visible .livre3d__corps {
   transform: rotateX(2deg) rotateY(-12deg);
 }
 .livre3d:hover .livre3d__ombre,
-.livre3d:focus-within .livre3d__ombre {
+.livre3d:focus-within .livre3d__ombre,
+.groupe-livre:hover .livre3d__ombre,
+.groupe-livre:focus-visible .livre3d__ombre {
   transform: scaleX(0.93);
 }
 
@@ -311,6 +405,15 @@
   .livre3d__ombre {
     transition: none;
   }
+}
+
+/* Les longues étagères ne peignent que ce qu'on regarde : content-visibility
+   déleste le moteur de rendu des volumes hors champ. Cent livres montés en
+   3D ne coûtent alors que la poignée à l'écran — les tables de cent titres
+   de Théâtre-Action restent légères, même sur une machine modeste. */
+.etagere > li {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 30rem;
 }
 
 .line-clamp-4-safe {

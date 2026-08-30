@@ -42,6 +42,7 @@ export default async function CollectionPage({
       <PageHeader
         eyebrow="Collection"
         title={c.name}
+        intro={`${livres.length} ${livres.length > 1 ? "titres" : "titre"}`}
         breadcrumb={[
           { label: "Accueil", href: "/" },
           { label: "Catalogue", href: "/catalogue" },
@@ -49,8 +50,10 @@ export default async function CollectionPage({
       />
 
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+        {/* La ligne éditoriale de la collection, mot pour mot, en exergue
+            sous le filet jaune — la seconde encre de la maison. */}
         {c.descriptionHtml && (
-          <div className="max-w-3xl rounded-xl border-l-4 border-cerise-400 bg-cerise-50 p-6">
+          <div className="entree tempo-2 max-w-3xl border-l-4 border-cerise-400 pl-6">
             <Prose html={c.descriptionHtml} />
           </div>
         )}
@@ -60,18 +63,17 @@ export default async function CollectionPage({
             <Link
               key={x.slug}
               href={`/catalogue/${x.slug}`}
-              className="rounded-full border border-ecorce-200 px-4 py-1.5 text-sm text-ecorce-600 transition-colors hover:border-cerise-400 hover:bg-cerise-50 hover:text-ecorce-900"
+              className="rounded-full border border-ecorce-300 px-4 py-1.5 text-sm text-ecorce-600 transition-colors hover:border-griotte-400 hover:bg-cerise-50 hover:text-griotte-500 focus-visible:outline-2 focus-visible:outline-cerise-400"
             >
               {x.name}
             </Link>
           ))}
         </div>
 
-        <p className="mt-10 text-sm text-ecorce-400">
-          {livres.length} {livres.length > 1 ? "titres" : "titre"}
-        </p>
-
-        <ul className="mt-5 grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
+        {/* Pas de « pousse » ici : sur cent titres, l'effet répété devient un
+            tic — et cent timelines de défilement pèsent pour rien. La grille
+            est simplement là, comme un rayonnage. */}
+        <ul className="etagere mt-14 grid grid-cols-2 gap-x-6 gap-y-14 sm:gap-x-8 md:grid-cols-3 lg:grid-cols-4">
           {livres.map((b) => (
             <li key={b.slug}>
               <BookCard book={b} />
