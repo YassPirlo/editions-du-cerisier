@@ -19,7 +19,6 @@ export default function ContactPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Nous contacter"
         title="Contact"
         intro="Pour toute question ou renseignement, notre équipe est à votre écoute."
         breadcrumb={[{ label: "Accueil", href: "/" }]}

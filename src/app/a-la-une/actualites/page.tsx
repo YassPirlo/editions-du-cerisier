@@ -14,7 +14,6 @@ export default function ActualitesPage() {
   return (
     <>
       <PageHeader
-        eyebrow="À la une"
         title="Actualités"
         breadcrumb={[
           { label: "Accueil", href: "/" },

@@ -17,7 +17,6 @@ export default function CommanderPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Contact"
         title="Nous commander"
         breadcrumb={[
           { label: "Accueil", href: "/" },

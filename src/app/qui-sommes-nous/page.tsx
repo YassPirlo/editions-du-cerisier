@@ -16,7 +16,6 @@ export default function QuiSommesNousPage() {
   return (
     <>
       <PageHeader
-        eyebrow="La maison"
         title="Qui sommes-nous ?"
         breadcrumb={[{ label: "Accueil", href: "/" }]}
       />

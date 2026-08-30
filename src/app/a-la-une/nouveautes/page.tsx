@@ -13,7 +13,6 @@ export default function NouveautesPage() {
   return (
     <>
       <PageHeader
-        eyebrow="À la une"
         title="Nouveautés"
         intro={`${pages.nouveautes.length} parutions récentes.`}
         breadcrumb={[

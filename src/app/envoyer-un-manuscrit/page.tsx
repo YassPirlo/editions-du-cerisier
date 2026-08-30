@@ -19,7 +19,6 @@ export default function ManuscritPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Présentation"
         title="Envoyer un manuscrit"
         breadcrumb={[{ label: "Accueil", href: "/" }]}
       />

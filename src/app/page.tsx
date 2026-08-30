@@ -26,41 +26,44 @@ export default function Home() {
   return (
     <>
       {/* Sous la branche : le premier écran est la vitrine à la tombée du
-          jour. Tout se met en place comme on dresse une table — le décor,
-          le titre, puis les volumes (voir « L'ENTRÉE », globals.css). */}
+          jour. Deux branches à deux vitesses font la profondeur du feuillage,
+          et tout se met en place comme on dresse une table — le décor, le
+          titre, puis les volumes (voir « L'ENTRÉE », globals.css). */}
       <section className="relative overflow-hidden bg-feuille-900 text-fleur-100">
         <div className="entree-opacite tempo-1 pointer-events-none absolute inset-0" aria-hidden="true">
-          {/* Sur mobile, une pleine largeur ne montrerait qu'un tronçon nu :
-              on donne au SVG plus large que l'écran pour retomber sur une
+          {/* La branche lointaine, presque immobile. */}
+          <div className="branche-derive-lente absolute -top-8 left-[-6%] hidden h-[19rem] w-[125%] opacity-60 sm:block">
+            <Branche className="h-full w-full text-feuille-800" />
+          </div>
+          {/* La branche proche, qui voyage vraiment au défilement. Sur
+              mobile, une pleine largeur ne montrerait qu'un tronçon nu : on
+              donne au SVG plus large que l'écran pour retomber sur une
               portion qui porte des fruits. */}
-          <div className="branche-derive absolute -top-14 -left-8 h-[13rem] w-[34rem] sm:hidden">
+          <div className="branche-derive absolute -top-14 -left-10 h-[14rem] w-[40rem] sm:hidden">
             <Branche className="h-full w-full text-feuille-700" />
           </div>
-          {/* 110 % de large : la branche doit déborder des deux côtés en fin
-              de dérive, sinon elle découvrirait son bord droit en glissant. */}
-          <div className="branche-derive absolute -top-24 left-0 hidden h-[22rem] w-[110%] sm:block">
+          {/* 130 % de large : la branche doit déborder largement des deux
+              côtés en fin de dérive, sinon elle découvrirait son bord droit
+              en glissant. */}
+          <div className="branche-derive absolute -top-24 left-[-8%] hidden h-[24rem] w-[130%] sm:block">
             <Branche className="h-full w-full text-feuille-700" />
           </div>
         </div>
 
-        <div className="relative mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-6xl content-center gap-14 px-4 pt-24 pb-16 sm:px-6 lg:grid-cols-12 lg:gap-8 lg:pt-28 lg:pb-20">
+        <div className="relative mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-6xl content-center gap-14 px-4 pt-28 pb-16 sm:px-6 lg:grid-cols-12 lg:gap-8 lg:pt-32 lg:pb-20">
           <div className="lg:col-span-6 lg:self-center">
-            <p className="entree tempo-2 flex items-center gap-3 text-[0.7rem] tracking-[0.28em] text-feuille-300 uppercase">
-              <Cerise filled className="h-4 w-4 shrink-0 text-griotte-300" />
-              Société coopérative · Cuesmes · Depuis 1985
-            </p>
-            <h1 className="titre-verger entree tempo-2 mt-7 text-[2.75rem] leading-[1.04] text-balance text-fleur-50 sm:text-6xl">
+            <h1 className="titre-verger entree tempo-1 text-[2.9rem] leading-[1.02] text-balance text-fleur-50 sm:text-6xl lg:text-7xl">
               Bienvenue aux
               <br />
               Éditions du Cerisier
             </h1>
-            <p className="entree tempo-3 mt-8 max-w-lg font-serif text-lg leading-relaxed text-fleur-200 italic">
+            <p className="entree tempo-2 mt-9 max-w-lg font-serif text-lg leading-relaxed text-fleur-200 italic sm:text-xl">
               Petites, mais obstinées, les Éditions du Cerisier cherchent, avant
               tout, à rendre publics les livres qui relatent, imaginent,
               témoignent des peuples, de leurs cultures, de leurs luttes, de
               leurs libertés…
             </p>
-            <div className="entree tempo-4 mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+            <div className="entree tempo-3 mt-11 flex flex-wrap items-center gap-x-8 gap-y-4">
               <Link
                 href="/catalogue"
                 className="inline-block bg-cerise-400 px-7 py-3.5 text-xs font-bold tracking-[0.16em] text-ecorce-900 uppercase transition-colors hover:bg-fleur-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cerise-400"
@@ -77,15 +80,21 @@ export default function Home() {
           </div>
 
           {/* Les volumes ne sont pas alignés : ils sont posés, décalés en
-              hauteur comme sur une table de libraire. */}
+              hauteur comme sur une table de libraire — et ils se hissent de
+              plus bas que le texte, en dernier. */}
           <ul className="flex items-end justify-center gap-5 sm:gap-8 lg:col-span-6 lg:justify-end lg:self-center">
             {vitrine.map((b, i) => (
               <li
                 key={`${b.collection}/${b.slug}`}
                 className={`entree w-[7.5rem] shrink-0 sm:w-40 lg:w-44 ${
-                  i === 1 ? "mb-10" : i === 2 ? "mb-4 hidden sm:block" : ""
+                  i === 1 ? "mb-12" : i === 2 ? "mb-5 hidden sm:block" : ""
                 }`}
-                style={{ "--tempo": `${0.34 + i * 0.14}s` } as React.CSSProperties}
+                style={
+                  {
+                    "--tempo": `${0.5 + i * 0.16}s`,
+                    "--souleve": "5rem",
+                  } as React.CSSProperties
+                }
               >
                 <Link
                   href={`/catalogue/${b.collection}/${b.slug}`}
@@ -107,85 +116,94 @@ export default function Home() {
       {/* La clairière : le texte de l'éditeur revient sur papier. Composer un
           avant-propos de cette longueur en clair sur vert le rendrait
           illisible — et c'est son texte, pas un ornement. */}
-      <section className="mx-auto max-w-2xl px-6 py-20 sm:py-24">
-        <p className="pousse flex items-center gap-3 text-[0.7rem] tracking-[0.28em] text-ecorce-500 uppercase">
-          <Cerise className="h-3.5 w-3.5 shrink-0 text-griotte-500" />
-          Avant-propos
-        </p>
+      <section className="mx-auto max-w-2xl px-6 py-20 sm:py-28">
         <div className="pousse">
+          <h2 className="titre-verger text-2xl text-ecorce-900 sm:text-3xl">
+            Avant-propos
+          </h2>
           <Prose
             html={presentation.html}
-            className="lettrine mt-8 font-serif text-[1.0625rem] leading-[1.9]"
+            className="lettrine mt-9 font-serif text-[1.0625rem] leading-[1.9]"
           />
         </div>
       </section>
 
-      {/* Le tronc : la citation, reprise mot pour mot du site. */}
-      <section className="border-y border-feuille-700 bg-feuille-800">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-          <blockquote className="pousse titre-verger max-w-4xl text-4xl leading-[1.08] text-balance text-fleur-50 sm:text-5xl">
+      {/* Le tronc : la citation, reprise mot pour mot du site, se pose en
+          pleine scène — c'est le moment fort de la page, il a droit au
+          grand geste. */}
+      <section className="overflow-hidden border-y border-feuille-700 bg-feuille-800">
+        <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
+          <blockquote className="pousse-scene titre-verger max-w-4xl text-4xl leading-[1.08] text-balance text-fleur-50 sm:text-6xl">
             « Ni dieu, ni maître. Juste un grand réservoir d’enthousiasme,
             d’esprit critique et de connivence avec la révolution permanente. »
           </blockquote>
-          <p className="pousse mt-8 max-w-xl leading-relaxed text-fleur-200/80">
+          <p className="pousse mt-10 max-w-xl leading-relaxed text-fleur-200/80">
             Le socle des Editions, constituées en société coopérative, c’est leur
             indépendance matérielle et intellectuelle.
           </p>
-          <p className="pousse mt-6 text-[0.7rem] tracking-[0.22em] text-fleur-200 uppercase">
-            Jean Delval
-          </p>
+          <p className="pousse mt-6 font-serif text-fleur-200 italic">Jean Delval</p>
         </div>
       </section>
 
       {/* La table des collections : un index de catalogue imprimé — le nom,
           la conduite pointillée, le nombre de titres. Le chiffre est une
           information réelle, pas un numéro d'ordre décoratif. */}
-      <section className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-24">
-        <p className="pousse text-[0.7rem] tracking-[0.28em] text-ecorce-500 uppercase">
-          Le catalogue · {books.length} titres
-        </p>
-        <ol className="mt-10 border-t border-ecorce-200">
-          {index.map((c) => (
-            <li key={c.slug} className="pousse border-b border-ecorce-200">
-              <Link
-                href={`/catalogue/${c.slug}`}
-                className="group flex items-baseline gap-4 py-5 focus-visible:outline-2 focus-visible:outline-cerise-400 sm:gap-6"
-              >
-                <span className="font-serif text-xl text-ecorce-900 transition-colors group-hover:text-griotte-500 sm:text-2xl">
-                  {c.name}
-                </span>
-                <span className="leader" aria-hidden="true" />
-                <Cerise className="h-4 w-4 shrink-0 translate-y-0.5 text-ecorce-300 group-hover:hidden" />
-                <Cerise
-                  filled
-                  className="hidden h-4 w-4 shrink-0 translate-y-0.5 text-griotte-500 group-hover:block"
-                />
-                <span className="w-8 shrink-0 text-right font-serif text-sm text-ecorce-500 tabular-nums">
-                  {c.count}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ol>
-        <div className="pousse mt-8">
-          <Link
-            href="/catalogue"
-            className="font-serif text-ecorce-700 underline decoration-cerise-400 decoration-2 underline-offset-[6px] transition-colors hover:text-griotte-500"
-          >
-            Parcourir tout le catalogue →
-          </Link>
+      <section className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
+        <div className="pousse">
+          <div className="flex items-baseline gap-4 sm:gap-6">
+            <h2 className="titre-verger text-2xl text-ecorce-900 sm:text-3xl">
+              Les collections
+            </h2>
+            <span className="leader" aria-hidden="true" />
+            <p className="shrink-0 font-serif text-sm text-ecorce-500 tabular-nums">
+              {books.length} titres
+            </p>
+          </div>
+          <ol className="mt-10 border-t border-ecorce-200">
+            {index.map((c) => (
+              <li key={c.slug} className="border-b border-ecorce-200">
+                <Link
+                  href={`/catalogue/${c.slug}`}
+                  className="group flex items-baseline gap-4 py-5 focus-visible:outline-2 focus-visible:outline-cerise-400 sm:gap-6"
+                >
+                  <span className="font-serif text-xl text-ecorce-900 transition-colors group-hover:text-griotte-500 sm:text-2xl">
+                    {c.name}
+                  </span>
+                  <span className="leader" aria-hidden="true" />
+                  <Cerise className="h-4 w-4 shrink-0 translate-y-0.5 text-ecorce-300 group-hover:hidden" />
+                  <Cerise
+                    filled
+                    className="hidden h-4 w-4 shrink-0 translate-y-0.5 text-griotte-500 group-hover:block"
+                  />
+                  <span className="w-8 shrink-0 text-right font-serif text-sm text-ecorce-500 tabular-nums">
+                    {c.count}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ol>
+          <div className="mt-8">
+            <Link
+              href="/catalogue"
+              className="font-serif text-ecorce-700 underline decoration-cerise-400 decoration-2 underline-offset-[6px] transition-colors hover:text-griotte-500"
+            >
+              Parcourir tout le catalogue →
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* La récolte : les dernières parutions, posées sous le feuillage. */}
+      {/* La récolte : les dernières parutions. Chaque volume se redresse en
+          entrant dans le champ — le geste du libraire qui met un livre
+          debout (.poser). */}
       <section className="border-y border-feuille-700 bg-feuille-900 text-fleur-100">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-          <p className="pousse text-[0.7rem] tracking-[0.28em] text-feuille-300 uppercase">
+        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+          <h2 className="pousse titre-verger text-2xl text-fleur-50 sm:text-3xl">
             Vient de paraître
-          </p>
-          <ul className="mt-14 grid grid-cols-2 gap-x-8 gap-y-16 sm:grid-cols-3 sm:gap-x-12 lg:grid-cols-4">
+          </h2>
+          <ul className="mt-16 grid grid-cols-2 gap-x-8 gap-y-16 sm:grid-cols-3 sm:gap-x-12 lg:grid-cols-4">
             {recolte.map((b) => (
-              <li key={`${b.collection}/${b.slug}`} className="pousse">
+              <li key={`${b.collection}/${b.slug}`} className="poser">
                 <Link
                   href={`/catalogue/${b.collection}/${b.slug}`}
                   className="groupe-livre group block focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-cerise-400"
@@ -199,14 +217,12 @@ export default function Home() {
                   <p className="mt-7 font-serif text-[0.95rem] leading-snug text-fleur-100 transition-colors group-hover:text-griotte-300">
                     {b.title}
                   </p>
-                  <p className="mt-1.5 text-[0.68rem] tracking-[0.16em] text-feuille-300 uppercase">
-                    {b.collectionName}
-                  </p>
+                  <p className="mt-1 text-xs text-feuille-300">{b.collectionName}</p>
                 </Link>
               </li>
             ))}
           </ul>
-          <div className="pousse mt-12">
+          <div className="pousse mt-14">
             <Link
               href="/a-la-une/nouveautes"
               className="font-serif text-fleur-200 underline decoration-cerise-400 decoration-2 underline-offset-[6px] transition-colors hover:text-fleur-50"
@@ -219,27 +235,27 @@ export default function Home() {
 
       {/* À la une : la vie de la maison, sur papier. */}
       {alaune && (
-        <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-          <div className="pousse grid gap-10 md:grid-cols-[auto_1fr] md:items-center">
+        <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+          <h2 className="pousse titre-verger text-2xl text-ecorce-900 sm:text-3xl">
+            À la une
+          </h2>
+          <div className="mt-12 grid gap-10 md:grid-cols-[auto_1fr] md:items-center">
             {alaune.images[0] && (
-              <div className="relative mx-auto h-64 w-48 shrink-0 md:h-72 md:w-52">
+              <div className="pousse-scene relative mx-auto h-64 w-48 shrink-0 md:h-80 md:w-56">
                 <Image
                   src={alaune.images[0]}
                   alt={`Couverture de « ${alaune.title} »`}
                   fill
-                  sizes="208px"
+                  sizes="224px"
                   className="object-contain drop-shadow-xl"
                 />
               </div>
             )}
-            <div>
-              <p className="flex items-center gap-3 text-[0.7rem] tracking-[0.28em] text-ecorce-500 uppercase">
-                <Cerise className="h-3.5 w-3.5 shrink-0 text-griotte-500" />À la une
-              </p>
-              <h2 className="titre-verger mt-3 text-2xl leading-tight text-balance text-ecorce-900 sm:text-3xl">
+            <div className="pousse">
+              <h3 className="titre-verger text-xl leading-tight text-balance text-ecorce-900 sm:text-2xl">
                 {alaune.title}
-              </h2>
-              <p className="mt-4 leading-relaxed text-ecorce-700">
+              </h3>
+              <p className="mt-4 max-w-2xl leading-relaxed text-ecorce-700">
                 {excerpt(alaune.text, 320)}
               </p>
               <Link
@@ -255,7 +271,7 @@ export default function Home() {
 
       {/* Le jaune imposé garde le dernier mot. */}
       <section className="bg-cerise-400 text-ecorce-900">
-        <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-16 sm:px-6 md:flex-row md:items-center md:justify-between">
+        <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-16 sm:px-6 sm:py-20 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 className="titre-verger text-3xl leading-tight sm:text-4xl">
               Vous rêvez d’être publié ?

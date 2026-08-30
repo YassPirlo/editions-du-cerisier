@@ -14,7 +14,6 @@ export default function LiensPratiquesPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Ressources"
         title="Liens pratiques"
         breadcrumb={[{ label: "Accueil", href: "/" }]}
       />

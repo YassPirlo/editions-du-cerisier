@@ -40,7 +40,6 @@ export default async function CollectionPage({
   return (
     <>
       <PageHeader
-        eyebrow="Collection"
         title={c.name}
         intro={`${livres.length} ${livres.length > 1 ? "titres" : "titre"}`}
         breadcrumb={[

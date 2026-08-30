@@ -16,7 +16,6 @@ export default function PressePage() {
   return (
     <>
       <PageHeader
-        eyebrow="Présentation"
         title="Ce qu’en dit la presse"
         breadcrumb={[{ label: "Accueil", href: "/" }]}
       />

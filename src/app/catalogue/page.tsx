@@ -21,7 +21,6 @@ export default function CataloguePage() {
   return (
     <>
       <PageHeader
-        eyebrow="Nos collections"
         title="Catalogue"
         intro={`${books.length} titres répartis en ${collections.length} collections.`}
       />

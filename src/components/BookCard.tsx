@@ -21,19 +21,16 @@ export function BookCard({ book }: { book: Book }) {
         sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 22vw"
         epaisseur={epaisseurDe(book.pages)}
       />
-      <p className="mt-6 text-[0.65rem] font-semibold tracking-[0.16em] text-ecorce-500 uppercase">
-        {book.collectionName}
-      </p>
-      <h3 className="mt-1 font-serif text-[0.95rem] leading-snug font-semibold text-ecorce-900 transition-colors group-hover:text-griotte-500">
+      <h3 className="mt-6 font-serif text-[0.95rem] leading-snug font-semibold text-ecorce-900 transition-colors group-hover:text-griotte-500">
         {book.title}
       </h3>
-      {(book.pages || book.price) && (
-        <p className="mt-1.5 text-xs text-ecorce-500 tabular-nums">
-          {book.pages && <span>{book.pages} p.</span>}
-          {book.pages && book.price && <span aria-hidden="true"> · </span>}
-          {book.price && <span>{book.price}</span>}
-        </p>
-      )}
+      {/* Le folio sous le titre, jamais d'étiquette au-dessus : collection,
+          pagination, prix — sur une seule ligne discrète. */}
+      <p className="mt-1.5 text-xs text-ecorce-500 tabular-nums">
+        {book.collectionName}
+        {book.pages && <span> · {book.pages} p.</span>}
+        {book.price && <span> · {book.price}</span>}
+      </p>
     </Link>
   );
 }

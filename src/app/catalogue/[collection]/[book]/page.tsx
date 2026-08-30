@@ -129,17 +129,19 @@ export default async function BookPage({
         </div>
 
         <div>
-          <p className="entree tempo-1 text-xs font-semibold tracking-[0.2em] text-ecorce-500 uppercase">
+          <h1 className="titre-verger entree tempo-1 text-3xl leading-tight text-balance text-ecorce-900 sm:text-4xl">
+            {b.title}
+          </h1>
+          {/* La collection sous le titre, pas d'étiquette au-dessus. */}
+          <p className="entree tempo-2 mt-4 font-serif text-ecorce-600 italic">
+            Collection{" "}
             <Link
               href={`/catalogue/${b.collection}`}
-              className="transition-colors hover:text-griotte-500"
+              className="underline decoration-cerise-400 decoration-2 underline-offset-4 transition-colors hover:text-griotte-500"
             >
               {b.collectionName}
             </Link>
           </p>
-          <h1 className="titre-verger entree tempo-1 mt-3 text-3xl leading-tight text-balance text-ecorce-900 sm:text-4xl">
-            {b.title}
-          </h1>
 
           <div className="entree tempo-2 mt-8">
             <Prose html={b.html} />

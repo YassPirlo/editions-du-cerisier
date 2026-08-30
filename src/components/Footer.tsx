@@ -35,9 +35,7 @@ export function Footer() {
         </div>
 
         <div>
-          <h2 className="text-xs font-semibold tracking-[0.12em] text-feuille-300 uppercase">
-            Collections
-          </h2>
+          <h2 className="font-serif text-lg text-fleur-50">Collections</h2>
           <ul className="mt-4 space-y-2">
             {collections.map((c) => (
               <li key={c.slug}>
@@ -53,9 +51,7 @@ export function Footer() {
         </div>
 
         <div>
-          <h2 className="text-xs font-semibold tracking-[0.12em] text-feuille-300 uppercase">
-            Contact
-          </h2>
+          <h2 className="font-serif text-lg text-fleur-50">Contact</h2>
           <address className="mt-4 space-y-1 text-sm leading-relaxed text-fleur-300 not-italic">
             <p>{CONTACT.street}</p>
             <p>{CONTACT.city}</p>

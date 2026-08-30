@@ -14,7 +14,6 @@ export default function RevueDePressePage() {
   return (
     <>
       <PageHeader
-        eyebrow="À la une"
         title="Lu dans la presse et sur le net"
         intro={`${pages.revueDePresse.length} articles et recensions.`}
         breadcrumb={[

@@ -16,7 +16,6 @@ export default function LigneEditorialePage() {
   return (
     <>
       <PageHeader
-        eyebrow="Présentation"
         title="Ligne éditoriale"
         breadcrumb={[{ label: "Accueil", href: "/" }]}
       />

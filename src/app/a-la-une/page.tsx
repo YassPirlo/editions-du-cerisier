@@ -39,7 +39,6 @@ export default function ALaUnePage() {
   return (
     <>
       <PageHeader
-        eyebrow="Actualité"
         title="À la une"
         breadcrumb={[{ label: "Accueil", href: "/" }]}
       />
