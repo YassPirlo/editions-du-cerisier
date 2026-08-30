@@ -38,6 +38,10 @@ export function Cerise({
  * Une branche qui traverse toute la largeur, les fruits suspendus dessous.
  * Volontairement coupée par les deux bords : on n'en voit qu'un fragment,
  * comme une branche qui passerait devant une fenêtre.
+ *
+ * Chaque tracé porte `pathLength={1}` : la classe `.branche-trace` peut alors
+ * dessiner la branche d'un seul geste (stroke-dashoffset 1 → 0), et les
+ * fruits éclosent une fois le trait posé. Voir « LE TRACÉ » dans globals.css.
  */
 export function Branche({ className = "" }: { className?: string }) {
   /**
@@ -63,6 +67,7 @@ export function Branche({ className = "" }: { className?: string }) {
       {/* la branche maîtresse, coupée par les deux bords */}
       <path
         d="M-20 244C220 190 430 214 660 172c200-37 380-30 580-92"
+        pathLength={1}
         stroke="currentColor"
         strokeWidth="7.2"
         strokeLinecap="round"
@@ -70,6 +75,7 @@ export function Branche({ className = "" }: { className?: string }) {
       {/* une ramification secondaire, plus fine */}
       <path
         d="M470 190c74-30 140-32 214-14"
+        pathLength={1}
         stroke="currentColor"
         strokeWidth="3.8"
         strokeLinecap="round"
@@ -90,6 +96,7 @@ export function Branche({ className = "" }: { className?: string }) {
             {/* pédoncule commun jusqu'à la fourche */}
             <path
               d={`M${n.x} ${n.y}q${n.sens * 3} ${n.drop * 0.7} ${n.sens * 5} ${n.drop}`}
+              pathLength={1}
               stroke="currentColor"
               strokeWidth="3.6"
               strokeLinecap="round"
@@ -97,12 +104,14 @@ export function Branche({ className = "" }: { className?: string }) {
             {/* les deux queues, incurvées vers le bas */}
             <path
               d={`M${fx} ${fy}Q${fx - n.r * 0.62} ${fy + n.r * 1.1} ${g.x} ${g.y - n.r}`}
+              pathLength={1}
               stroke="currentColor"
               strokeWidth="3.2"
               strokeLinecap="round"
             />
             <path
               d={`M${fx} ${fy}Q${fx + n.r * 0.7} ${fy + n.r * 1.4} ${d.x} ${d.y - rd}`}
+              pathLength={1}
               stroke="currentColor"
               strokeWidth="3.2"
               strokeLinecap="round"
@@ -112,6 +121,18 @@ export function Branche({ className = "" }: { className?: string }) {
           </g>
         );
       })}
+    </svg>
+  );
+}
+
+/** Un pétale de fleur de cerisier : celui d'avril, qui tombe au moindre vent. */
+export function Petale({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 12 15" fill="none" className={className} aria-hidden="true">
+      <path
+        d="M6 0.6 C9.8 3 10.4 8.6 6 14.2 C1.6 8.6 2.2 3 6 0.6 Z"
+        fill="currentColor"
+      />
     </svg>
   );
 }

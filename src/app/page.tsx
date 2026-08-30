@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Branche, Cerise } from "@/components/Cerisier";
+import { Branche, Cerise, Petale } from "@/components/Cerisier";
 import { epaisseurDe, Livre3D } from "@/components/Livre3D";
 import { Prose } from "@/components/Prose";
 import { type Book, books, collections, excerpt, pages } from "@/lib/content";
@@ -22,48 +22,103 @@ const index = collections
   .map((c) => ({ ...c, count: books.filter((b) => b.collection === c.slug).length }))
   .filter((c) => c.count > 0);
 
+/* Le rayonnage qui défile : seize couvertures prélevées régulièrement dans
+   tout le catalogue, pour que toutes les collections y passent. */
+const avecCouverture = books.filter(
+  (b): b is Book & { cover: string } => b.cover != null,
+);
+const pasRayon = Math.max(1, Math.floor(avecCouverture.length / 16));
+const rayonnage = avecCouverture.filter((_, i) => i % pasRayon === 0).slice(0, 16);
+
+/* Les pétales du premier écran : position, taille, durée et vent fixés une
+   fois pour toutes — le hasard à l'exécution ferait clignoter l'hydratation. */
+const petales = [
+  { x: "6%", taille: "0.7rem", duree: "17s", retard: "-3s", vent: "3rem", voile: "0.4" },
+  { x: "16%", taille: "1rem", duree: "13s", retard: "-9s", vent: "-2.5rem", voile: "0.55" },
+  { x: "29%", taille: "0.6rem", duree: "19s", retard: "-6s", vent: "4.5rem", voile: "0.35" },
+  { x: "43%", taille: "0.85rem", duree: "14s", retard: "-1s", vent: "-3rem", voile: "0.5" },
+  { x: "55%", taille: "0.7rem", duree: "16s", retard: "-12s", vent: "2rem", voile: "0.4" },
+  { x: "67%", taille: "1.05rem", duree: "12s", retard: "-5s", vent: "-4rem", voile: "0.6" },
+  { x: "80%", taille: "0.75rem", duree: "18s", retard: "-8s", vent: "3.5rem", voile: "0.45" },
+  { x: "91%", taille: "0.9rem", duree: "15s", retard: "-2s", vent: "-2rem", voile: "0.5" },
+];
+
 export default function Home() {
   return (
     <>
       {/* Sous la branche : le premier écran est la vitrine à la tombée du
-          jour. Deux branches à deux vitesses font la profondeur du feuillage,
-          et tout se met en place comme on dresse une table — le décor, le
-          titre, puis les volumes (voir « L'ENTRÉE », globals.css). */}
+          jour. À l'arrivée, la branche SE DESSINE (.branche-trace), les
+          fruits éclosent, les pétales tombent, le titre se compose ligne à
+          ligne et les volumes se hissent en dernier, légèrement penchés,
+          avant de s'aplomber. Au défilement, deux plans de branches dérivent
+          à deux vitesses. */}
       <section className="relative overflow-hidden bg-feuille-900 text-fleur-100">
-        <div className="entree-opacite tempo-1 pointer-events-none absolute inset-0" aria-hidden="true">
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
           {/* La branche lointaine, presque immobile. */}
           <div className="branche-derive-lente absolute -top-8 left-[-6%] hidden h-[19rem] w-[125%] opacity-60 sm:block">
-            <Branche className="h-full w-full text-feuille-800" />
+            <Branche className="branche-trace h-full w-full text-feuille-800" />
           </div>
           {/* La branche proche, qui voyage vraiment au défilement. Sur
               mobile, une pleine largeur ne montrerait qu'un tronçon nu : on
               donne au SVG plus large que l'écran pour retomber sur une
               portion qui porte des fruits. */}
           <div className="branche-derive absolute -top-14 -left-10 h-[14rem] w-[40rem] sm:hidden">
-            <Branche className="h-full w-full text-feuille-700" />
+            <Branche className="branche-trace h-full w-full text-feuille-700" />
           </div>
           {/* 130 % de large : la branche doit déborder largement des deux
               côtés en fin de dérive, sinon elle découvrirait son bord droit
               en glissant. */}
           <div className="branche-derive absolute -top-24 left-[-8%] hidden h-[24rem] w-[130%] sm:block">
-            <Branche className="h-full w-full text-feuille-700" />
+            <Branche className="branche-trace h-full w-full text-feuille-700" />
           </div>
+          {/* Les pétales d'avril. */}
+          {petales.map((p, i) => (
+            <span
+              key={i}
+              className="petale text-fleur-200"
+              style={
+                {
+                  "--x": p.x,
+                  "--taille": p.taille,
+                  "--duree": p.duree,
+                  "--retard": p.retard,
+                  "--vent": p.vent,
+                  "--voile": p.voile,
+                } as React.CSSProperties
+              }
+            >
+              <Petale />
+            </span>
+          ))}
         </div>
 
         <div className="relative mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-6xl content-center gap-14 px-4 pt-28 pb-16 sm:px-6 lg:grid-cols-12 lg:gap-8 lg:pt-32 lg:pb-20">
           <div className="lg:col-span-6 lg:self-center">
-            <h1 className="titre-verger entree tempo-1 text-[2.9rem] leading-[1.02] text-balance text-fleur-50 sm:text-6xl lg:text-7xl">
-              Bienvenue aux
-              <br />
-              Éditions du Cerisier
+            <h1 className="titre-verger text-[2.9rem] leading-[1.04] text-balance text-fleur-50 sm:text-6xl lg:text-7xl">
+              <span className="ligne-masque">
+                <span
+                  className="ligne entree tempo-1"
+                  style={{ "--souleve": "1.15em" } as React.CSSProperties}
+                >
+                  Bienvenue aux
+                </span>
+              </span>
+              <span className="ligne-masque">
+                <span
+                  className="ligne entree tempo-2"
+                  style={{ "--souleve": "1.15em" } as React.CSSProperties}
+                >
+                  Éditions du Cerisier
+                </span>
+              </span>
             </h1>
-            <p className="entree tempo-2 mt-9 max-w-lg font-serif text-lg leading-relaxed text-fleur-200 italic sm:text-xl">
+            <p className="entree tempo-3 mt-9 max-w-lg font-serif text-lg leading-relaxed text-fleur-200 italic sm:text-xl">
               Petites, mais obstinées, les Éditions du Cerisier cherchent, avant
               tout, à rendre publics les livres qui relatent, imaginent,
               témoignent des peuples, de leurs cultures, de leurs luttes, de
               leurs libertés…
             </p>
-            <div className="entree tempo-3 mt-11 flex flex-wrap items-center gap-x-8 gap-y-4">
+            <div className="entree tempo-4 mt-11 flex flex-wrap items-center gap-x-8 gap-y-4">
               <Link
                 href="/catalogue"
                 className="inline-block bg-cerise-400 px-7 py-3.5 text-xs font-bold tracking-[0.16em] text-ecorce-900 uppercase transition-colors hover:bg-fleur-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cerise-400"
@@ -80,8 +135,8 @@ export default function Home() {
           </div>
 
           {/* Les volumes ne sont pas alignés : ils sont posés, décalés en
-              hauteur comme sur une table de libraire — et ils se hissent de
-              plus bas que le texte, en dernier. */}
+              hauteur comme sur une table de libraire — hissés de plus bas
+              que le texte, en dernier, un peu penchés puis d'aplomb. */}
           <ul className="flex items-end justify-center gap-5 sm:gap-8 lg:col-span-6 lg:justify-end lg:self-center">
             {vitrine.map((b, i) => (
               <li
@@ -91,8 +146,9 @@ export default function Home() {
                 }`}
                 style={
                   {
-                    "--tempo": `${0.5 + i * 0.16}s`,
-                    "--souleve": "5rem",
+                    "--tempo": `${0.65 + i * 0.18}s`,
+                    "--souleve": "5.5rem",
+                    "--pivote": `${i === 1 ? -3 : 2.5}deg`,
                   } as React.CSSProperties
                 }
               >
@@ -128,15 +184,56 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Le tronc : la citation, reprise mot pour mot du site, se pose en
-          pleine scène — c'est le moment fort de la page, il a droit au
-          grand geste. */}
-      <section className="overflow-hidden border-y border-feuille-700 bg-feuille-800">
+      {/* Le rayonnage : une frise de couvertures longe la page, en boucle.
+          La marche s'arrête sous le curseur ; sans animation, elle redevient
+          une étagère qu'on fait défiler à la main. */}
+      <section
+        aria-label="Quelques couvertures du catalogue"
+        className="rayon-fenetre border-y border-feuille-700 bg-feuille-800 py-12"
+      >
+        <div className="rayon-defilant flex w-max">
+          {[0, 1].map((copie) => (
+            <ul
+              key={copie}
+              aria-hidden={copie === 1 || undefined}
+              className={`flex items-center ${copie === 1 ? "rayon-copie" : ""}`}
+            >
+              {rayonnage.map((b) => (
+                <li
+                  key={`${copie}-${b.slug}`}
+                  className="shrink-0 pr-14 transition-transform duration-300 odd:-rotate-2 even:rotate-[1.6deg] hover:rotate-0 hover:scale-[1.07]"
+                >
+                  <Link
+                    href={`/catalogue/${b.collection}/${b.slug}`}
+                    aria-label={b.title}
+                    tabIndex={copie === 1 ? -1 : undefined}
+                    className="relative block h-44 w-30 sm:h-52 sm:w-36"
+                  >
+                    <Image
+                      src={b.cover}
+                      alt=""
+                      fill
+                      sizes="144px"
+                      className="object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)]"
+                    />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </section>
+
+      {/* Le tronc : la citation, reprise mot pour mot du site. Elle se pose
+          en scène, puis la lumière la traverse au fil de la lecture. */}
+      <section className="overflow-hidden bg-feuille-800">
         <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
-          <blockquote className="pousse-scene titre-verger max-w-4xl text-4xl leading-[1.08] text-balance text-fleur-50 sm:text-6xl">
-            « Ni dieu, ni maître. Juste un grand réservoir d’enthousiasme,
-            d’esprit critique et de connivence avec la révolution permanente. »
-          </blockquote>
+          <div className="pousse-scene">
+            <blockquote className="balayage-lumiere titre-verger max-w-4xl text-4xl leading-[1.08] text-balance text-fleur-50 sm:text-6xl">
+              « Ni dieu, ni maître. Juste un grand réservoir d’enthousiasme,
+              d’esprit critique et de connivence avec la révolution permanente. »
+            </blockquote>
+          </div>
           <p className="pousse mt-10 max-w-xl leading-relaxed text-fleur-200/80">
             Le socle des Editions, constituées en société coopérative, c’est leur
             indépendance matérielle et intellectuelle.

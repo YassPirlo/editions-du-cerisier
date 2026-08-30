@@ -55,6 +55,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Aller au contenu
         </a>
+        {/* Le grain du papier, posé sur toute la page (voir globals.css). */}
+        <div className="grain" aria-hidden="true" />
         <Header />
         <main id="contenu" className="flex-1">
           {children}

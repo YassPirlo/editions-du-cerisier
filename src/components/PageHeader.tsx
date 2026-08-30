@@ -22,7 +22,8 @@ export function PageHeader({
         className="pointer-events-none absolute -top-20 -right-16 h-[16rem] w-[34rem] text-feuille-800"
         aria-hidden="true"
       >
-        <Branche className="h-full w-full -scale-x-100" />
+        {/* La branche se dessine à chaque arrivée sur la page (.branche-trace). */}
+        <Branche className="branche-trace h-full w-full -scale-x-100" />
       </div>
 
       <div className="relative mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">

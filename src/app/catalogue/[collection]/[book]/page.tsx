@@ -86,7 +86,10 @@ export default async function BookPage({
           {/* Le livre est en volume ici aussi : c'est l'objet qu'on vend par
               courrier, pas une vignette. Le survol le redresse pour montrer
               la couverture bien en face. */}
-          <div className="entree tempo-1 mx-auto w-full max-w-[260px] pt-4">
+          <div
+            className="entree tempo-1 mx-auto w-full max-w-[260px] pt-4"
+            style={{ "--souleve": "3.5rem", "--pivote": "2.5deg" } as React.CSSProperties}
+          >
             <Livre3D
               src={b.cover}
               titre={b.title}

@@ -221,8 +221,9 @@
     .entree {
       opacity: 0;
       /* L'amplitude se règle par élément : un titre se pose (2.5rem), un
-         volume se hisse (--souleve: 5rem). Un grand geste, pas un frisson. */
-      transform: translateY(var(--souleve, 2.5rem));
+         volume se hisse (--souleve: 5rem) et peut arriver légèrement penché
+         (--pivote) avant de s'aplomber. Un grand geste, pas un frisson. */
+      transform: translateY(var(--souleve, 2.5rem)) rotate(var(--pivote, 0deg));
     }
     .entree-opacite {
       opacity: 0;
@@ -290,6 +291,182 @@
     opacity: 1;
     transform: none;
   }
+}
+
+/* ------------------------------------------------------------------------
+   LE TRACÉ. La branche se dessine elle-même à l'arrivée sur la page :
+   chaque chemin du SVG porte pathLength=1, le trait part donc de
+   stroke-dashoffset 1 (invisible) et se pose en un geste d'1,4 s ; les
+   fruits éclosent ensuite, une fois le trait passé. Porté par
+   @starting-style : le tracé rejoue à chaque navigation, sans JavaScript.
+   Les bouts de trait passent en `butt` pendant le dessin, sinon les
+   embouts ronds laissent des points avant l'arrivée du trait.
+   ------------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  .branche-trace path {
+    stroke-linecap: butt;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1.4s var(--ease-verger) 0.15s;
+  }
+  .branche-trace circle {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition:
+      opacity 0.5s ease-out 1.25s,
+      transform 0.55s var(--ease-verger) 1.25s;
+  }
+}
+@starting-style {
+  @media (prefers-reduced-motion: no-preference) {
+    .branche-trace path {
+      stroke-dashoffset: 1;
+    }
+    .branche-trace circle {
+      opacity: 0;
+      transform: scale(0.25);
+    }
+  }
+}
+
+/* ------------------------------------------------------------------------
+   LES PÉTALES. Le cerisier d'avril perd ses fleurs au moindre vent : une
+   poignée de pétales descend le premier écran en se balançant. Deux calques
+   par pétale — l'un tombe, l'autre oscille — parce qu'une chute réelle est
+   la somme des deux. Absents si le lecteur préfère l'immobilité.
+   ------------------------------------------------------------------------ */
+.petale {
+  display: none;
+  position: absolute;
+  top: -6%;
+  left: var(--x, 50%);
+  width: var(--taille, 0.8rem);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .petale {
+    display: block;
+    animation: petale-chute var(--duree, 16s) linear var(--retard, 0s) infinite;
+  }
+  .petale > svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    animation: petale-balance calc(var(--duree, 16s) / 5) ease-in-out var(--retard, 0s)
+      infinite alternate;
+  }
+}
+@keyframes petale-chute {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  6% {
+    opacity: var(--voile, 0.5);
+  }
+  88% {
+    opacity: var(--voile, 0.5);
+  }
+  100% {
+    transform: translate3d(var(--vent, 4rem), 108vh, 0);
+    opacity: 0;
+  }
+}
+@keyframes petale-balance {
+  from {
+    transform: translateX(-0.6rem) rotate(-38deg);
+  }
+  to {
+    transform: translateX(0.6rem) rotate(32deg);
+  }
+}
+
+/* ------------------------------------------------------------------------
+   LE RAYONNAGE QUI DÉFILE. Une frise de couvertures traverse lentement la
+   page, en boucle — la vitrine qu'on longe. Le contenu est doublé pour que
+   la boucle soit invisible (les deux moitiés sont identiques, -50 % retombe
+   pile) ; la marche s'arrête sous le curseur, et sans animation la frise
+   redevient une étagère qu'on fait défiler à la main.
+   ------------------------------------------------------------------------ */
+.rayon-fenetre {
+  overflow-x: auto;
+}
+.rayon-copie {
+  display: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .rayon-fenetre {
+    overflow: hidden;
+  }
+  .rayon-copie {
+    display: flex;
+  }
+  .rayon-defilant {
+    animation: rayon-defile 75s linear infinite;
+  }
+  .rayon-defilant:hover,
+  .rayon-defilant:focus-within {
+    animation-play-state: paused;
+  }
+}
+@keyframes rayon-defile {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* ------------------------------------------------------------------------
+   LE BALAYAGE DE LUMIÈRE. La citation s'éclaire au fil du défilement : un
+   dégradé glisse dans les lettres (background-clip: text), scrutté par la
+   position de lecture. Sans timelines de défilement, le texte est
+   simplement clair — l'état final, pas une panne.
+   ------------------------------------------------------------------------ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .balayage-lumiere {
+      color: transparent;
+      background-image: linear-gradient(
+        105deg,
+        var(--color-fleur-50) 42%,
+        var(--color-feuille-600) 58%
+      );
+      background-size: 260% 100%;
+      background-position: 100% 0;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: balayage-lumiere linear both;
+      animation-timeline: view();
+      animation-range: entry 25% cover 60%;
+    }
+  }
+}
+@keyframes balayage-lumiere {
+  to {
+    background-position: 0% 0;
+  }
+}
+
+/* ------------------------------------------------------------------------
+   Le titre se compose ligne à ligne : chaque ligne monte depuis sa propre
+   fenêtre (overflow hidden), comme des lignes de plomb qu'on pose.
+   ------------------------------------------------------------------------ */
+.ligne-masque {
+  display: block;
+  overflow: hidden;
+}
+.ligne-masque > .ligne {
+  display: block;
+}
+
+/* Le grain du papier : un voile de bruit à peine perceptible sur toute la
+   page — c'est lui qui sépare une page imprimée d'un aplat d'écran. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
 }
 
 /* ------------------------------------------------------------------------
