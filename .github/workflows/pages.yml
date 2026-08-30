@@ -1,0 +1,61 @@
+# Aperçu public du site sur GitHub Pages, reconstruit à chaque poussée sur
+# main. C'est un déploiement d'aperçu : le site définitif visera un hébergeur
+# qui sert Next sans export statique.
+name: Aperçu GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un seul déploiement à la fois ; un push pendant un build annule le build.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  construire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - run: npm ci
+
+      - name: Export statique sous /editions-du-cerisier
+        run: npm run build
+        env:
+          PAGES_BASE: /editions-du-cerisier
+
+      - name: Préfixe les chemins d'images et de documents
+        run: node scripts/prefixe-pages.mjs out /editions-du-cerisier
+
+      # Le dossier _next commencerait par un underscore que Jekyll ignore.
+      - run: touch out/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deployer:
+    needs: construire
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
+      - id: deploiement
+        uses: actions/deploy-pages@v4

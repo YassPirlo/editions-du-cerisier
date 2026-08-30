@@ -1,6 +1,10 @@
 import type { MetadataRoute } from "next";
 import { books, collections } from "@/lib/content";
 
+/* Exigé par l'export statique de l'aperçu GitHub Pages ; le build normal
+   produit déjà ce fichier statiquement. */
+export const dynamic = "force-static";
+
 const BASE = "https://editions-du-cerisier.be";
 
 export default function sitemap(): MetadataRoute.Sitemap {
