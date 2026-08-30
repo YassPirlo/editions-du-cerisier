@@ -17,9 +17,11 @@ export function PageHeader({
   breadcrumb?: { label: string; href: string }[];
 }) {
   return (
-    <div className="relative overflow-hidden border-b border-feuille-700 bg-feuille-900 text-fleur-100">
+    <div className="relative overflow-hidden border-b border-ecorce-800 bg-ecorce-950 text-fleur-100">
+      {/* La branche se trace à l'or sur l'encre : le bandeau historique de
+          la maison, or sur brun, devenu geste. */}
       <div
-        className="pointer-events-none absolute -top-20 -right-16 h-[16rem] w-[34rem] text-feuille-800"
+        className="pointer-events-none absolute -top-20 -right-16 h-[16rem] w-[34rem] text-cerise-600/70"
         aria-hidden="true"
       >
         {/* La branche se dessine à chaque arrivée sur la page (.branche-trace). */}
@@ -29,7 +31,7 @@ export function PageHeader({
       <div className="relative mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
         {breadcrumb && (
           <nav aria-label="Fil d’Ariane" className="mb-6">
-            <ol className="flex flex-wrap items-center gap-1.5 text-sm text-feuille-300">
+            <ol className="flex flex-wrap items-center gap-1.5 text-sm text-ecorce-300">
               {breadcrumb.map((c) => (
                 <li key={c.href} className="flex items-center gap-1.5">
                   <Link href={c.href} className="transition-colors hover:text-fleur-100">

@@ -33,7 +33,7 @@ export function Header() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-feuille-800 bg-feuille-900/95 text-fleur-100 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-ecorce-800 bg-ecorce-950/95 text-fleur-100 backdrop-blur">
       <div className="mx-auto flex h-18 max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <Link
           href="/"
@@ -44,7 +44,7 @@ export function Header() {
             <span className="font-serif text-lg font-semibold tracking-tight text-fleur-50">
               Éditions du Cerisier
             </span>
-            <span className="mt-0.5 text-[0.6875rem] tracking-[0.14em] text-feuille-300 uppercase">
+            <span className="mt-0.5 text-[0.6875rem] tracking-[0.14em] text-ecorce-300 uppercase">
               Cuesmes · Belgique
             </span>
           </span>
@@ -85,12 +85,12 @@ export function Header() {
               />
               {item.children && (
                 <div className="invisible absolute top-full left-0 min-w-56 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-                  <ul className="overflow-hidden rounded-xl border border-feuille-700 bg-feuille-800 py-1.5 shadow-lg shadow-black/30">
+                  <ul className="overflow-hidden rounded-xl border border-ecorce-800 bg-ecorce-900 py-1.5 shadow-lg shadow-black/30">
                     {item.children.map((child) => (
                       <li key={child.href + child.label}>
                         <Link
                           href={child.href}
-                          className="block px-4 py-2 text-sm text-fleur-200 transition-colors hover:bg-feuille-700 hover:text-fleur-50 focus-visible:bg-feuille-700 focus-visible:outline-none"
+                          className="block px-4 py-2 text-sm text-fleur-200 transition-colors hover:bg-ecorce-800 hover:text-fleur-50 focus-visible:bg-ecorce-800 focus-visible:outline-none"
                         >
                           {child.label}
                         </Link>
@@ -108,7 +108,7 @@ export function Header() {
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
-          className="-mr-1 rounded-md p-2 text-fleur-100 transition-colors hover:bg-feuille-800 focus-visible:outline-2 focus-visible:outline-cerise-400 lg:hidden"
+          className="-mr-1 rounded-md p-2 text-fleur-100 transition-colors hover:bg-ecorce-900 focus-visible:outline-2 focus-visible:outline-cerise-400 lg:hidden"
         >
           <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden="true">
             {open ? (
@@ -131,12 +131,12 @@ export function Header() {
       </div>
 
       {open && (
-        <div className="max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-feuille-800 bg-feuille-900 lg:hidden">
+        <div className="max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-ecorce-800 bg-ecorce-950 lg:hidden">
           <ul className="mx-auto max-w-6xl px-4 py-3 sm:px-6">
             {nav.map((item, i) => (
               <li
                 key={item.href}
-                className="entree border-b border-feuille-800 last:border-0"
+                className="entree border-b border-ecorce-800 last:border-0"
                 style={{ "--tempo": `${i * 0.06}s` } as React.CSSProperties}
               >
                 <div className="flex items-center">
@@ -156,7 +156,7 @@ export function Header() {
                       }
                       aria-expanded={expanded === item.href}
                       aria-label={`Afficher les sous-rubriques de ${item.label}`}
-                      className="p-3 text-feuille-300"
+                      className="p-3 text-ecorce-300"
                     >
                       <svg
                         viewBox="0 0 12 12"

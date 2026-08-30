@@ -4,7 +4,7 @@ import { Cerise } from "@/components/Cerisier";
 /* La cerise est tombée de la branche : la page demandée n'est plus là. */
 export default function NotFound() {
   return (
-    <div className="flex min-h-[70vh] items-center bg-feuille-900 text-fleur-100">
+    <div className="flex min-h-[70vh] items-center bg-ecorce-950 text-fleur-100">
       <div className="mx-auto flex max-w-xl flex-col items-center px-4 py-24 text-center sm:px-6">
         <Cerise
           filled
@@ -25,7 +25,7 @@ export default function NotFound() {
           </Link>
           <Link
             href="/catalogue"
-            className="border border-feuille-600 px-6 py-3 text-xs font-bold tracking-[0.16em] text-fleur-200 uppercase transition-colors hover:border-cerise-400 hover:text-fleur-50"
+            className="border border-ecorce-600 px-6 py-3 text-xs font-bold tracking-[0.16em] text-fleur-200 uppercase transition-colors hover:border-cerise-400 hover:text-fleur-50"
           >
             Voir le catalogue
           </Link>

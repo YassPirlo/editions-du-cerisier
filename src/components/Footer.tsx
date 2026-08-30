@@ -11,9 +11,9 @@ import { CherryLogo } from "./CherryLogo";
  */
 export function Footer() {
   return (
-    <footer className="relative mt-24 overflow-hidden border-t border-feuille-800 bg-feuille-900 text-fleur-200">
+    <footer className="relative mt-24 overflow-hidden border-t border-ecorce-800 bg-ecorce-950 text-fleur-200">
       <div
-        className="pointer-events-none absolute -top-24 -right-24 h-[20rem] w-[44rem] text-feuille-800"
+        className="pointer-events-none absolute -top-24 -right-24 h-[20rem] w-[44rem] text-ecorce-900"
         aria-hidden="true"
       >
         <Branche className="h-full w-full -scale-x-100" />
@@ -76,8 +76,8 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="relative border-t border-feuille-800">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-xs text-feuille-300 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <div className="relative border-t border-ecorce-800">
+        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-xs text-ecorce-300 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <p>
             © {new Date().getFullYear()} Éditions du Cerisier — Société coopérative
           </p>

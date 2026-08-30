@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Branche, Cerise, Petale } from "@/components/Cerisier";
+import { Cerise, Petale } from "@/components/Cerisier";
+import { FluxCouvertures } from "@/components/FluxCouvertures";
 import { epaisseurDe, Livre3D } from "@/components/Livre3D";
 import { Prose } from "@/components/Prose";
 import { type Book, books, collections, excerpt, pages } from "@/lib/content";
@@ -15,86 +16,83 @@ const parutions = pages.nouveautes
   .map((n) => books.find((b) => b.cover === n.images[0]))
   .filter((b): b is Book & { cover: string } => b?.cover != null);
 
-const vitrine = parutions.slice(0, 3);
 const recolte = parutions.slice(0, 8);
 
 const index = collections
   .map((c) => ({ ...c, count: books.filter((b) => b.collection === c.slug).length }))
   .filter((c) => c.count > 0);
 
-/* Le rayonnage qui défile : seize couvertures prélevées régulièrement dans
-   tout le catalogue, pour que toutes les collections y passent. */
+/* Deux prélèvements réguliers dans tout le catalogue : douze couvertures
+   pour le couloir du héros, seize pour le rayonnage — décalés d'un
+   demi-pas pour ne pas montrer deux fois les mêmes. */
 const avecCouverture = books.filter(
   (b): b is Book & { cover: string } => b.cover != null,
 );
+const pasFlux = Math.max(1, Math.floor(avecCouverture.length / 12));
+const flux = avecCouverture.filter((_, i) => i % pasFlux === 0).slice(0, 12);
 const pasRayon = Math.max(1, Math.floor(avecCouverture.length / 16));
-const rayonnage = avecCouverture.filter((_, i) => i % pasRayon === 0).slice(0, 16);
+const rayonnage = avecCouverture
+  .filter((_, i) => (i + Math.floor(pasRayon / 2)) % pasRayon === 0)
+  .slice(0, 16);
 
 /* Les pétales du premier écran : position, taille, durée et vent fixés une
    fois pour toutes — le hasard à l'exécution ferait clignoter l'hydratation. */
 const petales = [
   { x: "6%", taille: "0.7rem", duree: "17s", retard: "-3s", vent: "3rem", voile: "0.4" },
-  { x: "16%", taille: "1rem", duree: "13s", retard: "-9s", vent: "-2.5rem", voile: "0.55" },
-  { x: "29%", taille: "0.6rem", duree: "19s", retard: "-6s", vent: "4.5rem", voile: "0.35" },
-  { x: "43%", taille: "0.85rem", duree: "14s", retard: "-1s", vent: "-3rem", voile: "0.5" },
-  { x: "55%", taille: "0.7rem", duree: "16s", retard: "-12s", vent: "2rem", voile: "0.4" },
-  { x: "67%", taille: "1.05rem", duree: "12s", retard: "-5s", vent: "-4rem", voile: "0.6" },
-  { x: "80%", taille: "0.75rem", duree: "18s", retard: "-8s", vent: "3.5rem", voile: "0.45" },
-  { x: "91%", taille: "0.9rem", duree: "15s", retard: "-2s", vent: "-2rem", voile: "0.5" },
+  { x: "16%", taille: "1rem", duree: "13s", retard: "-9s", vent: "-2.5rem", voile: "0.5" },
+  { x: "31%", taille: "0.6rem", duree: "19s", retard: "-6s", vent: "4.5rem", voile: "0.35" },
+  { x: "47%", taille: "0.85rem", duree: "14s", retard: "-1s", vent: "-3rem", voile: "0.45" },
+  { x: "62%", taille: "0.7rem", duree: "16s", retard: "-12s", vent: "2rem", voile: "0.4" },
+  { x: "74%", taille: "1.05rem", duree: "12s", retard: "-5s", vent: "-4rem", voile: "0.55" },
+  { x: "86%", taille: "0.75rem", duree: "18s", retard: "-8s", vent: "3.5rem", voile: "0.4" },
+  { x: "94%", taille: "0.9rem", duree: "15s", retard: "-2s", vent: "-2rem", voile: "0.5" },
 ];
 
 export default function Home() {
   return (
     <>
-      {/* Sous la branche : le premier écran est la vitrine à la tombée du
-          jour. À l'arrivée, la branche SE DESSINE (.branche-trace), les
-          fruits éclosent, les pétales tombent, le titre se compose ligne à
-          ligne et les volumes se hissent en dernier, légèrement penchés,
-          avant de s'aplomber. Au défilement, deux plans de branches dérivent
-          à deux vitesses. */}
-      <section className="relative overflow-hidden bg-feuille-900 text-fleur-100">
-        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-          {/* La branche lointaine, presque immobile. */}
-          <div className="branche-derive-lente absolute -top-8 left-[-6%] hidden h-[19rem] w-[125%] opacity-60 sm:block">
-            <Branche className="branche-trace h-full w-full text-feuille-800" />
-          </div>
-          {/* La branche proche, qui voyage vraiment au défilement. Sur
-              mobile, une pleine largeur ne montrerait qu'un tronçon nu : on
-              donne au SVG plus large que l'écran pour retomber sur une
-              portion qui porte des fruits. */}
-          <div className="branche-derive absolute -top-14 -left-10 h-[14rem] w-[40rem] sm:hidden">
-            <Branche className="branche-trace h-full w-full text-feuille-700" />
-          </div>
-          {/* 130 % de large : la branche doit déborder largement des deux
-              côtés en fin de dérive, sinon elle découvrirait son bord droit
-              en glissant. */}
-          <div className="branche-derive absolute -top-24 left-[-8%] hidden h-[24rem] w-[130%] sm:block">
-            <Branche className="branche-trace h-full w-full text-feuille-700" />
-          </div>
+      {/* L'encre et l'or : le premier écran est un couloir de couvertures
+          qui émergent du point de fuite et balaient vers les bords, en
+          boucle — la vitrine d'une librairie qui n'en finit pas (adapté de
+          l'Image Stream Hero de ruixen.ui). Les pétales d'avril tombent
+          par-dessus, le titre se compose ligne à ligne au centre. */}
+      <section className="relative overflow-hidden bg-ecorce-950 text-fleur-100">
+        <FluxCouvertures
+          couvertures={flux.map((b) => b.cover)}
+          duree={22}
+          axe={56}
+          className="min-h-[calc(100svh-4.5rem)]"
+        >
+          {/* Le voile : une pénombre radiale sous le texte, pour que le
+              titre reste net au-dessus du défilé. */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 z-[4] bg-[radial-gradient(ellipse_55%_60%_at_50%_46%,rgba(23,16,8,0.9)_0%,rgba(23,16,8,0.45)_55%,transparent_78%)]"
+          />
           {/* Les pétales d'avril. */}
-          {petales.map((p, i) => (
-            <span
-              key={i}
-              className="petale text-fleur-200"
-              style={
-                {
-                  "--x": p.x,
-                  "--taille": p.taille,
-                  "--duree": p.duree,
-                  "--retard": p.retard,
-                  "--vent": p.vent,
-                  "--voile": p.voile,
-                } as React.CSSProperties
-              }
-            >
-              <Petale />
-            </span>
-          ))}
-        </div>
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-[6]">
+            {petales.map((p, i) => (
+              <span
+                key={i}
+                className="petale text-fleur-200"
+                style={
+                  {
+                    "--x": p.x,
+                    "--taille": p.taille,
+                    "--duree": p.duree,
+                    "--retard": p.retard,
+                    "--vent": p.vent,
+                    "--voile": p.voile,
+                  } as React.CSSProperties
+                }
+              >
+                <Petale />
+              </span>
+            ))}
+          </div>
 
-        <div className="relative mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-6xl content-center gap-14 px-4 pt-28 pb-16 sm:px-6 lg:grid-cols-12 lg:gap-8 lg:pt-32 lg:pb-20">
-          <div className="lg:col-span-6 lg:self-center">
-            <h1 className="titre-verger text-[2.9rem] leading-[1.04] text-balance text-fleur-50 sm:text-6xl lg:text-7xl">
+          <div className="relative z-10 mx-auto flex min-h-[calc(100svh-4.5rem)] max-w-4xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6">
+            <h1 className="titre-verger text-5xl leading-[1.02] text-balance text-fleur-50 sm:text-7xl">
               <span className="ligne-masque">
                 <span
                   className="ligne entree tempo-1"
@@ -112,13 +110,13 @@ export default function Home() {
                 </span>
               </span>
             </h1>
-            <p className="entree tempo-3 mt-9 max-w-lg font-serif text-lg leading-relaxed text-fleur-200 italic sm:text-xl">
+            <p className="entree tempo-3 mt-9 max-w-2xl font-serif text-lg leading-relaxed text-fleur-200 italic sm:text-xl">
               Petites, mais obstinées, les Éditions du Cerisier cherchent, avant
               tout, à rendre publics les livres qui relatent, imaginent,
               témoignent des peuples, de leurs cultures, de leurs luttes, de
               leurs libertés…
             </p>
-            <div className="entree tempo-4 mt-11 flex flex-wrap items-center gap-x-8 gap-y-4">
+            <div className="entree tempo-4 mt-11 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
               <Link
                 href="/catalogue"
                 className="inline-block bg-cerise-400 px-7 py-3.5 text-xs font-bold tracking-[0.16em] text-ecorce-900 uppercase transition-colors hover:bg-fleur-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cerise-400"
@@ -127,50 +125,17 @@ export default function Home() {
               </Link>
               <Link
                 href="/envoyer-un-manuscrit"
-                className="border-b border-feuille-400 pb-1 font-serif text-fleur-200 transition-colors hover:border-griotte-300 hover:text-fleur-50"
+                className="border-b border-ecorce-400 pb-1 font-serif text-fleur-200 transition-colors hover:border-griotte-300 hover:text-fleur-50"
               >
                 Envoyer un manuscrit
               </Link>
             </div>
           </div>
-
-          {/* Les volumes ne sont pas alignés : ils sont posés, décalés en
-              hauteur comme sur une table de libraire — hissés de plus bas
-              que le texte, en dernier, un peu penchés puis d'aplomb. */}
-          <ul className="flex items-end justify-center gap-5 sm:gap-8 lg:col-span-6 lg:justify-end lg:self-center">
-            {vitrine.map((b, i) => (
-              <li
-                key={`${b.collection}/${b.slug}`}
-                className={`entree w-[7.5rem] shrink-0 sm:w-40 lg:w-44 ${
-                  i === 1 ? "mb-12" : i === 2 ? "mb-5 hidden sm:block" : ""
-                }`}
-                style={
-                  {
-                    "--tempo": `${0.65 + i * 0.18}s`,
-                    "--souleve": "5.5rem",
-                    "--pivote": `${i === 1 ? -3 : 2.5}deg`,
-                  } as React.CSSProperties
-                }
-              >
-                <Link
-                  href={`/catalogue/${b.collection}/${b.slug}`}
-                  className="groupe-livre block focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-cerise-400"
-                >
-                  <Livre3D
-                    src={b.cover}
-                    titre={b.title}
-                    sizes="(min-width: 1024px) 176px, (min-width: 640px) 160px, 120px"
-                    epaisseur={epaisseurDe(b.pages)}
-                  />
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+        </FluxCouvertures>
       </section>
 
       {/* La clairière : le texte de l'éditeur revient sur papier. Composer un
-          avant-propos de cette longueur en clair sur vert le rendrait
+          avant-propos de cette longueur en clair sur l'encre le rendrait
           illisible — et c'est son texte, pas un ornement. */}
       <section className="mx-auto max-w-2xl px-6 py-20 sm:py-28">
         <div className="pousse">
@@ -189,7 +154,7 @@ export default function Home() {
           une étagère qu'on fait défiler à la main. */}
       <section
         aria-label="Quelques couvertures du catalogue"
-        className="rayon-fenetre border-y border-feuille-700 bg-feuille-800 py-12"
+        className="rayon-fenetre border-y border-ecorce-800 bg-ecorce-900 py-12"
       >
         <div className="rayon-defilant flex w-max">
           {[0, 1].map((copie) => (
@@ -214,7 +179,7 @@ export default function Home() {
                       alt=""
                       fill
                       sizes="144px"
-                      className="object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)]"
+                      className="object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.5)]"
                     />
                   </Link>
                 </li>
@@ -226,7 +191,7 @@ export default function Home() {
 
       {/* Le tronc : la citation, reprise mot pour mot du site. Elle se pose
           en scène, puis la lumière la traverse au fil de la lecture. */}
-      <section className="overflow-hidden bg-feuille-800">
+      <section className="overflow-hidden bg-ecorce-900">
         <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
           <div className="pousse-scene">
             <blockquote className="balayage-lumiere titre-verger max-w-4xl text-4xl leading-[1.08] text-balance text-fleur-50 sm:text-6xl">
@@ -293,7 +258,7 @@ export default function Home() {
       {/* La récolte : les dernières parutions. Chaque volume se redresse en
           entrant dans le champ — le geste du libraire qui met un livre
           debout (.poser). */}
-      <section className="border-y border-feuille-700 bg-feuille-900 text-fleur-100">
+      <section className="border-y border-ecorce-800 bg-ecorce-950 text-fleur-100">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
           <h2 className="pousse titre-verger text-2xl text-fleur-50 sm:text-3xl">
             Vient de paraître
@@ -314,7 +279,7 @@ export default function Home() {
                   <p className="mt-7 font-serif text-[0.95rem] leading-snug text-fleur-100 transition-colors group-hover:text-griotte-300">
                     {b.title}
                   </p>
-                  <p className="mt-1 text-xs text-feuille-300">{b.collectionName}</p>
+                  <p className="mt-1 text-xs text-ecorce-300">{b.collectionName}</p>
                 </Link>
               </li>
             ))}
@@ -380,7 +345,7 @@ export default function Home() {
           </div>
           <Link
             href="/envoyer-un-manuscrit"
-            className="shrink-0 self-start bg-ecorce-900 px-8 py-4 text-xs font-bold tracking-[0.16em] text-cerise-400 uppercase transition-colors hover:bg-feuille-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ecorce-900 md:self-auto"
+            className="shrink-0 self-start bg-ecorce-900 px-8 py-4 text-xs font-bold tracking-[0.16em] text-cerise-400 uppercase transition-colors hover:bg-ecorce-950 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ecorce-900 md:self-auto"
           >
             Envoyer un manuscrit
           </Link>

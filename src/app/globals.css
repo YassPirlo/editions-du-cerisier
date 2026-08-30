@@ -19,6 +19,9 @@
   --color-ecorce-700: #52412a;
   --color-ecorce-800: #3a2e1e;
   --color-ecorce-900: #241d13;
+  /* L'encre : le brun poussé jusqu'à la nuit. C'est l'enveloppe du site —
+     le bandeau historique de la maison est or sur brun, pas or sur vert. */
+  --color-ecorce-950: #171008;
 
   /* Accent tertiaire : « l'acidité et le juteux du fruit rouge » (Jean Delval).
      Le jaune et le marron restent la base imposée ; ce rouge n'intervient que
@@ -173,9 +176,21 @@
   transform: translateY(-0.32em);
   border-bottom: 1px dotted var(--color-ecorce-300);
 }
-/* La même conduite, posée sur la frondaison. */
+/* La même conduite, posée sur l'encre. */
 .leader-nuit {
-  border-bottom-color: var(--color-feuille-600);
+  border-bottom-color: var(--color-ecorce-700);
+}
+
+/* Le couloir de couvertures ne s'affiche que si le navigateur comprend les
+   unités de conteneur (cqw) : sans elles, mieux vaut pas de décor qu'un
+   décor démesuré. */
+.flux-corridor {
+  display: none;
+}
+@supports (width: 1cqw) {
+  .flux-corridor {
+    display: block;
+  }
 }
 
 /* Lettrine sur le premier paragraphe du texte de présentation.
@@ -425,10 +440,11 @@
   @media (prefers-reduced-motion: no-preference) {
     .balayage-lumiere {
       color: transparent;
+      /* La lumière va du bronze — le brun imposé de la maison — à la fleur. */
       background-image: linear-gradient(
         105deg,
         var(--color-fleur-50) 42%,
-        var(--color-feuille-600) 58%
+        var(--color-ecorce-500) 58%
       );
       background-size: 260% 100%;
       background-position: 100% 0;
