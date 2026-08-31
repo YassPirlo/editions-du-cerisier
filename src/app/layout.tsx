@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { InvitationNewsletter } from "@/components/InvitationNewsletter";
 import "./globals.css";
 
 const inter = Inter({
@@ -66,6 +67,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <Footer />
+        <InvitationNewsletter />
+        {/* Formulaire statique jumeau du pop-up : Netlify ne détecte les
+            formulaires qu'en scannant le HTML publié, et le pop-up n'y est
+            pas (rendu client). */}
+        <form name="newsletter" data-netlify="true" netlify-honeypot="bot-field" hidden>
+          <input type="email" name="email" />
+          <input name="bot-field" />
+        </form>
       </body>
     </html>
   );
