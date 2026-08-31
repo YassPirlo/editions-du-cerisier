@@ -2,13 +2,20 @@ import Link from "next/link";
 import type { Book } from "@/lib/content";
 import { epaisseurDe, Livre3D } from "./Livre3D";
 
+/* Le sous-ensemble léger d'une fiche : ce qu'il faut pour la vignette, sans
+   le html/text — indispensable quand la liste passe par un composant client. */
+export type LivreVignette = Pick<
+  Book,
+  "slug" | "title" | "collection" | "collectionName" | "cover" | "pages" | "price"
+> & { annee?: number | null };
+
 /**
  * Un livre posé sur la table, pas une carte de logiciel : le volume en 3D,
  * puis le titre — et c'est tout. Le résumé se lit sur la fiche ; sur une
  * table de libraire, on ne lit pas les quatrièmes de couverture à distance.
  * Toute la vignette tend le livre vers le lecteur au survol (.groupe-livre).
  */
-export function BookCard({ book }: { book: Book }) {
+export function BookCard({ book }: { book: LivreVignette }) {
   return (
     <Link
       href={`/catalogue/${book.collection}/${book.slug}`}
@@ -28,6 +35,7 @@ export function BookCard({ book }: { book: Book }) {
           pagination, prix — sur une seule ligne discrète. */}
       <p className="mt-1.5 text-xs text-ecorce-500 tabular-nums">
         {book.collectionName}
+        {book.annee != null && <span> · {book.annee}</span>}
         {book.pages && <span> · {book.pages} p.</span>}
         {book.price && <span> · {book.price}</span>}
       </p>

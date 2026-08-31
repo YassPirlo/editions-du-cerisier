@@ -26,13 +26,17 @@ export const nav: NavItem[] = [
       { label: "Lu dans la presse et sur le net", href: "/a-la-une/revue-de-presse" },
     ],
   },
+  { label: "Nouveautés", href: "/a-la-une/nouveautes" },
   {
     label: "Catalogue",
     href: "/catalogue",
-    children: collections.map((c) => ({
-      label: c.name,
-      href: `/catalogue/${c.slug}`,
-    })),
+    children: [
+      { label: "Tous les titres", href: "/catalogue/tous-les-titres" },
+      ...collections.map((c) => ({
+        label: c.name,
+        href: `/catalogue/${c.slug}`,
+      })),
+    ],
   },
   {
     label: "Contact",

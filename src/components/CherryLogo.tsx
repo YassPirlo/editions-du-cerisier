@@ -13,8 +13,8 @@ export function CherryLogo({ className = "" }: { className?: string }) {
         strokeWidth="2.2"
         strokeLinecap="round"
       />
-      <circle cx="9.5" cy="31.5" r="7.5" fill="var(--color-cerise-400)" />
-      <circle cx="30.5" cy="33.5" r="8.5" fill="var(--color-cerise-500)" />
+      <circle cx="9.5" cy="31.5" r="7.5" fill="var(--color-griotte-300)" />
+      <circle cx="30.5" cy="33.5" r="8.5" fill="var(--color-griotte-400)" />
       <circle cx="7" cy="29" r="2.2" fill="#fff" fillOpacity="0.5" />
       <circle cx="27.5" cy="30.5" r="2.6" fill="#fff" fillOpacity="0.45" />
     </svg>

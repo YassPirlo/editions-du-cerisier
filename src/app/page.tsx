@@ -32,14 +32,14 @@ const index = collections
   })
   .filter((c) => c.count > 0);
 
-/* Deux prélèvements réguliers dans tout le catalogue : douze couvertures
-   pour le couloir du héros, seize pour le rayonnage — décalés d'un
-   demi-pas pour ne pas montrer deux fois les mêmes. */
 const avecCouverture = books.filter(
   (b): b is Book & { cover: string } => b.cover != null,
 );
-const pasFlux = Math.max(1, Math.floor(avecCouverture.length / 12));
-const flux = avecCouverture.filter((_, i) => i % pasFlux === 0).slice(0, 12);
+/* Le couloir du héros montre les parutions par ordre de nouveauté : la
+   rubrique « Nouveautés » fait foi (l'ordre y est celui de l'éditeur). */
+const flux = parutions.slice(0, 12);
+/* Seize couvertures pour le rayonnage, prélevées régulièrement dans tout
+   le catalogue. */
 const pasRayon = Math.max(1, Math.floor(avecCouverture.length / 16));
 const rayonnage = avecCouverture
   .filter((_, i) => (i + Math.floor(pasRayon / 2)) % pasRayon === 0)

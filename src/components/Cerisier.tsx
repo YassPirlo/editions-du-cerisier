@@ -116,8 +116,20 @@ export function Branche({ className = "" }: { className?: string }) {
               strokeWidth="3.2"
               strokeLinecap="round"
             />
-            <circle cx={g.x} cy={g.y} r={n.r} stroke="currentColor" strokeWidth="4.4" />
-            <circle cx={d.x} cy={d.y} r={rd} stroke="currentColor" strokeWidth="4.4" />
+            <circle
+              cx={g.x}
+              cy={g.y}
+              r={n.r}
+              stroke="var(--color-griotte-300)"
+              strokeWidth="4.4"
+            />
+            <circle
+              cx={d.x}
+              cy={d.y}
+              r={rd}
+              stroke="var(--color-griotte-400)"
+              strokeWidth="4.4"
+            />
           </g>
         );
       })}
@@ -145,7 +157,13 @@ export function Fleuron({ className = "" }: { className?: string }) {
         strokeWidth="2"
         strokeLinecap="round"
       />
-      <circle cx="41" cy="24" r="5.4" stroke="currentColor" strokeWidth="2.4" />
+      <circle
+        cx="41"
+        cy="24"
+        r="5.4"
+        stroke="var(--color-griotte-400)"
+        strokeWidth="2.4"
+      />
       <circle
         cx="56"
         cy="23.4"

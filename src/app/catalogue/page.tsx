@@ -26,6 +26,17 @@ export default function CataloguePage() {
       />
 
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+        <div className="flex flex-wrap gap-3">
+        <Link
+          href="/catalogue/tous-les-titres"
+          className="pousse inline-flex items-center gap-2.5 border border-ecorce-300 bg-white px-5 py-3 text-sm font-semibold text-ecorce-700 transition-colors hover:border-cerise-400 hover:bg-cerise-50 focus-visible:outline-2 focus-visible:outline-cerise-400"
+        >
+          <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" aria-hidden="true">
+            <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.6" />
+            <path d="m13.5 13.5 3.5 3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
+          Chercher parmi les {books.length} titres
+        </Link>
         <a
           href="/documents/cerisier_catalogue_2021.pdf"
           className="pousse inline-flex items-center gap-2.5 border border-ecorce-300 bg-white px-5 py-3 text-sm font-semibold text-ecorce-700 transition-colors hover:border-cerise-400 hover:bg-cerise-50 focus-visible:outline-2 focus-visible:outline-cerise-400"
@@ -41,6 +52,7 @@ export default function CataloguePage() {
           </svg>
           Télécharger le catalogue en PDF
         </a>
+        </div>
 
         {/* Chaque collection est une table de libraire : l'index en tête
             (nom … nombre de titres, en conduite pointillée), la ligne

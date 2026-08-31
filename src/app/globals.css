@@ -29,7 +29,7 @@
      Supprimer ces trois lignes suffit à revenir à deux couleurs. */
   /* Le 300 est le fruit pris par la lumière : sur le feuillage sombre, le
      griotte-500 s'éteint et devient illisible. */
-  --color-griotte-300: #e4566b;
+  --color-griotte-300: #e63946;
   --color-griotte-400: #c2183a;
   --color-griotte-500: #a5112b;
   --color-griotte-600: #7d0c20;
@@ -298,6 +298,16 @@
   from {
     opacity: 0;
     transform: translateY(2.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes apparition {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.98);
   }
   to {
     opacity: 1;

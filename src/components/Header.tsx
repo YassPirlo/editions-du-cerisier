@@ -29,8 +29,13 @@ export function Header() {
     };
   }, [open]);
 
-  const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+  /* Une seule entrée active à la fois : la correspondance la plus longue
+     l'emporte (« Nouveautés » plutôt que « À la une » sur sa propre page). */
+  const actif = nav
+    .map((item) => item.href)
+    .filter((href) => (href === "/" ? pathname === "/" : pathname.startsWith(href)))
+    .sort((a, b) => b.length - a.length)[0];
+  const isActive = (href: string) => href === actif;
 
   return (
     <header className="sticky top-0 z-50 border-b border-ecorce-800 bg-ecorce-950/95 text-fleur-100 backdrop-blur">
