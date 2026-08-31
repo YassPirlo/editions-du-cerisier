@@ -1,65 +1,65 @@
 [
- {
-  "id": 7,
-  "slug": "faits-et-gestes",
-  "name": "Faits et Gestes",
-  "descriptionHtml": "<p><strong> <i>Des livres qui racontent des histoires, mais pas n’importe lesquelles.<br/> Des personnages ancrés dans le réel, mais qui nous entraînent loin dans l’imaginaire.<br/> Des auteurs, non pas réfugiés dans leur tour d’ivoire mais qui affrontent la société, questionnent l’état du monde.<br/> Des livres qui nous parlent, parce qu’ils parlent de nous.</i> </strong></p>",
-  "descriptionText": "Des livres qui racontent des histoires, mais pas n’importe lesquelles.\n\nDes personnages ancrés dans le réel, mais qui nous entraînent loin dans l’imaginaire.\n\nDes auteurs, non pas réfugiés dans leur tour d’ivoire mais qui affrontent la société, questionnent l’état du monde.\n\nDes livres qui nous parlent, parce qu’ils parlent de nous."
- },
- {
-  "id": 9,
-  "slug": "place-publique",
-  "name": "Place publique",
-  "descriptionHtml": "<p> <strong> <i>C’est l’agora, le lieu de rencontre, de débat, de confrontation d’idées, de questions.<br/> Une collection ouverte, sans limitation de genre et qui veut déborder de la ligne de l’essai classique</i> </strong>.</p>",
-  "descriptionText": "C’est l’agora, le lieu de rencontre, de débat, de confrontation d’idées, de questions.\n\nUne collection ouverte, sans limitation de genre et qui veut déborder de la ligne de l’essai classique ."
- },
- {
-  "id": 10,
-  "slug": "quotidiennes",
-  "name": "Quotidiennes",
-  "descriptionHtml": "<p><strong> <i>Récits, témoignages, récits de vie. Des textes pour sauver la mémoire, pour exprimer la parole confisquée</i> </strong></p>",
-  "descriptionText": "Récits, témoignages, récits de vie. Des textes pour sauver la mémoire, pour exprimer la parole confisquée"
- },
- {
-  "id": 14,
-  "slug": "griottes",
-  "name": "Griottes",
-  "descriptionHtml": "<p><strong> <i>Une collection destinée à accueillir des nouvelles ou des courtes fictions.<br/> Acidulées de préférence</i> </strong>.</p>",
-  "descriptionText": "Une collection destinée à accueillir des nouvelles ou des courtes fictions.\n\nAcidulées de préférence ."
- },
- {
-  "id": 12,
-  "slug": "cerisier-noir",
-  "name": "Cerisier noir",
-  "descriptionHtml": "<p><strong> <i>Où le roman noir (ou polar) entraîne le lecteur dans son énigme à résoudre, avec bien sûr des bons et des méchants. Mais tout cela n’est que -prétexte à mettre le doigt sur les plaies d’une société malade&nbsp;: racisme, extrême droite, corruption, drogue ou pollution…<br/> Noir de noir.</i> </strong></p>",
-  "descriptionText": "Où le roman noir (ou polar) entraîne le lecteur dans son énigme à résoudre, avec bien sûr des bons et des méchants. Mais tout cela n’est que -prétexte à mettre le doigt sur les plaies d’une société malade : racisme, extrême droite, corruption, drogue ou pollution…\n\nNoir de noir."
- },
- {
-  "id": 11,
-  "slug": "theatre-action",
-  "name": "Théâtre-Action",
-  "descriptionHtml": "<p><strong> <i>Pour que le texte accompagne le spectacle et pour qu’il survive à l’éphémère.<br/> Le théâtre-action, le plus souvent résultat d’écritures collectives, se veut théâtre de résistance et de combat. Il aborde une multitude de thèmes ou de questions actuelles&nbsp;: de la violence à l’école au commerce équitable, des problèmes vécus par des chômeurs à ceux des réfugiés clandestins.</i> </strong></p>",
-  "descriptionText": "Pour que le texte accompagne le spectacle et pour qu’il survive à l’éphémère.\n\nLe théâtre-action, le plus souvent résultat d’écritures collectives, se veut théâtre de résistance et de combat. Il aborde une multitude de thèmes ou de questions actuelles : de la violence à l’école au commerce équitable, des problèmes vécus par des chômeurs à ceux des réfugiés clandestins."
- },
- {
-  "id": 13,
-  "slug": "feux-follets",
-  "name": "Feux Follets",
-  "descriptionHtml": "<p><strong> <i>Textes de théâtre pour enfants et tout-petits.<br/> Pour que les enfants retrouvent avec plaisir les personnages qu’ils ont vus, réinventent les images qui les ont frappés, repensent aux idées qui les ont touchés lors de la représentation du spectacle.<br/> Des petits livres qui peuvent aussi devenir outil pédagogique pour l’apprentissage de la lecture et du théâtre.</i> </strong></p>",
-  "descriptionText": "Textes de théâtre pour enfants et tout-petits.\n\nPour que les enfants retrouvent avec plaisir les personnages qu’ils ont vus, réinventent les images qui les ont frappés, repensent aux idées qui les ont touchés lors de la représentation du spectacle.\n\nDes petits livres qui peuvent aussi devenir outil pédagogique pour l’apprentissage de la lecture et du théâtre."
- },
- {
-  "id": 30,
-  "slug": "en-diffusion",
-  "name": "en diffusion",
-  "descriptionHtml": "",
-  "descriptionText": ""
- },
- {
-  "id": 33,
-  "slug": "hors-collections",
-  "name": "Hors collections",
-  "descriptionHtml": "",
-  "descriptionText": ""
- }
+  {
+    "id": 7,
+    "slug": "faits-et-gestes",
+    "name": "Faits et Gestes",
+    "descriptionHtml": "<p><em><strong>Des livres qui racontent des histoires, mais pas n’importe lesquelles.</strong></em><br/><em><strong>Des personnages ancrés dans le réel, mais qui nous entraînent loin dans l’imaginaire.</strong></em><br/><em><strong>Des auteurs, non pas réfugiés dans leur tour d’ivoire mais qui affrontent la société, questionnent l’état du monde.</strong></em><br/><em><strong>Des livres qui nous parlent, parce qu’ils parlent de nous.</strong></em></p>",
+    "descriptionText": "Des livres qui racontent des histoires, mais pas n’importe lesquelles.\nDes personnages ancrés dans le réel, mais qui nous entraînent loin dans l’imaginaire.\nDes auteurs, non pas réfugiés dans leur tour d’ivoire mais qui affrontent la société, questionnent l’état du monde.\nDes livres qui nous parlent, parce qu’ils parlent de nous."
+  },
+  {
+    "id": 9,
+    "slug": "place-publique",
+    "name": "Place publique",
+    "descriptionHtml": "<p><em><strong>C’est l’agora, le lieu de rencontre, de débat, de confrontation d’idées, de questions.</strong></em><br/><em><strong>Une collection ouverte, sans limitation de genre et qui veut déborder de la ligne de l’essai classique</strong></em> .</p>",
+    "descriptionText": "C’est l’agora, le lieu de rencontre, de débat, de confrontation d’idées, de questions.\nUne collection ouverte, sans limitation de genre et qui veut déborder de la ligne de l’essai classique ."
+  },
+  {
+    "id": 10,
+    "slug": "quotidiennes",
+    "name": "Quotidiennes",
+    "descriptionHtml": "<p><em><strong>Récits, témoignages, récits de vie. Des textes pour sauver la mémoire, pour exprimer la parole confisquée</strong></em></p>",
+    "descriptionText": "Récits, témoignages, récits de vie. Des textes pour sauver la mémoire, pour exprimer la parole confisquée"
+  },
+  {
+    "id": 14,
+    "slug": "griottes",
+    "name": "Griottes",
+    "descriptionHtml": "<p><em><strong>Une collection destinée à accueillir des nouvelles ou des courtes fictions.</strong></em><br/><em><strong>Acidulées de préférence</strong></em> .</p>",
+    "descriptionText": "Une collection destinée à accueillir des nouvelles ou des courtes fictions.\nAcidulées de préférence ."
+  },
+  {
+    "id": 12,
+    "slug": "cerisier-noir",
+    "name": "Cerisier noir",
+    "descriptionHtml": "<p><em><strong>Où le roman noir (ou polar) entraîne le lecteur dans son énigme à résoudre, avec bien sûr des bons et des méchants. Mais tout cela n’est que -prétexte à mettre le doigt sur les plaies d’une société malade : racisme, extrême droite, corruption, drogue ou pollution…</strong></em><br/><em><strong>Noir de noir.</strong></em></p>",
+    "descriptionText": "Où le roman noir (ou polar) entraîne le lecteur dans son énigme à résoudre, avec bien sûr des bons et des méchants. Mais tout cela n’est que -prétexte à mettre le doigt sur les plaies d’une société malade : racisme, extrême droite, corruption, drogue ou pollution…\nNoir de noir."
+  },
+  {
+    "id": 11,
+    "slug": "theatre-action",
+    "name": "Théâtre-Action",
+    "descriptionHtml": "<p><em><strong>Pour que le texte accompagne le spectacle et pour qu’il survive à l’éphémère.</strong></em><br/><em><strong>Le théâtre-action, le plus souvent résultat d’écritures collectives, se veut théâtre de résistance et de combat. Il aborde une multitude de thèmes ou de questions actuelles : de la violence à l’école au commerce équitable, des problèmes vécus par des chômeurs à ceux des réfugiés clandestins.</strong></em></p>",
+    "descriptionText": "Pour que le texte accompagne le spectacle et pour qu’il survive à l’éphémère.\nLe théâtre-action, le plus souvent résultat d’écritures collectives, se veut théâtre de résistance et de combat. Il aborde une multitude de thèmes ou de questions actuelles : de la violence à l’école au commerce équitable, des problèmes vécus par des chômeurs à ceux des réfugiés clandestins."
+  },
+  {
+    "id": 13,
+    "slug": "feux-follets",
+    "name": "Feux Follets",
+    "descriptionHtml": "<p><em><strong>Textes de théâtre pour enfants et tout-petits.</strong></em><br/><em><strong>Pour que les enfants retrouvent avec plaisir les personnages qu’ils ont vus, réinventent les images qui les ont frappés, repensent aux idées qui les ont touchés lors de la représentation du spectacle.</strong></em><br/><em><strong>Des petits livres qui peuvent aussi devenir outil pédagogique pour l’apprentissage de la lecture et du théâtre.</strong></em></p>",
+    "descriptionText": "Textes de théâtre pour enfants et tout-petits.\nPour que les enfants retrouvent avec plaisir les personnages qu’ils ont vus, réinventent les images qui les ont frappés, repensent aux idées qui les ont touchés lors de la représentation du spectacle.\nDes petits livres qui peuvent aussi devenir outil pédagogique pour l’apprentissage de la lecture et du théâtre."
+  },
+  {
+    "id": 30,
+    "slug": "en-diffusion",
+    "name": "en diffusion",
+    "descriptionHtml": "",
+    "descriptionText": ""
+  },
+  {
+    "id": 33,
+    "slug": "hors-collections",
+    "name": "Hors collections",
+    "descriptionHtml": "",
+    "descriptionText": ""
+  }
 ]

@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# outillage local Claude
+/.claude/
+
+# sauvegarde temporaire de la migration CMS
+/.migration-originaux/

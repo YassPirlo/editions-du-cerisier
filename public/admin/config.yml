@@ -1,0 +1,204 @@
+# Configuration Decap CMS — Éditions du Cerisier
+#
+# Les fichiers édités vivent dans content/ ; au build, le script
+# scripts/construire-donnees.mjs les retransforme en src/data/*.json.
+# Le champ « ordre » pilote l'ordre d'affichage (pas de tirer-déposer).
+
+backend:
+  name: git-gateway
+  branch: main
+  commit_messages:
+    create: "Contenu : ajout de « {{slug}} » ({{collection}})"
+    update: "Contenu : mise à jour de « {{slug}} » ({{collection}})"
+    delete: "Contenu : suppression de « {{slug}} » ({{collection}})"
+    uploadMedia: "Média : ajout de {{path}}"
+    deleteMedia: "Média : suppression de {{path}}"
+
+# En local (npm run cms-local + npm run dev), pas besoin de compte :
+# Decap parle directement au dépôt via le proxy decap-server.
+local_backend: true
+
+locale: "fr"
+
+media_folder: "public/covers"
+public_folder: "/covers"
+
+# Corps de texte limité aux mises en forme que le site sait afficher
+# (le build supprime de toute façon tout le reste).
+_texte: &texte
+  label: "Texte"
+  name: "body"
+  widget: "markdown"
+  buttons: [bold, italic, link, heading-three, heading-four, bulleted-list, numbered-list, quote]
+  editor_components: []
+  required: false
+
+_ordre: &ordre
+  label: "Ordre d'affichage"
+  name: "ordre"
+  widget: "number"
+  value_type: "int"
+  hint: "Du plus petit au plus grand. Laissez des écarts (10, 20, 30…) pour pouvoir intercaler une entrée plus tard sans tout renuméroter."
+
+_page: &page
+  create: true
+  summary: "{{ordre}} — {{title}}"
+  sortable_fields: ["ordre", "title"]
+  fields:
+    - { label: "Titre", name: "title", widget: "string" }
+    - *ordre
+    - label: "Images"
+      name: "images"
+      widget: "list"
+      required: false
+      hint: "Illustrations affichées avec le texte, dans l'ordre de la liste."
+      field: { label: "Image", name: "image", widget: "image" }
+    - *texte
+
+collections:
+  - name: "livres"
+    label: "Livres"
+    label_singular: "livre"
+    description: "Les fiches des livres du catalogue. Utilisez « Grouper par » ou les filtres pour retrouver une collection, et la recherche pour un titre."
+    folder: "content/livres"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    sortable_fields: ["title", "ordre"]
+    view_groups:
+      - { label: "Collection", field: "collection" }
+    view_filters:
+      - { label: "Cerisier noir", field: "collection", pattern: "^cerisier-noir$" }
+      - { label: "en diffusion", field: "collection", pattern: "^en-diffusion$" }
+      - { label: "Faits et Gestes", field: "collection", pattern: "^faits-et-gestes$" }
+      - { label: "Feux Follets", field: "collection", pattern: "^feux-follets$" }
+      - { label: "Griottes", field: "collection", pattern: "^griottes$" }
+      - { label: "Hors collections", field: "collection", pattern: "^hors-collections$" }
+      - { label: "Place publique", field: "collection", pattern: "^place-publique$" }
+      - { label: "Quotidiennes", field: "collection", pattern: "^quotidiennes$" }
+      - { label: "Théâtre-Action", field: "collection", pattern: "^theatre-action$" }
+    fields:
+      - { label: "Titre", name: "title", widget: "string" }
+      - label: "Collection"
+        name: "collection"
+        widget: "relation"
+        collection: "collections"
+        search_fields: ["name"]
+        display_fields: ["name"]
+        value_field: "{{slug}}"
+        hint: "La collection dans laquelle le livre est rangé sur le site."
+      - { label: "Couverture", name: "cover", widget: "image", required: false, hint: "Image affichée dans le catalogue et sur la fiche du livre." }
+      - { label: "ISBN", name: "isbn", widget: "string", required: false }
+      - { label: "Prix", name: "price", widget: "string", required: false, hint: "Tel qu'affiché, ex. « 20 € »" }
+      - { label: "Pages", name: "pages", widget: "string", required: false, hint: "Nombre de pages, ex. « 384 »" }
+      - <<: *ordre
+        hint: "Position du livre dans le catalogue (du plus petit au plus grand). Laissez des écarts (10, 20, 30…) pour intercaler."
+      - <<: *texte
+        label: "Fiche du livre"
+
+  - name: "collections"
+    label: "Collections"
+    label_singular: "collection"
+    description: "Les collections de la maison (nom + texte de présentation). Attention : ne supprimez pas une collection qui contient des livres : le site refuserait de se reconstruire."
+    folder: "content/collections"
+    create: true
+    identifier_field: "name"
+    slug: "{{slug}}"
+    sortable_fields: ["ordre", "name"]
+    fields:
+      - { label: "Identifiant SPIP", name: "id", widget: "number", value_type: "int", hint: "Numéro hérité de l'ancien site — ne pas modifier pour les collections existantes." }
+      - { label: "Nom", name: "name", widget: "string" }
+      - *ordre
+      - <<: *texte
+        label: "Présentation de la collection"
+
+  - name: "presentation"
+    label: "Présentation"
+    label_singular: "entrée"
+    description: "Textes de présentation de la maison — affichés sur la page d'accueil."
+    folder: "content/pages/presentation"
+    <<: *page
+
+  - name: "ligne-editoriale"
+    label: "Ligne éditoriale"
+    label_singular: "entrée"
+    description: "Page « Présentation → Ligne éditoriale »."
+    folder: "content/pages/ligne-editoriale"
+    <<: *page
+
+  - name: "presse"
+    label: "Ce qu'en dit la presse"
+    label_singular: "entrée"
+    description: "Page « Ce qu'en dit la presse » ; des extraits apparaissent aussi sur la page d'accueil."
+    folder: "content/pages/presse"
+    <<: *page
+
+  - name: "manuscrit"
+    label: "Envoyer un manuscrit"
+    label_singular: "entrée"
+    description: "Page « Envoyer un manuscrit »."
+    folder: "content/pages/manuscrit"
+    <<: *page
+
+  - name: "qui-sommes-nous"
+    label: "Qui sommes-nous"
+    label_singular: "entrée"
+    description: "Page « Qui sommes-nous »."
+    folder: "content/pages/qui-sommes-nous"
+    <<: *page
+
+  - name: "a-la-une"
+    label: "À la une"
+    label_singular: "entrée"
+    description: "Introduction de la page « À la une » ; visible aussi sur la page d'accueil."
+    folder: "content/pages/a-la-une"
+    <<: *page
+
+  - name: "actualites"
+    label: "À la une · Actualités"
+    label_singular: "entrée"
+    description: "Page « À la une → Actualités »."
+    folder: "content/pages/actualites"
+    <<: *page
+
+  - name: "nouveautes"
+    label: "À la une · Nouveautés"
+    label_singular: "entrée"
+    description: "Page « À la une → Nouveautés ». L'ordre de ces entrées définit aussi l'ordre des couvertures qui défilent sur la page d'accueil : la première entrée = la parution la plus récente."
+    folder: "content/pages/nouveautes"
+    <<: *page
+
+  - name: "revue-de-presse"
+    label: "À la une · Revue de presse"
+    label_singular: "entrée"
+    description: "Page « À la une → Revue de presse »."
+    folder: "content/pages/revue-de-presse"
+    <<: *page
+
+  - name: "catalogue-intro"
+    label: "Intro du catalogue (archive)"
+    label_singular: "entrée"
+    description: "Contenu conservé de l'ancien site — il n'est affiché nulle part actuellement."
+    folder: "content/pages/catalogue-intro"
+    <<: *page
+
+  - name: "contact"
+    label: "Contact"
+    label_singular: "entrée"
+    description: "Page « Contact »."
+    folder: "content/pages/contact"
+    <<: *page
+
+  - name: "commander"
+    label: "Contact · Commander"
+    label_singular: "entrée"
+    description: "Page « Contact → Commander »."
+    folder: "content/pages/commander"
+    <<: *page
+
+  - name: "liens"
+    label: "Liens pratiques"
+    label_singular: "entrée"
+    description: "Page « Liens pratiques »."
+    folder: "content/pages/liens"
+    <<: *page
