@@ -23,6 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/contact",
     "/contact/commander",
     "/liens-pratiques",
+    "/confidentialite",
   ];
 
   return [

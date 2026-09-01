@@ -88,6 +88,9 @@ export function Footer() {
             <Link href="/envoyer-un-manuscrit" className="hover:text-fleur-100">
               Envoyer un manuscrit
             </Link>
+            <Link href="/confidentialite" className="hover:text-fleur-100">
+              Confidentialité
+            </Link>
           </div>
         </div>
       </div>
