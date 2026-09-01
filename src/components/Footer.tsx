@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BasculeNuit } from "@/components/BasculeNuit";
 import { Branche } from "@/components/Cerisier";
+import { FormulaireInfolettre } from "@/components/FormulaireInfolettre";
 import { collections } from "@/lib/content";
 import { CONTACT } from "@/lib/nav";
 import { CherryLogo } from "./CherryLogo";
@@ -33,6 +34,25 @@ export function Footer() {
             témoignent des peuples, de leurs cultures, de leurs luttes, de leurs
             libertés.
           </p>
+
+          {/* L'invitation en pop-up ne se montre qu'une fois par visiteur :
+              c'est ici que l'inscription reste possible, sur chaque page et
+              aussi longtemps qu'on veut. */}
+          <div className="mt-8 max-w-sm">
+            <h2 className="font-serif text-lg text-fleur-50">
+              La lettre du Cerisier
+            </h2>
+            <FormulaireInfolettre
+              idChamp="email-infolettre-pied"
+              sombre
+              intro={
+                <p className="mt-2 text-sm leading-relaxed text-fleur-300">
+                  Nos parutions et nos rencontres par courriel — quelques
+                  lettres par an, rien d&rsquo;autre.
+                </p>
+              }
+            />
+          </div>
         </div>
 
         <div>

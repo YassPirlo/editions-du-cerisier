@@ -1,53 +1,31 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { CherryLogo } from "@/components/CherryLogo";
+import {
+  CLE_INFOLETTRE,
+  FormulaireInfolettre,
+} from "@/components/FormulaireInfolettre";
 
 /* Ne se montre qu'une fois par visiteur : la clé passe à « vue » dès
    l'ouverture, puis à « inscrit » après envoi — dans les deux cas, le
-   pop-up ne reviendra pas. */
-const CLE = "cerisier-newsletter";
+   pop-up ne reviendra pas. Celui qui l'a fermé retrouve le même formulaire
+   dans le pied de page, sur toutes les pages. */
 const DELAI_MS = 10_000;
 
 export function InvitationNewsletter() {
   const ref = useRef<HTMLDialogElement>(null);
-  const [etat, setEtat] = useState<"repos" | "envoi" | "merci" | "erreur">("repos");
 
   useEffect(() => {
-    if (localStorage.getItem(CLE)) return;
+    if (localStorage.getItem(CLE_INFOLETTRE)) return;
     const timer = setTimeout(() => {
-      localStorage.setItem(CLE, "vue");
+      localStorage.setItem(CLE_INFOLETTRE, "vue");
       ref.current?.showModal();
     }, DELAI_MS);
     return () => clearTimeout(timer);
   }, []);
 
   const ferme = () => ref.current?.close();
-
-  async function envoie(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setEtat("envoi");
-    try {
-      /* L'adresse part vers la liste Brevo de la maison, via notre route
-         serveur (la clé d'API n'a rien à faire dans le navigateur) ; le
-         champ-piège « bot-field » voyage avec, sous le nom que la route
-         attend. */
-      const donnees = new FormData(e.currentTarget);
-      const reponse = await fetch("/api/infolettre", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          courriel: donnees.get("email"),
-          verger: donnees.get("bot-field") ?? "",
-        }),
-      });
-      if (!reponse.ok) throw new Error(String(reponse.status));
-      localStorage.setItem(CLE, "inscrit");
-      setEtat("merci");
-    } catch {
-      setEtat("erreur");
-    }
-  }
 
   return (
     <dialog
@@ -77,56 +55,15 @@ export function InvitationNewsletter() {
           La lettre du Cerisier
         </h2>
 
-        {etat === "merci" ? (
-          <p className="mt-4 font-serif text-ecorce-700">
-            Merci ! Vous recevrez nos prochaines parutions.
-          </p>
-        ) : (
-          <>
+        <FormulaireInfolettre
+          idChamp="email-newsletter"
+          intro={
             <p className="mt-4 font-serif leading-relaxed text-ecorce-700">
               Recevez nos nouvelles parutions par courriel — quelques lettres
               par an, rien d&rsquo;autre.
             </p>
-
-            <form onSubmit={envoie} className="mt-6">
-              <p className="hidden">
-                <label>
-                  Ne pas remplir : <input name="bot-field" />
-                </label>
-              </p>
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <label htmlFor="email-newsletter" className="sr-only">
-                  Adresse de courriel
-                </label>
-                <input
-                  id="email-newsletter"
-                  type="email"
-                  name="email"
-                  required
-                  placeholder="votre@adresse.be"
-                  className="min-w-0 flex-1 border border-ecorce-300 bg-white px-4 py-3 font-serif text-ecorce-900 placeholder:text-ecorce-400 focus-visible:outline-2 focus-visible:outline-cerise-400"
-                />
-                <button
-                  type="submit"
-                  disabled={etat === "envoi"}
-                  className="bg-cerise-400 px-6 py-3 text-xs font-bold tracking-[0.16em] text-ecorce-900 uppercase transition-colors hover:bg-cerise-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cerise-400 disabled:opacity-60"
-                >
-                  {etat === "envoi" ? "Envoi…" : "Je m’inscris"}
-                </button>
-              </div>
-              {etat === "erreur" && (
-                <p className="mt-3 text-sm text-griotte-500" role="alert">
-                  L&rsquo;inscription n&rsquo;a pas abouti — réessayez, ou
-                  écrivez-nous via la page Contact.
-                </p>
-              )}
-              <p className="mt-4 text-xs leading-relaxed text-ecorce-500">
-                Votre adresse ne sert qu&rsquo;à ces envois ; vous pourrez vous
-                désinscrire à tout moment.
-              </p>
-            </form>
-          </>
-        )}
+          }
+        />
       </div>
     </dialog>
   );
