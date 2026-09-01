@@ -23,9 +23,10 @@ import { SRGBColorSpace, TextureLoader, type Group } from "three";
  * toujours si WebGL manque.
  */
 
-/* Le gabarit de la maison : plats 18 × 24 (voir FluxCouvertures), l’épaisseur
-   suit la pagination réelle comme epaisseurDe() côté CSS. */
-const LARGEUR = 1.8;
+/* La hauteur du volume est fixe ; la largeur du plat suit le ratio réel de
+   la couverture chargée (borné aux proportions plausibles d’un livre) —
+   ni étirement, ni liseré. L’épaisseur suit la pagination réelle, comme
+   epaisseurDe() côté CSS. */
 const HAUTEUR = 2.4;
 const PLAT = 0.03;
 
@@ -42,7 +43,7 @@ export function epaisseurVolume(pages?: string): number {
   const n = parseInt(pages ?? "", 10);
   if (!n || Number.isNaN(n)) return 0.26;
   const borne = Math.min(Math.max(n, 60), 450);
-  return 0.18 + ((borne - 60) / 390) * 0.34;
+  return 0.15 + ((borne - 60) / 390) * 0.47;
 }
 
 function Volume({
@@ -65,13 +66,20 @@ function Volume({
     onPeint?.();
   }, [onPeint]);
 
+  /* Le plat au ratio réel de la couverture : la texture s'y pose telle
+     quelle, sans étirement. */
+  const image = texture.image as { width?: number; height?: number } | undefined;
+  const ratio =
+    image?.width && image?.height ? image.width / image.height : 0.75;
+  const largeur = HAUTEUR * Math.min(0.85, Math.max(0.62, ratio));
+
   const demiEp = epaisseur / 2;
 
   return (
     <group>
       {/* Le plat de devant porte la couverture ; ses chants restent carton. */}
       <mesh position={[0.02, 0, demiEp - PLAT / 2]}>
-        <boxGeometry args={[LARGEUR, HAUTEUR, PLAT]} />
+        <boxGeometry args={[largeur, HAUTEUR, PLAT]} />
         <meshStandardMaterial attach="material-0" color={CARTON} roughness={0.7} />
         <meshStandardMaterial attach="material-1" color={CARTON} roughness={0.7} />
         <meshStandardMaterial attach="material-2" color={CARTON} roughness={0.7} />
@@ -88,19 +96,19 @@ function Volume({
 
       {/* Le plat de derrière, papier nu. */}
       <mesh position={[0.02, 0, -(demiEp - PLAT / 2)]}>
-        <boxGeometry args={[LARGEUR, HAUTEUR, PLAT]} />
+        <boxGeometry args={[largeur, HAUTEUR, PLAT]} />
         <meshStandardMaterial color={CARTON} roughness={0.75} />
       </mesh>
 
       {/* Le dos relie les deux plats. */}
-      <mesh position={[-LARGEUR / 2 + 0.02, 0, 0]}>
+      <mesh position={[-largeur / 2 + 0.02, 0, 0]}>
         <boxGeometry args={[0.08, HAUTEUR, epaisseur]} />
         <meshStandardMaterial color={DOS} roughness={0.6} />
       </mesh>
 
       {/* La tranche : le bloc de pages, en retrait de gouttière. */}
       <mesh position={[0.03, 0, 0]}>
-        <boxGeometry args={[LARGEUR - 0.09, HAUTEUR - 0.09, epaisseur - PLAT * 2]} />
+        <boxGeometry args={[largeur - 0.09, HAUTEUR - 0.09, epaisseur - PLAT * 2]} />
         <meshStandardMaterial color={PAPIER} roughness={0.95} />
       </mesh>
     </group>

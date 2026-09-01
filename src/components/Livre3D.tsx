@@ -9,8 +9,11 @@ import { Cerise } from "./Cerisier";
  * ni des faces hors du flux, et l'écrire en `[transform-style:preserve-3d]`
  * rendrait le composant illisible pour rien.
  *
- * La couverture est posée en `object-contain` sur un fond papier : les titres
- * et l'emblème de l'éditeur y sont imprimés, un `object-cover` les couperait.
+ * La couverture remplit le plat (`object-cover`) : les numérisations sont au
+ * format du livre, le rognage est de l'ordre du filet — tandis qu'un
+ * `object-contain` laissait dépasser des liserés de papier blanc dès que le
+ * ratio différait d'un cheveu, et un volume à liserés fait maquette, pas
+ * livre.
  *
  * Sans image, le volume ne disparaît pas : il devient une reliure muette —
  * papier nu, filet, titre composé en Fraunces et emblème au trait, comme une
@@ -51,7 +54,7 @@ export function Livre3D({
               alt={alt ?? (titre ? `Couverture de « ${titre} »` : "")}
               fill
               sizes={sizes}
-              className="object-contain"
+              className="object-cover"
             />
           ) : (
             <div className="flex h-full flex-col items-center justify-between p-4 pt-7 pb-5 text-center">
@@ -78,10 +81,12 @@ export function Livre3D({
 
 /* L'épaisseur du volume suit la pagination réelle : un essai de 432 pages
    n'occupe pas la table comme une pièce de 64. C'est une information, pas un
-   ornement — et c'est elle qui rend le rayonnage vivant. */
+   ornement — et c'est elle qui rend le rayonnage vivant. L'éventail est
+   large à dessein : une plaquette doit se lire mince au premier regard, une
+   somme bien charpentée. */
 export function epaisseurDe(pages?: string): string {
   const n = parseInt(pages ?? "", 10);
   if (!n || Number.isNaN(n)) return "1.6rem";
   const borne = Math.min(Math.max(n, 60), 450);
-  return `${(1.1 + ((borne - 60) / 390) * 1.5).toFixed(2)}rem`;
+  return `${(0.95 + ((borne - 60) / 390) * 2.05).toFixed(2)}rem`;
 }
