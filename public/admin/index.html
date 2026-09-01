@@ -106,6 +106,8 @@
         padding: 0.35rem 0.9rem;
         text-align: center;
       }
+      /* Les outils se rangent en bas à GAUCHE : le coin droit est occupé
+         par le badge de l'hébergeur, qui recouvrait « Fréquentation ». */
       .outil {
         position: fixed;
         bottom: 1rem;
@@ -165,10 +167,10 @@
           if (texte) el.textContent = texte;
         }
 
-        function bouton(texte, droite, action) {
+        function bouton(texte, gauche, action) {
           var el = document.createElement(typeof action === "string" ? "a" : "button");
           el.className = "outil";
-          el.style.right = droite;
+          el.style.left = gauche;
           el.textContent = texte;
           if (typeof action === "string") el.href = action;
           else el.addEventListener("click", action);
