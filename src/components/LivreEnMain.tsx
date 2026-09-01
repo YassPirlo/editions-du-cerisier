@@ -192,7 +192,9 @@ export default function LivreEnMain({
     <Canvas
       frameloop="demand"
       dpr={[1, 1.5]}
-      camera={{ position: [0, 0, 4.6], fov: 30 }}
+      /* Le recul laisse au volume une marge franche dans son cadre : un
+         livre rogné par le bord du canvas ferait plus mal que petit. */
+      camera={{ position: [0, 0, 5.05], fov: 30 }}
       /* Le glisser horizontal tourne le livre ; le vertical continue de faire
          défiler la page — un canvas qui confisque le défilement au pouce est
          un piège, pas une vitrine. */

@@ -96,9 +96,11 @@ export function VitrineLivre({
           </BarriereScene>
         </div>
       </div>
+      {/* mt-9 : la scène déborde du cadre d'un bon pouce (-inset-y-6) — le
+          libellé doit se poser dessous, pas dessous le livre. */}
       <p
         aria-hidden="true"
-        className={`mt-2 text-center text-xs text-ecorce-500 transition-opacity duration-500 ${
+        className={`mt-9 text-center text-xs text-ecorce-500 transition-opacity duration-500 ${
           peint ? "opacity-100" : "opacity-0"
         }`}
       >

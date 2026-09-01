@@ -147,7 +147,7 @@ export function RackCouvertures({
   return (
     <div
       ref={cadre}
-      className="rack -mx-4 mt-10 flex cursor-grab gap-8 overflow-x-auto px-[max(1.5rem,calc(50%-5rem))] pb-6 select-none [mask-image:linear-gradient(90deg,transparent,black_7%,black_93%,transparent)] sm:gap-10 [&.rack-en-main]:cursor-grabbing"
+      className="rack -mx-4 mt-10 flex cursor-grab gap-8 overflow-x-auto px-6 pb-6 select-none [mask-image:linear-gradient(90deg,transparent,black_3%,black_97%,transparent)] sm:gap-10 sm:px-10 [&.rack-en-main]:cursor-grabbing"
     >
       {items.map((x) => (
         <Link
