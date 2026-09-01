@@ -755,3 +755,19 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* La releve des suggestions du champ de recherche (/recherche) : la
+   nouvelle monte d'un souffle a la place de l'ancienne. */
+@keyframes releve-suggestion {
+  from {
+    opacity: 0;
+    transform: translateY(0.55em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.releve-suggestion {
+  animation: releve-suggestion 0.45s var(--ease-verger) both;
+}

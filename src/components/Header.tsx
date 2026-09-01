@@ -110,6 +110,21 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-0.5">
+          <Link
+            href="/recherche"
+            aria-label="Chercher un livre"
+            className="rounded-md p-2 text-fleur-100 transition-colors hover:bg-ecorce-900 focus-visible:outline-2 focus-visible:outline-cerise-400"
+          >
+            <svg viewBox="0 0 24 24" className="h-5.5 w-5.5" fill="none" aria-hidden="true">
+              <circle cx="10.5" cy="10.5" r="6" stroke="currentColor" strokeWidth="1.7" />
+              <path
+                d="m15.5 15.5 4.5 4.5"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+              />
+            </svg>
+          </Link>
           <PanierLien />
           <button
           type="button"

@@ -143,6 +143,25 @@ const pages = Object.fromEntries(
 ecrireJson("collections.json", collections);
 ecrireJson("books.json", books);
 ecrireJson("pages.json", pages);
+
+/* L'index de la recherche embarquée (src/lib/recherche.ts) : la fiche
+   allégée de chaque livre, texte compris — c'est lui qui permet de
+   retrouver un titre malgré une faute, ou un livre par un mot de sa
+   présentation. Chargé à la demande par la page /recherche, jamais par
+   le reste du site. */
+ecrireJson(
+  "recherche-index.json",
+  books.map((b) => ({
+    slug: b.slug,
+    collection: b.collection,
+    collectionName: b.collectionName,
+    title: b.title,
+    cover: b.cover,
+    price: b.price ?? null,
+    pages: b.pages ?? null,
+    texte: b.text.slice(0, 5000),
+  })),
+);
 console.log(
   `Données reconstruites : ${books.length} livres, ${collections.length} collections, ${Object.values(pages).flat().length} entrées.`,
 );
