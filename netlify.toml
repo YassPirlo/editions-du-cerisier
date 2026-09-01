@@ -1,0 +1,15 @@
+# Réglages de l'hébergeur : Netlify sert Next tel quel (son runtime le
+# détecte de lui-même) et reconstruit le site à chaque envoi sur main.
+#
+# Un seul réglage à poser dans l'interface (Site settings → Environment
+# variables) : ADMIN_PASSWORD, qui ouvre /admin. Puis, quand l'infolettre
+# sera branchée, BREVO_API_KEY et BREVO_LIST_ID.
+#
+# La version de Node est épinglée : Next 16 en exige une récente, et la
+# valeur par défaut de l'hébergeur change avec le temps.
+
+[build]
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "22"
