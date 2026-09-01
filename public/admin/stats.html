@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Fréquentation — Éditions du Cerisier</title>
+    <style>
+      :root {
+        --papier: #fdf8f5;
+        --encre: #241d13;
+        --ecorce-600: #6f5838;
+        --ecorce-500: #8b6f47;
+        --ecorce-300: #bfa483;
+        --filet: #e6dccf;
+        --cerise: #ffc107;
+        --griotte: #a5112b;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--papier);
+        color: var(--encre);
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        line-height: 1.6;
+      }
+      .page { max-width: 62rem; margin: 0 auto; padding: 2.2rem 1.25rem 4rem; }
+      h1 { font-family: Georgia, serif; font-size: 1.9rem; font-weight: 600; margin: 0.4rem 0 0; }
+      h2 { font-family: Georgia, serif; font-size: 1.15rem; font-weight: 600; margin: 0 0 0.8rem; }
+      a { color: var(--ecorce-600); text-decoration: underline; text-decoration-color: var(--cerise); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+      a:hover { color: var(--griotte); }
+      .entete { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; border-bottom: 1px solid var(--filet); padding-bottom: 1.2rem; }
+      .sous { color: var(--ecorce-600); font-size: 0.9rem; margin: 0.3rem 0 0; }
+      .message { margin-top: 2rem; border-left: 4px solid var(--cerise); background: #fff8e6; padding: 1rem 1.2rem; }
+      .message.rouge { border-left-color: var(--griotte); background: #fdf1f0; }
+      .tuiles { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); margin-top: 1.6rem; }
+      .tuile { background: #fff; border: 1px solid var(--filet); border-top: 4px solid var(--cerise); padding: 1rem 1.2rem; }
+      .tuile b { display: block; font-family: Georgia, serif; font-size: 2rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+      .tuile span { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ecorce-600); }
+      .carte { background: #fff; border: 1px solid var(--filet); padding: 1.4rem 1.5rem; margin-top: 1.6rem; }
+      .barres { display: flex; align-items: flex-end; gap: 3px; height: 9rem; }
+      .barres .b { flex: 1; min-width: 3px; background: var(--cerise); border-radius: 2px 2px 0 0; position: relative; }
+      .barres .b.vide { background: var(--filet); height: 3px !important; }
+      .barres .b:hover { background: var(--griotte); }
+      .axe { display: flex; justify-content: space-between; color: var(--ecorce-500); font-size: 0.72rem; margin-top: 0.4rem; }
+      .colonnes { display: grid; gap: 1.6rem; grid-template-columns: 1fr; }
+      @media (min-width: 760px) { .colonnes { grid-template-columns: 1fr 1fr; } }
+      table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+      td { padding: 0.42rem 0; border-bottom: 1px solid var(--filet); vertical-align: baseline; }
+      td:last-child { text-align: right; font-variant-numeric: tabular-nums; color: var(--ecorce-600); white-space: nowrap; padding-left: 1rem; }
+      td .chemin { word-break: break-all; }
+      .note { color: var(--ecorce-500); font-size: 0.8rem; margin-top: 1.6rem; }
+      button { border: 0; background: var(--cerise); padding: 0.55rem 1rem; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--encre); cursor: pointer; }
+      button:hover { background: #ffd75c; }
+      .cache { display: none; }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="entete">
+        <div>
+          <p class="sous" style="margin:0"><a href="/admin/">← Revenir à l’admin</a></p>
+          <h1>La fréquentation</h1>
+          <p class="sous">
+            Comptée par le site lui-même — sans cookies, sans service tiers,
+            sans données personnelles.
+          </p>
+        </div>
+        <button id="rafraichir" type="button">Rafraîchir</button>
+      </div>
+
+      <p id="message" class="message cache"></p>
+
+      <div id="contenu" class="cache">
+        <div class="tuiles">
+          <div class="tuile"><b id="t-visiteurs">–</b><span>Visiteurs · 30 jours</span></div>
+          <div class="tuile"><b id="t-vues">–</b><span>Pages lues · 30 jours</span></div>
+          <div class="tuile"><b id="t-jour">–</b><span>Pages lues aujourd’hui</span></div>
+        </div>
+
+        <div class="carte">
+          <h2>Les trente derniers jours</h2>
+          <div id="barres" class="barres"></div>
+          <div class="axe"><span id="axe-debut"></span><span id="axe-fin"></span></div>
+        </div>
+
+        <div class="colonnes">
+          <div class="carte">
+            <h2>Pages les plus lues</h2>
+            <table id="table-pages"></table>
+          </div>
+          <div>
+            <div class="carte">
+              <h2>Pays des lecteurs</h2>
+              <table id="table-pays"></table>
+            </div>
+            <div class="carte">
+              <h2>Ils arrivent de…</h2>
+              <table id="table-provenances"></table>
+            </div>
+          </div>
+        </div>
+        <p class="note">
+          Tuiles et courbe : trente jours glissants. Tables : cumul de ce
+          mois-ci et du précédent. Les robots d’indexation sont écartés ;
+          un visiteur est compté une fois par jour, par une empreinte
+          anonyme qui change chaque nuit.
+        </p>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+        var $ = function (id) { return document.getElementById(id); };
+
+        function message(texte, rouge) {
+          var el = $("message");
+          el.textContent = "";
+          if (!texte) { el.classList.add("cache"); return; }
+          el.classList.remove("cache");
+          el.classList.toggle("rouge", Boolean(rouge));
+          el.textContent = texte + " ";
+          if (rouge) {
+            var lien = document.createElement("a");
+            lien.href = "/admin/";
+            lien.textContent = "Se reconnecter";
+            el.appendChild(lien);
+          }
+        }
+
+        function jetonSession() {
+          try {
+            var brut = localStorage.getItem("gotrue.user");
+            if (!brut) return null;
+            var u = JSON.parse(brut);
+            return u && u.token && u.token.access_token ? u.token.access_token : null;
+          } catch (e) { return null; }
+        }
+
+        function drapeau(code) {
+          if (!/^[A-Z]{2}$/.test(code)) return "🌍";
+          return String.fromCodePoint(0x1f1e6 + code.charCodeAt(0) - 65, 0x1f1e6 + code.charCodeAt(1) - 65);
+        }
+        var nomsPays;
+        try { nomsPays = new Intl.DisplayNames(["fr"], { type: "region" }); } catch (e) {}
+        function nomPays(code) {
+          if (code === "??") return "Inconnu";
+          try { return (nomsPays && nomsPays.of(code)) || code; } catch (e) { return code; }
+        }
+
+        function table(id, lignes, libelle) {
+          var t = $(id);
+          t.innerHTML = "";
+          if (!lignes.length) {
+            var tr = t.insertRow();
+            tr.insertCell().textContent = "Rien encore — les chiffres arrivent avec les lecteurs.";
+            return;
+          }
+          lignes.forEach(function (ligne) {
+            var tr = t.insertRow();
+            var c = tr.insertCell();
+            c.innerHTML = '<span class="chemin"></span>';
+            c.firstChild.textContent = libelle ? libelle(ligne[0]) : ligne[0];
+            tr.insertCell().textContent = ligne[1].toLocaleString("fr-BE");
+          });
+        }
+
+        function affiche(d) {
+          $("t-visiteurs").textContent = d.totaux.visiteurs.toLocaleString("fr-BE");
+          $("t-vues").textContent = d.totaux.vues.toLocaleString("fr-BE");
+          $("t-jour").textContent = d.totaux.vuesAujourdHui.toLocaleString("fr-BE");
+
+          var barres = $("barres");
+          barres.innerHTML = "";
+          var plafond = Math.max.apply(null, d.serie.map(function (j) { return j.vues; }).concat([1]));
+          d.serie.forEach(function (j) {
+            var b = document.createElement("div");
+            b.className = "b" + (j.vues === 0 ? " vide" : "");
+            b.style.height = Math.max(3, Math.round((j.vues / plafond) * 100)) + "%";
+            b.title = j.date + " — " + j.vues + " vues, " + j.visiteurs + " visiteurs";
+            barres.appendChild(b);
+          });
+          $("axe-debut").textContent = d.serie[0].date;
+          $("axe-fin").textContent = d.serie[d.serie.length - 1].date;
+
+          table("table-pages", d.pages);
+          table("table-pays", d.pays, function (code) { return drapeau(code) + " " + nomPays(code); });
+          table("table-provenances", d.provenances);
+          $("contenu").classList.remove("cache");
+        }
+
+        function charge() {
+          message(null);
+          var jeton = jetonSession();
+          if (!jeton) {
+            message("Ouvrez d’abord une session dans l’admin — les chiffres sont réservés à la maison.", true);
+            return;
+          }
+          fetch("/api/frequentation", { headers: { Authorization: "Bearer " + jeton } })
+            .then(function (r) { return r.json().then(function (corps) { return { ok: r.ok, statut: r.status, corps: corps }; }); })
+            .then(function (r) {
+              if (!r.ok) {
+                message(r.corps && r.corps.erreur ? r.corps.erreur : "Les chiffres ne répondent pas (" + r.statut + ").", r.statut === 401);
+                return;
+              }
+              affiche(r.corps);
+            })
+            .catch(function () {
+              message("Les chiffres ne répondent pas — réessayez dans un instant.");
+            });
+        }
+
+        $("rafraichir").addEventListener("click", charge);
+        charge();
+      })();
+    </script>
+  </body>
+</html>

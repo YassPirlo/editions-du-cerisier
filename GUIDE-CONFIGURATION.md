@@ -87,24 +87,23 @@ Créer une campagne e-mail** → destinataires = ta liste → compose en
 glisser-déposer (couverture, deux phrases, lien vers la fiche) →
 *Envoyer*. Rien à coder, jamais.
 
-## Étape 4 — Les statistiques (Umami, sans Google, ≈ 10 min)
+## Étape 4 — Les statistiques (maison : rien à créer)
 
-Umami compte les visiteurs **sans cookies et sans données personnelles** :
-pas de compte Google, pas de bannière de consentement à infliger aux
-lecteurs — et un tableau de bord simple avec pages lues, provenance et
-**carte des pays**. Gratuit jusqu'à 100 000 événements par mois (des ordres
-de grandeur au-dessus du besoin).
+La fréquentation est comptée **par le site lui-même** — aucun service
+tiers, aucun compte à ouvrir. Chaque page lue dépose un signal minuscule
+sur `/api/frequentation`, rangé dans le stockage attaché au site (les
+Blobs Netlify) : jours, pages les plus lues, **pays des lecteurs**,
+provenances. Pas de cookies ni de données personnelles (les visiteurs
+sont comptés par une empreinte anonyme qui change chaque nuit) — donc
+pas de bannière de consentement.
 
-1. Sur **cloud.umami.is** → *Sign up* (adresse + mot de passe, c'est tout).
-2. **Add website** → nom `Éditions du Cerisier`, domaine
-   `editions-du-cerisier.be` → le site reçoit un **Website ID** (une longue
-   référence) — copie-le.
-3. Dans Netlify : **Site configuration → Environment variables** → ajoute
-   `NEXT_PUBLIC_UMAMI_ID` = ce Website ID → *Deploys → Trigger deploy*.
-4. C'est tout. Les chiffres tombent dans le tableau de bord de
-   cloud.umami.is (vue *Realtime* pour vérifier tout de suite). Seul le
-   vrai domaine est compté — tes essais locaux ne polluent pas les
-   statistiques.
+Les chiffres se lisent **dans ton admin** : bouton « Fréquentation » en
+bas à droite du CMS, ou directement `…/admin/stats.html` — réservé aux
+sessions de la maison (le même compte que l'admin).
+
+Il n'y a rien à configurer. En option, pose une variable `STATS_SEL`
+(une longue phrase quelconque) dans Netlify pour saler les empreintes
+anonymes.
 
 ## Éditer le site en local (déjà prêt, aucun compte)
 
@@ -130,7 +129,8 @@ content.
 - Une modification enregistrée dans le CMS crée un commit « Contenu : … »
   sur GitHub, et Netlify redéploie le site tout seul (2-3 min).
 - Une inscription au pop-up apparaît dans ta liste Brevo (Contacts).
-- Une visite du site en ligne apparaît dans le tableau de bord Umami
-  (*Realtime*) — sans bannière à accepter, il n'y en a plus.
+- Une visite du site en ligne fait monter les chiffres de
+  `…/admin/stats.html` (bouton « Fréquentation » du CMS) — sans bannière
+  à accepter, il n'y en a pas besoin.
 - Sur une fiche livre, le volume se saisit et se retourne (WebGL) ; sans
   WebGL, la couverture CSS reste en place.

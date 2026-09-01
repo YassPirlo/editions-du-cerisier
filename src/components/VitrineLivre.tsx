@@ -83,7 +83,7 @@ export function VitrineLivre({
         <div
           role="img"
           aria-label={`Couverture de « ${titre} » en volume — cliquer-glisser pour retourner le livre`}
-          className={`absolute -inset-x-8 -inset-y-6 transition-opacity duration-500 ${
+          className={`absolute -inset-x-8 -inset-y-6 cursor-grab transition-opacity duration-500 active:cursor-grabbing ${
             peint ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
         >

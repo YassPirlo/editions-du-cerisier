@@ -57,10 +57,13 @@ entièrement statique, généré au build.
   le site, chaque fiche en Book — ISBN, prix, couverture — et les fils
   d'Ariane, voir `src/lib/schema.ts`), carte de partage `public/partage.png`
   (régénérable par `scripts/genere-partage.mjs`), sitemap et robots tenus.
-- **Fréquentation** : Umami (`NEXT_PUBLIC_UMAMI_ID`), la mesure
-  d'audience sans cookies ni données personnelles — donc sans bannière de
-  consentement (`Statistiques.tsx` ; tableau de bord sur cloud.umami.is,
-  carte des pays comprise).
+- **Fréquentation** : comptée par la maison elle-même, sans service
+  tiers — la balise (`Statistiques.tsx`) dépose chaque vue sur
+  `/api/frequentation`, qui agrège dans les Blobs Netlify (jours, pages,
+  pays via l'en-tête géographique de Netlify, provenances ; visiteurs
+  par empreinte anonyme quotidienne — pas de cookies ni de données
+  personnelles, donc pas de bannière). Tableau de bord dans l'admin :
+  `/admin/stats.html`, réservé aux sessions Identity.
 
 ## Arborescence
 
