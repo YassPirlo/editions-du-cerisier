@@ -134,11 +134,18 @@ export function EntreeRecherche({
     animation.current = requestAnimationFrame(souffle);
   }
 
+  /* Une seule validation, deux chemins pour y arriver : le submit du
+     formulaire (bouton, Entrée) et la touche Entrée saisie au vol — la
+     ceinture pour les claviers que le submit implicite n'entend pas. */
+  function valide() {
+    if (!dissolution) dissout(valeur);
+  }
+
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        if (!dissolution) dissout(valeur);
+        valide();
       }}
       className="relative"
     >
@@ -147,6 +154,12 @@ export function EntreeRecherche({
         type="search"
         value={valeur}
         onChange={(e) => onValeur(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            valide();
+          }
+        }}
         aria-label={ariaLabel}
         autoComplete="off"
         spellCheck={false}

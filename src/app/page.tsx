@@ -5,6 +5,7 @@ import { FluxCouvertures } from "@/components/FluxCouvertures";
 import { LampeDeLecture } from "@/components/LampeDeLecture";
 import { epaisseurDe, Livre3D } from "@/components/Livre3D";
 import { Prose } from "@/components/Prose";
+import { RechercheAccueil } from "@/components/RechercheAccueil";
 import { type Book, books, collections, excerpt, pages } from "@/lib/content";
 
 const presentation = pages.presentation[0];
@@ -163,6 +164,11 @@ export default function Home() {
               >
                 Envoyer un manuscrit
               </Link>
+            </div>
+            {/* La barre de recherche, posée sous les gestes du héros : on
+                tape ici, la table de recherche répond là-bas. */}
+            <div className="entree tempo-4 mt-9 w-full max-w-xl">
+              <RechercheAccueil />
             </div>
           </div>
         </FluxCouvertures>
