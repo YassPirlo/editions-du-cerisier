@@ -13,3 +13,12 @@
 
 [build.environment]
   NODE_VERSION = "22"
+
+  # L'hébergeur relit tout ce qu'il a produit et refuse de publier s'il y
+  # reconnaît la valeur d'une variable secrète. Le compilateur de Next
+  # recopie l'environnement dans son cache de travail : le mot de passe
+  # s'y retrouve, et le déploiement s'arrête. On écarte donc ces deux
+  # dossiers de cache — ils ne sont jamais servis aux visiteurs. Le reste
+  # du site, lui, continue d'être inspecté : si le mot de passe fuyait
+  # dans une page, le garde-fou jouerait toujours.
+  SECRETS_SCAN_OMIT_PATHS = ".netlify/.next/cache/**,.next/cache/**"

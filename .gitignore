@@ -48,3 +48,7 @@ next-env.d.ts
 
 # comptes de fréquentation écrits par le site
 /.data/
+
+# cache de compilation de l'hébergeur : il peut contenir des valeurs
+# de variables d'environnement, il n'a rien à faire dans le dépôt
+/.netlify/
