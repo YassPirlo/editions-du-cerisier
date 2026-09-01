@@ -46,7 +46,7 @@ export function ContenuPanier() {
         </p>
         <Link
           href="/catalogue"
-          className="mt-8 inline-block bg-cerise-400 px-7 py-3.5 text-xs font-bold tracking-[0.16em] text-ecorce-900 uppercase transition-colors hover:bg-cerise-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ecorce-900"
+          className="pression mt-8 inline-block bg-cerise-400 px-7 py-3.5 text-xs font-bold tracking-[0.16em] text-ecorce-900 uppercase transition-colors hover:bg-cerise-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ecorce-900"
         >
           Parcourir le catalogue
         </Link>
@@ -100,7 +100,7 @@ export function ContenuPanier() {
                 onClick={() => poseQuantite(a.collection, a.slug, a.quantite - 1)}
                 disabled={a.quantite <= 1}
                 aria-label="Un exemplaire de moins"
-                className="flex h-8 w-8 items-center justify-center border border-ecorce-300 text-ecorce-700 transition-colors hover:border-cerise-400 hover:bg-cerise-50 focus-visible:outline-2 focus-visible:outline-cerise-400 disabled:opacity-40"
+                className="pression flex h-8 w-8 items-center justify-center border border-ecorce-300 text-ecorce-700 transition-colors hover:border-cerise-400 hover:bg-cerise-50 focus-visible:outline-2 focus-visible:outline-cerise-400 disabled:opacity-40"
               >
                 −
               </button>
@@ -119,7 +119,7 @@ export function ContenuPanier() {
                 type="button"
                 onClick={() => poseQuantite(a.collection, a.slug, a.quantite + 1)}
                 aria-label="Un exemplaire de plus"
-                className="flex h-8 w-8 items-center justify-center border border-ecorce-300 text-ecorce-700 transition-colors hover:border-cerise-400 hover:bg-cerise-50 focus-visible:outline-2 focus-visible:outline-cerise-400"
+                className="pression flex h-8 w-8 items-center justify-center border border-ecorce-300 text-ecorce-700 transition-colors hover:border-cerise-400 hover:bg-cerise-50 focus-visible:outline-2 focus-visible:outline-cerise-400"
               >
                 +
               </button>
@@ -205,13 +205,13 @@ export function ContenuPanier() {
           href={brouillonGmail(sujet, lettre)}
           target="_blank"
           rel="noreferrer"
-          className="block bg-cerise-400 px-6 py-4 text-center text-xs font-bold tracking-[0.16em] text-ecorce-900 uppercase transition-colors hover:bg-cerise-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ecorce-900"
+          className="pression block bg-cerise-400 px-6 py-4 text-center text-xs font-bold tracking-[0.16em] text-ecorce-900 uppercase transition-colors hover:bg-cerise-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ecorce-900"
         >
           Envoyer via Gmail
         </a>
         <a
           href={brouillonMailto(sujet, lettre)}
-          className="block border border-ecorce-300 bg-white px-6 py-4 text-center text-xs font-bold tracking-[0.16em] text-ecorce-800 uppercase transition-colors hover:border-cerise-400 hover:bg-cerise-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cerise-400"
+          className="pression block border border-ecorce-300 bg-white px-6 py-4 text-center text-xs font-bold tracking-[0.16em] text-ecorce-800 uppercase transition-colors hover:border-cerise-400 hover:bg-cerise-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cerise-400"
         >
           Via votre messagerie
         </a>

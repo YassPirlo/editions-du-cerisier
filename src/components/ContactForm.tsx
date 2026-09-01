@@ -143,7 +143,7 @@ export function ContactForm({
             type="submit"
             name="canal"
             value="logiciel"
-            className="inline-flex items-center gap-2.5 rounded-lg bg-ecorce-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-ecorce-700"
+            className="pression inline-flex items-center gap-2.5 rounded-lg bg-ecorce-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-ecorce-700"
           >
             <IconeOutlook />
             Envoyer via Outlook
@@ -152,7 +152,7 @@ export function ContactForm({
             type="submit"
             name="canal"
             value="gmail"
-            className="inline-flex items-center gap-2.5 rounded-lg border border-ecorce-200 bg-white px-5 py-3 text-sm font-semibold text-ecorce-900 transition-colors hover:border-cerise-400 hover:bg-cerise-50"
+            className="pression inline-flex items-center gap-2.5 rounded-lg border border-ecorce-200 bg-white px-5 py-3 text-sm font-semibold text-ecorce-900 transition-colors hover:border-cerise-400 hover:bg-cerise-50"
           >
             <IconeGmail />
             Envoyer via Gmail

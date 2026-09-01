@@ -89,7 +89,7 @@ export function ChoixSaison() {
           <div
             role="menu"
             aria-label="Saisons du verger"
-            className="absolute top-full right-0 z-50 mt-2 w-60 rounded-xl border border-ecorce-800 bg-ecorce-900 py-1.5 shadow-lg shadow-black/30"
+            className="surgit absolute top-full right-0 z-50 mt-2 w-60 rounded-xl border border-ecorce-800 bg-ecorce-900 py-1.5 shadow-lg shadow-black/30"
           >
             {SAISONS.map((s) => (
               <button

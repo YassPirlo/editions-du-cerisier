@@ -90,8 +90,11 @@ export function Header() {
                   isActive(item.href) ? "scale-x-100" : "scale-x-0"
                 }`}
               />
+              {/* Le sous-menu surgit de son mot d'attache : un souffle
+                  d'échelle depuis le haut, jamais depuis le néant — et on
+                  n'anime que ce qui change, pas « tout ». */}
               {item.children && (
-                <div className="invisible absolute top-full left-0 min-w-56 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                <div className="invisible absolute top-full left-0 min-w-56 origin-top scale-[0.98] pt-2 opacity-0 transition-[opacity,scale,visibility] duration-150 ease-out group-hover:visible group-hover:scale-100 group-hover:opacity-100 group-focus-within:visible group-focus-within:scale-100 group-focus-within:opacity-100 motion-reduce:scale-100">
                   <ul className="overflow-hidden rounded-xl border border-ecorce-800 bg-ecorce-900 py-1.5 shadow-lg shadow-black/30">
                     {item.children.map((child) => (
                       <li key={child.href + child.label}>

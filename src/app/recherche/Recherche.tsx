@@ -206,7 +206,7 @@ export function Recherche() {
               <button
                 type="button"
                 onClick={() => setVisibles((v) => v + PAR_PAGE)}
-                className="mt-8 block w-full border border-ecorce-300 bg-white px-6 py-3.5 text-center text-xs font-bold tracking-[0.16em] text-ecorce-800 uppercase transition-colors hover:border-cerise-400 hover:bg-cerise-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cerise-400"
+                className="pression mt-8 block w-full border border-ecorce-300 bg-white px-6 py-3.5 text-center text-xs font-bold tracking-[0.16em] text-ecorce-800 uppercase transition-colors hover:border-cerise-400 hover:bg-cerise-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cerise-400"
               >
                 Voir plus ({resultats.length - visibles} autres)
               </button>

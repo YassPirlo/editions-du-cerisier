@@ -72,21 +72,41 @@ function retiens(cle: string, valeur: string | null) {
   }
 }
 
+/* Changer d'ambiance doit claquer, pas baver : des centaines d'éléments
+   portent des transitions de couleur aux durées diverses — les laisser
+   toutes partir en même temps ferait une traînée désordonnée. On les
+   suspend le temps du changement, on force un recalcul, et on les rend
+   au cadre suivant. */
+function dUnSeulCoup(applique: () => void) {
+  const voile = document.createElement("style");
+  voile.textContent = "*,*::before,*::after{transition:none!important}";
+  document.head.appendChild(voile);
+  applique();
+  void document.documentElement.offsetHeight;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => voile.remove());
+  });
+}
+
 /* Changer de saison ne touche pas à la nuit : on peut feuilleter les
    quatre nuits comme les quatre jours. */
 export function choisisSaison(saison: Saison) {
-  const racine = document.documentElement;
-  if (saison === "ete") delete racine.dataset.saison;
-  else racine.dataset.saison = saison;
+  dUnSeulCoup(() => {
+    const racine = document.documentElement;
+    if (saison === "ete") delete racine.dataset.saison;
+    else racine.dataset.saison = saison;
+  });
   retiens(CLE_SAISON, saison === "ete" ? null : saison);
   notifie();
 }
 
 export function basculeNuit() {
-  const racine = document.documentElement;
   const versLaNuit = !lisNuit();
-  if (versLaNuit) racine.dataset.nuit = "";
-  else delete racine.dataset.nuit;
+  dUnSeulCoup(() => {
+    const racine = document.documentElement;
+    if (versLaNuit) racine.dataset.nuit = "";
+    else delete racine.dataset.nuit;
+  });
   retiens(CLE_NUIT, versLaNuit ? "nuit" : null);
   notifie();
 }

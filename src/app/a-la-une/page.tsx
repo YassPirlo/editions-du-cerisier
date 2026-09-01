@@ -48,7 +48,7 @@ export default function ALaUnePage() {
             <li key={s.href}>
               <Link
                 href={s.href}
-                className="group flex h-full flex-col rounded-xl border border-ecorce-100 p-5 transition-all hover:-translate-y-0.5 hover:border-cerise-300 hover:shadow-md hover:shadow-ecorce-900/5"
+                className="group flex h-full flex-col rounded-xl border border-ecorce-100 p-5 transition-[translate,border-color,box-shadow] hover:-translate-y-0.5 hover:border-cerise-300 hover:shadow-md hover:shadow-ecorce-900/5"
               >
                 <div className="flex items-baseline justify-between gap-2">
                   <h2 className="font-serif text-base leading-snug font-semibold text-ecorce-900">

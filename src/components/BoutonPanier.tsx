@@ -38,7 +38,7 @@ export function CerisePanier({ livre }: { livre: Livre }) {
           ? `Retirer « ${livre.titre} » du panier`
           : `Ajouter « ${livre.titre} » au panier`
       }
-      className={`absolute -top-1 -right-1 z-10 flex h-9 w-9 items-center justify-center rounded-full border shadow-md transition-all focus-visible:outline-2 focus-visible:outline-cerise-400 ${
+      className={`pression absolute -top-1 -right-1 z-10 flex h-9 w-9 items-center justify-center rounded-full border shadow-md transition-[opacity,background-color,border-color,color] focus-visible:outline-2 focus-visible:outline-cerise-400 ${
         cueillie
           ? "border-griotte-400/40 bg-fleur-50 opacity-100"
           : "border-ecorce-200 bg-fleur-50/95 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 max-lg:opacity-100"
@@ -63,7 +63,7 @@ export function AjoutPanierFiche({ livre }: { livre: Livre }) {
       <button
         type="button"
         onClick={() => ajouteAuPanier(livre)}
-        className="block w-full border border-ecorce-300 bg-white px-5 py-3 text-center text-xs font-bold tracking-[0.16em] text-ecorce-800 uppercase transition-colors hover:border-cerise-400 hover:bg-cerise-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cerise-400"
+        className="pression block w-full border border-ecorce-300 bg-white px-5 py-3 text-center text-xs font-bold tracking-[0.16em] text-ecorce-800 uppercase transition-colors hover:border-cerise-400 hover:bg-cerise-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cerise-400"
       >
         {present ? "En ajouter un exemplaire" : "Ajouter au panier"}
       </button>

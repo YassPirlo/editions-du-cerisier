@@ -774,6 +774,54 @@
   overflow: hidden;
 }
 
+/* La pression : la surface cède d'un souffle sous le doigt — 0.97, cent
+   soixante millisecondes, et rien d'autre. Un bouton qu'on sent céder
+   n'a pas besoin d'en faire plus ; posée sur les gestes qui déclenchent
+   (commander, chercher, ajouter), jamais sur les liens de lecture. */
+@media (prefers-reduced-motion: no-preference) {
+  .pression {
+    /* La liste couvre aussi les fondus de survol : cette règle remplace
+       la transition de l'élément, elle ne s'y ajoute pas. */
+    transition-property: scale, color, background-color, border-color, opacity, box-shadow;
+    transition-duration: 160ms;
+    transition-timing-function: var(--ease-verger);
+  }
+  .pression:active {
+    scale: 0.97;
+  }
+}
+
+/* Le surgissement des menus : depuis leur déclencheur, jamais du néant —
+   un fondu bref et un souffle d'échelle depuis le coin d'attache. Sous
+   prefers-reduced-motion, le fondu reste, le mouvement s'efface. */
+.surgit {
+  transform-origin: var(--attache, top right);
+  transition: opacity 150ms var(--ease-verger);
+}
+@starting-style {
+  .surgit {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .surgit {
+    transition:
+      opacity 150ms var(--ease-verger),
+      scale 150ms var(--ease-verger);
+  }
+  @starting-style {
+    .surgit {
+      scale: 0.97;
+    }
+  }
+}
+
+/* Les paragraphes soignent leurs fins de ligne : pas de mot veuf au bas
+   d'un alinéa. */
+main p {
+  text-wrap: pretty;
+}
+
 /* La relève des suggestions du champ de recherche : la nouvelle monte
    d'un souffle à la place de l'ancienne. */
 @keyframes releve-suggestion {

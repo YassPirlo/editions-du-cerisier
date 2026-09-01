@@ -193,7 +193,7 @@ export function EntreeRecherche({
       <button
         type="submit"
         aria-label="Lancer la recherche"
-        className="absolute inset-y-1.5 right-1.5 flex w-11 items-center justify-center bg-cerise-400 text-ecorce-900 transition-colors hover:bg-cerise-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ecorce-900"
+        className="pression absolute inset-y-1.5 right-1.5 flex w-11 items-center justify-center bg-cerise-400 text-ecorce-900 transition-colors hover:bg-cerise-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ecorce-900"
       >
         <svg viewBox="0 0 20 20" className="h-4.5 w-4.5" fill="none" aria-hidden="true">
           <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.7" />

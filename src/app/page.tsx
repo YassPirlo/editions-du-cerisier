@@ -154,7 +154,7 @@ export default function Home() {
             <div className="entree tempo-4 mt-11 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
               <Link
                 href="/catalogue"
-                className="inline-block bg-cerise-400 px-7 py-3.5 text-xs font-bold tracking-[0.16em] text-ecorce-900 uppercase transition-colors hover:bg-fleur-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cerise-400"
+                className="pression inline-block bg-cerise-400 px-7 py-3.5 text-xs font-bold tracking-[0.16em] text-ecorce-900 uppercase transition-colors hover:bg-fleur-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cerise-400"
               >
                 Découvrir les {books.length} titres
               </Link>
@@ -446,7 +446,7 @@ export default function Home() {
           </div>
           <Link
             href="/envoyer-un-manuscrit"
-            className="shrink-0 self-start bg-ecorce-900 px-8 py-4 text-xs font-bold tracking-[0.16em] text-cerise-400 uppercase transition-colors hover:bg-ecorce-950 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ecorce-900 md:self-auto"
+            className="pression shrink-0 self-start bg-ecorce-900 px-8 py-4 text-xs font-bold tracking-[0.16em] text-cerise-400 uppercase transition-colors hover:bg-ecorce-950 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ecorce-900 md:self-auto"
           >
             Envoyer un manuscrit
           </Link>
