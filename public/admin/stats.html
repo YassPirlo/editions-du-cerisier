@@ -129,15 +129,6 @@
           }
         }
 
-        function jetonSession() {
-          try {
-            var brut = localStorage.getItem("gotrue.user");
-            if (!brut) return null;
-            var u = JSON.parse(brut);
-            return u && u.token && u.token.access_token ? u.token.access_token : null;
-          } catch (e) { return null; }
-        }
-
         function drapeau(code) {
           if (!/^[A-Z]{2}$/.test(code)) return "🌍";
           return String.fromCodePoint(0x1f1e6 + code.charCodeAt(0) - 65, 0x1f1e6 + code.charCodeAt(1) - 65);
@@ -192,12 +183,9 @@
 
         function charge() {
           message(null);
-          var jeton = jetonSession();
-          if (!jeton) {
-            message("Ouvrez d’abord une session dans l’admin — les chiffres sont réservés à la maison.", true);
-            return;
-          }
-          fetch("/api/frequentation", { headers: { Authorization: "Bearer " + jeton } })
+          /* La session est le cookie signé de la porte : le navigateur le
+             joint tout seul. */
+          fetch("/api/frequentation")
             .then(function (r) { return r.json().then(function (corps) { return { ok: r.ok, statut: r.status, corps: corps }; }); })
             .then(function (r) {
               if (!r.ok) {

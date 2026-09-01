@@ -4,9 +4,16 @@
 # scripts/construire-donnees.mjs les retransforme en src/data/*.json.
 # Le champ « ordre » pilote l'ordre d'affichage (pas de tirer-déposer).
 
+# Le CMS écrit dans le dépôt GitHub avec le jeton de la maison, remis par
+# notre propre guichet (api/decap/auth) à qui a passé la porte à mot de
+# passe — pas de comptes, pas de Netlify Identity. base_url est le domaine
+# définitif : c'est là que la petite fenêtre d'autorisation s'ouvre.
 backend:
-  name: git-gateway
+  name: github
+  repo: YassPirlo/editions-du-cerisier
   branch: main
+  base_url: https://editions-du-cerisier.be
+  auth_endpoint: api/decap/auth
   commit_messages:
     create: "Contenu : ajout de « {{slug}} » ({{collection}})"
     update: "Contenu : mise à jour de « {{slug}} » ({{collection}})"

@@ -5,11 +5,11 @@ import Link from "next/link";
 import { Cerise } from "@/components/Cerisier";
 import {
   abonnePanier,
+  brouillonGmail,
+  brouillonMailto,
   composeCommande,
   COURRIEL_COMMANDES,
   enEuros,
-  lienCommande,
-  lienCommandeGmail,
   lisPanier,
   lisPanierServeur,
   poseQuantite,
@@ -28,6 +28,10 @@ import {
 export function ContenuPanier() {
   const articles = useSyncExternalStore(abonnePanier, lisPanier, lisPanierServeur);
   const [copie, setCopie] = useState(false);
+  /* La lettre suit le panier tant qu'on n'y a pas touché ; dès qu'on
+     l'édite (son nom, un mot en plus), c'est la version du lecteur qui
+     fait foi — un lien permet de la réécrire depuis le panier. */
+  const [lettrePerso, setLettrePerso] = useState<string | null>(null);
 
   if (articles.length === 0) {
     return (
@@ -61,9 +65,12 @@ export function ContenuPanier() {
   }
   const nombre = articles.reduce((s, a) => s + a.quantite, 0);
 
+  const { sujet, corps: corpsParDefaut } = composeCommande(articles);
+  const lettre = lettrePerso ?? corpsParDefaut;
+
   async function copieCommande() {
     try {
-      await navigator.clipboard.writeText(composeCommande(articles).corps);
+      await navigator.clipboard.writeText(lettre);
       setCopie(true);
       setTimeout(() => setCopie(false), 2500);
     } catch {}
@@ -151,9 +158,10 @@ export function ContenuPanier() {
         </p>
       )}
 
-      {/* La lettre elle-même, posée sur la page : chacun voit ce qui va
-          partir, et peut aussi la copier telle quelle vers n'importe quelle
-          messagerie. */}
+      {/* La lettre elle-même, posée sur la page — et modifiable : on
+          complète son nom et son adresse ici même, on ajoute un mot si on
+          veut, et c'est cette version-là qui part, par Gmail, par la
+          messagerie ou au presse-papiers. */}
       <div className="mt-10 border border-ecorce-200 bg-white p-5 sm:p-6">
         <div className="flex items-baseline justify-between gap-4 border-b border-ecorce-200 pb-3">
           <p className="text-xs font-bold tracking-[0.14em] text-ecorce-600 uppercase">
@@ -168,16 +176,33 @@ export function ContenuPanier() {
           </button>
         </div>
         <p className="mt-1 text-xs text-ecorce-500">
-          À : {COURRIEL_COMMANDES} — complétez vos coordonnées avant l’envoi.
+          À : {COURRIEL_COMMANDES} — complétez vos coordonnées directement dans
+          la lettre.
         </p>
-        <pre className="mt-4 font-sans text-sm leading-relaxed whitespace-pre-wrap text-ecorce-800">
-          {composeCommande(articles).corps}
-        </pre>
+        <textarea
+          value={lettre}
+          onChange={(e) => setLettrePerso(e.target.value)}
+          rows={17}
+          aria-label="La lettre de commande, modifiable"
+          spellCheck={false}
+          className="mt-4 w-full resize-y border border-ecorce-200 bg-fleur-50/40 p-4 font-sans text-sm leading-relaxed text-ecorce-800 focus-visible:border-cerise-400 focus-visible:outline-2 focus-visible:outline-cerise-400"
+        />
+        {lettrePerso !== null && (
+          <p className="mt-2 text-right text-xs">
+            <button
+              type="button"
+              onClick={() => setLettrePerso(null)}
+              className="text-ecorce-500 underline decoration-transparent decoration-2 underline-offset-2 transition-colors hover:text-griotte-500 hover:decoration-griotte-500"
+            >
+              Réécrire la lettre depuis le panier
+            </button>
+          </p>
+        )}
       </div>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2">
         <a
-          href={lienCommandeGmail(articles)}
+          href={brouillonGmail(sujet, lettre)}
           target="_blank"
           rel="noreferrer"
           className="block bg-cerise-400 px-6 py-4 text-center text-xs font-bold tracking-[0.16em] text-ecorce-900 uppercase transition-colors hover:bg-cerise-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ecorce-900"
@@ -185,7 +210,7 @@ export function ContenuPanier() {
           Envoyer via Gmail
         </a>
         <a
-          href={lienCommande(articles)}
+          href={brouillonMailto(sujet, lettre)}
           className="block border border-ecorce-300 bg-white px-6 py-4 text-center text-xs font-bold tracking-[0.16em] text-ecorce-800 uppercase transition-colors hover:border-cerise-400 hover:bg-cerise-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cerise-400"
         >
           Via votre messagerie

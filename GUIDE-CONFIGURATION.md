@@ -27,41 +27,34 @@ GitHub), et la route serveur de l'infolettre.
 
 ## Étape 2 — L'authentification de l'admin (≈ 10 min)
 
-C'est la partie qui donne à la maison un accès `/admin/` par **courriel +
-mot de passe, sur invitation seulement** — sans compte GitHub, sans rien
-d'autre à connaître.
+**Un seul mot de passe — celui de la maison — posé dans les variables
+d'environnement.** Pas de comptes, pas d'adresses, rien à activer chez
+Netlify. Derrière la porte, le CMS écrit dans le dépôt avec un jeton
+GitHub gardé côté serveur, remis uniquement aux sessions valides.
 
-Dans le tableau de bord Netlify de ton site :
+1. **Le jeton GitHub** (une fois) : sur github.com → *Settings →
+   Developer settings → Personal access tokens → Fine-grained tokens →
+   Generate new token* → *Repository access* : **Only select
+   repositories** → `editions-du-cerisier` → *Permissions → Contents* :
+   **Read and write** → expiration longue (1 an) → génère, **copie-le**
+   (il ne s'affiche qu'une fois).
+2. Dans Netlify : **Site configuration → Environment variables** →
+   ajoute :
+   - `ADMIN_PASSWORD` — le mot de passe de la maison ; choisis-le
+     **long**, une phrase fait très bien ;
+   - `GITHUB_CMS_TOKEN` — le jeton copié à l'instant ;
+   - `SESSION_SECRET` — une autre longue phrase (facultatif) ;
+   → *Deploys → Trigger deploy*.
+3. `…/admin/` → le mot de passe → le CMS s'ouvre. Au premier passage,
+   « Se connecter » ouvre une petite fenêtre qui se referme d'elle-même
+   (elle remet la clé au CMS). La session tient sept jours par
+   navigateur ; « Se déconnecter » est en bas à droite du CMS.
 
-1. **Integrations → Identity** (ou *Site configuration → Identity*) →
-   **Enable Identity**.
-2. Toujours dans Identity : **Registration** → choisis **Invite only** —
-   personne ne peut se créer un compte tout seul.
-3. Plus bas : **Services → Git Gateway** → **Enable Git Gateway**. C'est le
-   pont qui permet au CMS d'écrire dans le dépôt au nom de l'éditeur, sans
-   qu'il ait de compte GitHub.
-4. Onglet **Identity** (en haut) → **Invite users** → l'adresse de la
-   maison (et la tienne pour essayer).
-5. La personne invitée reçoit un courriel « You've been invited to join… »
-   → clique **Accept the invite** → elle arrive sur le site, qui la
-   reconduit sur `/admin/` (c'est le rôle de `AccesIdentite.tsx`) → elle
-   choisit son mot de passe → le CMS s'ouvre.
-
-L'écran de connexion est le nôtre (pas la fenêtre standard de Netlify) :
-en français, aux couleurs de la maison, et il **impose un mot de passe
-fort** au moment où chacun le choisit — douze caractères au moins, une
-minuscule, une majuscule, un chiffre, un caractère spécial (vérifié par
-regex, liste des exigences qui s'allume en tapant), et jamais l'adresse de
-courriel dedans. Chaque accès est lié à une adresse invitée ; « Mot de
-passe oublié ? » renvoie un lien de renouvellement, soumis aux mêmes
-règles.
-
-Ensuite, l'entrée se fait toujours par `…/admin/` → adresse + mot de
-passe. Retirer un accès : Identity → la personne → *Delete user*.
-
-> Si Netlify affichait Identity comme indisponible sur les nouveaux sites
-> (le service est ancien chez eux), dis-le-moi : je brancherais alors le
-> CMS sur l'authentification GitHub à la place — dix minutes de travail.
+À savoir : les modifications du CMS sont committées au nom du
+propriétaire du jeton. Retirer l'accès = changer `ADMIN_PASSWORD`
+(et/ou révoquer le jeton sur GitHub). L'admin **en ligne** passe par le
+domaine définitif (`base_url` de la configuration) : branche le domaine
+à l'étape 1 avant de l'essayer.
 
 ## Étape 3 — L'infolettre (Brevo, ≈ 15 min)
 
@@ -124,8 +117,8 @@ content.
 
 ## Vérifier que tout marche
 
-- L'invitation reçue par courriel mène bien à la création du mot de passe,
-  puis au CMS sur `/admin/`.
+- Le mot de passe (celui des variables Netlify) ouvre `…/admin/`, et le
+  CMS s'ouvre après la petite fenêtre d'autorisation.
 - Une modification enregistrée dans le CMS crée un commit « Contenu : … »
   sur GitHub, et Netlify redéploie le site tout seul (2-3 min).
 - Une inscription au pop-up apparaît dans ta liste Brevo (Contacts).

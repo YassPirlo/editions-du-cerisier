@@ -1,4 +1,5 @@
 import { getStore } from "@netlify/blobs";
+import { jetonValide, litJetonDesCookies } from "@/lib/jeton";
 
 /**
  * La fréquentation, comptée par la maison elle-même — aucun service tiers.
@@ -173,19 +174,12 @@ const tri = (table: Compteurs, garde: number) =>
     .slice(0, garde);
 
 export async function GET(request: Request) {
-  /* Réservé aux éditeurs : le jeton de session (Netlify Identity) est
-     revérifié auprès du service — pas de jeton valide, pas de chiffres. */
-  const jeton = (request.headers.get("authorization") || "").replace(/^Bearer /, "");
-  if (!jeton) {
-    return Response.json({ erreur: "Session requise." }, { status: 401 });
-  }
-  const identite = await fetch(
-    `${new URL(request.url).origin}/.netlify/identity/user`,
-    { headers: { Authorization: `Bearer ${jeton}` } },
-  ).catch(() => null);
-  if (!identite || !identite.ok) {
+  /* Réservé à la maison : le cookie de session signé de la porte
+     (/api/admin/session) fait foi — pas de session, pas de chiffres. */
+  const connecte = await jetonValide(litJetonDesCookies(request.headers));
+  if (!connecte) {
     return Response.json(
-      { erreur: "Session invalide ou expirée — reconnectez-vous." },
+      { erreur: "Session requise ou expirée — repassez par la porte de l’admin." },
       { status: 401 },
     );
   }

@@ -180,8 +180,13 @@ export function lienCommande(articles: ArticlePanier[]) {
 
 /* La même commande, mais dans Gmail au navigateur — pour tous ceux dont la
    messagerie est un onglet, pas une application installée. */
-const brouillonGmail = (sujet: string, corps: string) =>
+export const brouillonGmail = (sujet: string, corps: string) =>
   `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(COURRIEL_COMMANDES)}&su=${encodeURIComponent(sujet)}&body=${encodeURIComponent(corps)}`;
+
+/* Le mailto équivalent, pour un corps déjà en main (la lettre retouchée
+   sur la page du panier part telle que le lecteur l'a laissée). */
+export const brouillonMailto = (sujet: string, corps: string) =>
+  `mailto:${COURRIEL_COMMANDES}?subject=${encodeURIComponent(sujet)}&body=${encodeURIComponent(corps)}`;
 
 export function lienCommandeGmail(articles: ArticlePanier[]) {
   const { sujet, corps } = composeCommande(articles);

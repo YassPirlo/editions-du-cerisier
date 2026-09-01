@@ -3,7 +3,6 @@ import { Fraunces, Inter } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { InvitationNewsletter } from "@/components/InvitationNewsletter";
-import { AccesIdentite } from "@/components/AccesIdentite";
 import { Statistiques } from "@/components/Statistiques";
 import { DonneesStructurees } from "@/components/DonneesStructurees";
 import { MAISON, SITE } from "@/lib/schema";
@@ -77,11 +76,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </main>
         <Footer />
         <InvitationNewsletter />
-        {/* Le raccord des courriels Netlify Identity (invitation, mot de
-            passe oublié) vers /admin/, et la mesure d'audience sans cookies
-            (Umami — d'où l'absence de bannière) — deux composants qui
-            savent s'effacer. */}
-        <AccesIdentite />
+        {/* La mesure d'audience maison, sans cookies — voir
+            src/components/Statistiques.tsx ; elle sait s'effacer. */}
         <Statistiques />
         {/* La maison et le site, décrits aux moteurs (schema.org). */}
         <DonneesStructurees donnees={MAISON} />

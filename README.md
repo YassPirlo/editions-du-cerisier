@@ -38,15 +38,14 @@ entièrement statique, généré au build.
   commit reconstruit le site. En local : `npm run cms-local` dans un
   terminal, `npm run dev` dans un autre — pas de compte requis
   (`local_backend`).
-- **Authentification** : Netlify Identity + Git Gateway (comptes par
-  invitation, un par adresse de courriel), derrière une porte maison —
-  l'écran de connexion de `public/admin/index.html`, qui parle
-  directement à l'API d'identité et impose un mot de passe fort à sa
-  création (regex : 12 caractères, minuscule, majuscule, chiffre,
-  caractère spécial, jamais l'adresse dedans). `AccesIdentite.tsx`
-  reconduit vers `/admin/` les liens d'invitation et de renouvellement,
-  qui arrivent sur `/`. La mise en service se fait dans le tableau de
-  bord Netlify — pas-à-pas dans `GUIDE-CONFIGURATION.md`.
+- **Authentification** : un seul mot de passe, celui de la maison, posé
+  dans `ADMIN_PASSWORD` — pas de comptes ni d'adresses. La porte de
+  `public/admin/index.html` le vérifie via `/api/admin/session`
+  (comparaison en temps constant, cookie signé de sept jours,
+  `src/lib/jeton.ts`) ; le CMS écrit ensuite dans le dépôt avec le jeton
+  GitHub de la maison (`GITHUB_CMS_TOKEN`, fine-grained limité au dépôt),
+  remis aux sessions valides par le guichet `/api/decap/auth`. Pas-à-pas
+  dans `GUIDE-CONFIGURATION.md`.
 - **Infolettre** : le pop-up « La lettre du Cerisier » poste vers
   `/api/infolettre`, qui range l'adresse dans la liste Brevo de la maison
   (clé côté serveur, pot de miel, réponses en français) — les campagnes

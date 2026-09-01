@@ -10,59 +10,39 @@
          viserait la racine du site. -->
     <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
     <style>
-      /* La porte de l'arrière-boutique, aux couleurs de la maison : papier
-         rosé, or cerise, griotte pour ce qui vit. Une seule page, aucun
-         build : tout est là. */
-      :root {
-        --papier: #fdf8f5;
-        --encre: #241d13;
-        --ecorce-600: #6f5838;
-        --ecorce-500: #8b6f47;
-        --ecorce-300: #bfa483;
-        --ecorce-200: #d8c7b1;
-        --cerise: #ffc107;
-        --cerise-300: #ffd75c;
-        --griotte: #a5112b;
-        --feuille: #5c7a46;
-      }
+      /* La porte de l'arrière-boutique, aux couleurs de la maison. Un seul
+         mot de passe — celui posé dans ADMIN_PASSWORD — vérifié par la
+         route /api/admin/session, qui pose un cookie signé de sept jours. */
       .porte * { box-sizing: border-box; }
       .porte {
         position: fixed;
         inset: 0;
         z-index: 100;
         display: flex;
-        /* Le centrage passe par les marges de la carte : quand la fenêtre
-           est plus basse que le formulaire, la porte défile au lieu de
-           cacher le bouton. */
         overflow-y: auto;
         padding: 1.5rem;
-        background: var(--papier);
-        color: var(--encre);
+        background: #fdf8f5;
+        color: #241d13;
         font-family: ui-sans-serif, system-ui, sans-serif;
         line-height: 1.6;
       }
       .porte-carte {
         margin: auto;
         width: 100%;
-        max-width: 24rem;
-        border-top: 4px solid var(--cerise);
+        max-width: 22rem;
+        border-top: 4px solid #ffc107;
         background: #fff;
         box-shadow: 0 22px 45px rgba(36, 29, 19, 0.14);
-        padding: 2.2rem 2rem 2.4rem;
+        padding: 2.1rem 1.9rem 2.2rem;
       }
       .porte h1 {
         margin: 0.9rem 0 0;
         font-family: Georgia, "Times New Roman", serif;
-        font-size: 1.65rem;
+        font-size: 1.6rem;
         font-weight: 600;
         line-height: 1.15;
       }
-      .porte p { margin: 0; }
-      .porte-sous {
-        margin-top: 0.55rem !important;
-        font-size: 0.9rem;
-        color: var(--ecorce-600);
-      }
+      .porte p { margin: 0.55rem 0 0; font-size: 0.9rem; color: #6f5838; }
       .porte label {
         display: block;
         margin-top: 1.15rem;
@@ -70,87 +50,49 @@
         font-weight: 700;
         letter-spacing: 0.13em;
         text-transform: uppercase;
-        color: var(--ecorce-600);
+        color: #6f5838;
       }
       .porte input {
         width: 100%;
         margin-top: 0.45rem;
-        border: 1px solid var(--ecorce-300);
+        border: 1px solid #bfa483;
         background: #fff;
         padding: 0.65rem 0.9rem;
         font: inherit;
-        color: var(--encre);
+        color: #241d13;
       }
       .porte input:focus-visible,
-      .porte button:focus-visible,
-      .porte a:focus-visible {
-        outline: 2px solid var(--cerise);
+      .porte button:focus-visible {
+        outline: 2px solid #ffc107;
         outline-offset: 2px;
       }
-      .porte-bouton {
+      .porte button {
         width: 100%;
         margin-top: 1.4rem;
         border: 0;
-        background: var(--cerise);
+        background: #ffc107;
         padding: 0.8rem 1rem;
         font-size: 0.72rem;
         font-weight: 800;
         letter-spacing: 0.16em;
         text-transform: uppercase;
-        color: var(--encre);
+        color: #241d13;
         cursor: pointer;
         transition: background 0.15s;
       }
-      .porte-bouton:hover { background: var(--cerise-300); }
-      .porte-bouton[disabled] { opacity: 0.6; cursor: default; }
-      .porte-liens {
-        margin-top: 1.1rem !important;
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-        font-size: 0.83rem;
-      }
-      .porte a {
-        color: var(--ecorce-600);
-        text-decoration: underline;
-        text-decoration-color: var(--cerise);
-        text-decoration-thickness: 2px;
-        text-underline-offset: 3px;
-        cursor: pointer;
-      }
-      .porte a:hover { color: var(--griotte); }
+      .porte button:hover { background: #ffd75c; }
+      .porte button[disabled] { opacity: 0.6; cursor: default; }
       .porte-erreur {
-        margin-top: 1rem !important;
-        border-left: 4px solid var(--griotte);
+        margin-top: 1rem;
+        border-left: 4px solid #a5112b;
         background: #fdf1f0;
         padding: 0.6rem 0.85rem;
         font-size: 0.86rem;
         color: #7d1c22;
       }
-      .porte-info {
-        margin-top: 1rem !important;
-        border-left: 4px solid var(--feuille);
-        background: #f1f6ec;
-        padding: 0.6rem 0.85rem;
-        font-size: 0.86rem;
-        color: #33491f;
-      }
-      /* La liste des exigences : chaque règle s'allume quand elle est
-         satisfaite — on voit le mot de passe devenir fort. */
-      .porte-regles {
-        margin: 0.8rem 0 0;
-        padding: 0;
-        list-style: none;
-        font-size: 0.82rem;
-        color: var(--ecorce-500);
-      }
-      .porte-regles li { display: flex; gap: 0.5rem; align-items: baseline; padding: 0.12rem 0; }
-      .porte-regles .puce { width: 0.95em; flex-shrink: 0; text-align: center; color: var(--ecorce-300); }
-      .porte-regles li.ok { color: var(--feuille); }
-      .porte-regles li.ok .puce { color: var(--feuille); }
       .cerises { display: inline-flex; gap: 4px; }
-      .cerises span { width: 9px; height: 9px; border-radius: 50%; background: var(--griotte); }
-      .cerises span + span { background: var(--cerise); }
+      .cerises span { width: 9px; height: 9px; border-radius: 50%; background: #a5112b; }
+      .cerises span + span { background: #ffc107; }
       .cache { display: none !important; }
       .bandeau-local {
         position: fixed;
@@ -164,6 +106,21 @@
         padding: 0.35rem 0.9rem;
         text-align: center;
       }
+      .outil {
+        position: fixed;
+        bottom: 1rem;
+        z-index: 99999;
+        background: #171008;
+        color: #f7ece5;
+        padding: 0.55rem 1rem;
+        font: 700 0.7rem/1 ui-sans-serif, system-ui, sans-serif;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        text-decoration: none;
+        border: 0;
+        border-top: 3px solid #ffc107;
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
@@ -175,349 +132,115 @@
     <div id="porte" class="porte cache" role="main">
       <div class="porte-carte">
         <span class="cerises" aria-hidden="true"><span></span><span></span></span>
-        <h1 id="porte-titre">L’arrière-boutique</h1>
-        <p class="porte-sous" id="porte-sous">
-          L’espace de la maison. Chaque accès est lié à une adresse de
-          courriel invitée.
-        </p>
-
-        <!-- Connexion : l'adresse et son mot de passe. -->
-        <form id="f-connexion" novalidate>
-          <label for="c-courriel">Adresse de courriel</label>
-          <input id="c-courriel" name="email" type="email" autocomplete="username" required />
-          <label for="c-mdp">Mot de passe</label>
-          <input id="c-mdp" name="password" type="password" autocomplete="current-password" required />
-          <button class="porte-bouton" type="submit">Entrer</button>
-          <p class="porte-liens">
-            <a id="lien-oubli" role="button" tabindex="0">Mot de passe oublié ?</a>
-          </p>
+        <h1>L’arrière-boutique</h1>
+        <p>L’espace de la maison : le catalogue s’y tient à jour, la
+        fréquentation s’y consulte.</p>
+        <form id="f-porte">
+          <label for="mdp">Mot de passe</label>
+          <input id="mdp" type="password" autocomplete="current-password" required />
+          <p id="porte-erreur" class="porte-erreur cache" role="alert"></p>
+          <button id="entrer" type="submit">Entrer</button>
         </form>
-
-        <!-- Invitation ou renouvellement : on choisit un mot de passe fort. -->
-        <form id="f-mdp" class="cache" novalidate>
-          <label for="m-courriel">Votre adresse de courriel</label>
-          <input id="m-courriel" name="email" type="email" autocomplete="username" required />
-          <label for="m-mdp">Nouveau mot de passe</label>
-          <input id="m-mdp" name="new-password" type="password" autocomplete="new-password" required
-                 aria-describedby="regles-mdp" />
-          <ul class="porte-regles" id="regles-mdp" aria-live="polite"></ul>
-          <label for="m-confirme">Le même, pour confirmer</label>
-          <input id="m-confirme" type="password" autocomplete="new-password" required />
-          <button class="porte-bouton" type="submit">Enregistrer et entrer</button>
-        </form>
-
-        <!-- Mot de passe oublié : on envoie le courriel de renouvellement. -->
-        <form id="f-oubli" class="cache" novalidate>
-          <label for="o-courriel">Votre adresse de courriel</label>
-          <input id="o-courriel" type="email" autocomplete="username" required />
-          <button class="porte-bouton" type="submit">Envoyer le courriel</button>
-          <p class="porte-liens">
-            <a id="lien-retour" role="button" tabindex="0">← Revenir à la connexion</a>
-          </p>
-        </form>
-
-        <p id="porte-erreur" class="porte-erreur cache" role="alert"></p>
-        <p id="porte-message" class="porte-info cache" role="status"></p>
       </div>
     </div>
 
     <script>
       /**
-       * La porte de l'administration.
+       * La porte : un mot de passe, celui de la maison (ADMIN_PASSWORD dans
+       * les variables d'environnement — pas de comptes, pas d'adresses).
+       * La session tient sept jours dans un cookie signé ; le CMS écrit
+       * ensuite dans le dépôt via le guichet /api/decap/auth, qui remet le
+       * jeton GitHub de la maison aux sessions valides.
        *
-       * Derrière, l'authentification reste Netlify Identity (comptes sur
-       * invitation, un par adresse) — mais l'écran est le nôtre : en
-       * français, aux couleurs de la maison, et surtout avec nos exigences
-       * de mot de passe, que la fenêtre standard de Netlify ne sait pas
-       * imposer. On parle directement à l'API (GoTrue) : connexion,
-       * acceptation d'invitation, renouvellement — puis on confie la
-       * session au CMS, qui la retrouve là où sa propre bibliothèque la
-       * range (localStorage « gotrue.user »).
-       *
-       * En local (decap-server), pas de compte : la porte s'efface —
+       * En local (decap-server), pas de mot de passe : la porte s'efface —
        * ajouter ?porte=1 à l'adresse pour la voir quand même.
        */
       (function () {
         "use strict";
-
-        var IDENTITE = location.origin + "/.netlify/identity";
-        var CLE_SESSION = "gotrue.user";
-
-        /* Le mot de passe fort, en toutes lettres puis en une regex :
-           douze caractères au moins, une minuscule, une majuscule, un
-           chiffre, un caractère spécial. Les espaces sont permis — une
-           phrase de passe est un excellent mot de passe. */
-        var MDP_FORT = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s]).{12,}$/;
-        var REGLES = [
-          { libelle: "douze caractères au moins", test: function (m) { return m.length >= 12; } },
-          { libelle: "une minuscule", test: function (m) { return /[a-z]/.test(m); } },
-          { libelle: "une majuscule", test: function (m) { return /[A-Z]/.test(m); } },
-          { libelle: "un chiffre", test: function (m) { return /\d/.test(m); } },
-          { libelle: "un caractère spécial (! ? % € …)", test: function (m) { return /[^A-Za-z0-9\s]/.test(m); } },
-        ];
-
-        var $ = function (id) { return document.getElementById(id); };
-        var porte = $("porte");
-        var formulaires = { connexion: $("f-connexion"), mdp: $("f-mdp"), oubli: $("f-oubli") };
-
-        function montre(nom, titre, sous) {
-          Object.keys(formulaires).forEach(function (n) {
-            formulaires[n].classList.toggle("cache", n !== nom);
-          });
-          if (titre) $("porte-titre").textContent = titre;
-          if (sous) $("porte-sous").textContent = sous;
-          erreur(null);
-          message(null);
-          porte.classList.remove("cache");
-        }
-        function erreur(texte) {
-          $("porte-erreur").classList.toggle("cache", !texte);
-          if (texte) $("porte-erreur").textContent = texte;
-        }
-        function message(texte) {
-          $("porte-message").classList.toggle("cache", !texte);
-          if (texte) $("porte-message").textContent = texte;
-        }
-        function enCours(form, oui) {
-          var bouton = form.querySelector("button");
-          bouton.disabled = oui;
-        }
-
-        /* ----- les appels à l'API d'identité ----- */
-
-        function appelle(chemin, options) {
-          return fetch(IDENTITE + chemin, options).then(function (reponse) {
-            return reponse.json().catch(function () { return {}; }).then(function (corps) {
-              if (!reponse.ok) {
-                var detail = corps.error_description || corps.msg || corps.error || String(reponse.status);
-                var e = new Error(detail);
-                e.code = reponse.status;
-                throw e;
-              }
-              return corps;
-            });
-          });
-        }
-
-        /* La session, rangée comme la bibliothèque du CMS la range : le
-           profil, plus le jeton daté — c'est tout ce que Decap relit. */
-        function rangeSession(jeton) {
-          jeton.expires_at = Date.now() + jeton.expires_in * 1000;
-          return appelle("/user", {
-            headers: { Authorization: "Bearer " + jeton.access_token },
-          }).then(function (profil) {
-            profil.token = jeton;
-            profil.api = { apiURL: IDENTITE };
-            profil.url = IDENTITE;
-            localStorage.setItem(CLE_SESSION, JSON.stringify(profil));
-            location.replace(location.pathname);
-          });
-        }
-
-        function connecte(courriel, mdp) {
-          return appelle("/token", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body:
-              "grant_type=password&username=" + encodeURIComponent(courriel) +
-              "&password=" + encodeURIComponent(mdp),
-          }).then(rangeSession);
-        }
-
-        /* ----- les règles du mot de passe ----- */
-
-        function dessineRegles(valeur) {
-          var liste = $("regles-mdp");
-          liste.innerHTML = "";
-          REGLES.forEach(function (regle) {
-            var ok = regle.test(valeur);
-            var li = document.createElement("li");
-            li.className = ok ? "ok" : "";
-            var puce = document.createElement("span");
-            puce.className = "puce";
-            puce.textContent = ok ? "✓" : "•";
-            li.appendChild(puce);
-            li.appendChild(document.createTextNode(regle.libelle));
-            liste.appendChild(li);
-          });
-        }
-
-        function verifieMdp(courriel, mdp, confirme) {
-          if (!MDP_FORT.test(mdp)) {
-            return "Le mot de passe ne remplit pas encore toutes les exigences de la liste.";
-          }
-          var partieLocale = (courriel.split("@")[0] || "").toLowerCase();
-          if (partieLocale.length >= 3 && mdp.toLowerCase().indexOf(partieLocale) !== -1) {
-            return "Le mot de passe ne doit pas contenir votre adresse (« " + partieLocale + " »).";
-          }
-          if (mdp !== confirme) {
-            return "Les deux saisies ne sont pas identiques.";
-          }
-          return null;
-        }
-
-        /* ----- l'aiguillage ----- */
-
-        var hash = location.hash || "";
-        var jetonInvitation = (hash.match(/invite_token=([^&]+)/) || [])[1];
-        var jetonRenouvellement = (hash.match(/recovery_token=([^&]+)/) || [])[1];
-        if (jetonInvitation || jetonRenouvellement) {
-          /* On retient le jeton et on nettoie l'adresse : un rechargement
-             ne doit pas rejouer le courriel. */
-          history.replaceState(null, "", location.pathname + location.search);
-        }
-
+        var porte = document.getElementById("porte");
         var estLocal = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
         var porteForcee = /(^|[?&])porte=1(&|$)/.test(location.search);
 
-        function sessionPresente() {
-          try {
-            var brut = localStorage.getItem(CLE_SESSION);
-            if (!brut) return false;
-            var session = JSON.parse(brut);
-            return Boolean(session && session.token && session.token.refresh_token);
-          } catch (e) {
-            return false;
-          }
+        function erreur(texte) {
+          var el = document.getElementById("porte-erreur");
+          el.classList.toggle("cache", !texte);
+          if (texte) el.textContent = texte;
         }
 
-        function ouvreCms() {
+        function bouton(texte, droite, action) {
+          var el = document.createElement(typeof action === "string" ? "a" : "button");
+          el.className = "outil";
+          el.style.right = droite;
+          el.textContent = texte;
+          if (typeof action === "string") el.href = action;
+          else el.addEventListener("click", action);
+          document.body.appendChild(el);
+        }
+
+        function ouvreCms(local) {
           porte.classList.add("cache");
           if (window.CMS) window.CMS.init();
-          /* Le raccourci vers les chiffres de fréquentation, posé sur le
-             CMS — la page vit à côté (stats.html) et exige la même
-             session. */
-          var chiffres = document.createElement("a");
-          chiffres.href = "/admin/stats.html";
-          chiffres.textContent = "Fréquentation";
-          chiffres.style.cssText =
-            "position:fixed;right:1rem;bottom:1rem;z-index:99999;" +
-            "background:#171008;color:#f7ece5;padding:0.55rem 1rem;" +
-            "font:700 0.7rem/1 ui-sans-serif,system-ui,sans-serif;" +
-            "letter-spacing:0.14em;text-transform:uppercase;" +
-            "text-decoration:none;border-top:3px solid #ffc107;";
-          document.body.appendChild(chiffres);
-          /* Si l'éditeur se déconnecte depuis le CMS, la bibliothèque du
-             CMS efface la session : on referme la porte derrière lui. */
-          var etaitLa = sessionPresente();
-          setInterval(function () {
-            var estLa = sessionPresente();
-            if (etaitLa && !estLa) location.replace(location.pathname);
-            etaitLa = estLa;
-          }, 2000);
+          bouton("Fréquentation", "1rem", "/admin/stats.html");
+          if (!local) {
+            bouton("Se déconnecter", "11.5rem", function () {
+              fetch("/api/admin/session", { method: "DELETE" }).finally(function () {
+                try {
+                  localStorage.removeItem("decap-cms.user");
+                  localStorage.removeItem("netlify-cms-user");
+                } catch (e) {}
+                location.replace(location.pathname);
+              });
+            });
+          } else {
+            var bandeau = document.createElement("p");
+            bandeau.className = "bandeau-local";
+            bandeau.textContent =
+              "Édition locale (decap-server) — sans mot de passe. La porte garde le site en ligne.";
+            document.body.appendChild(bandeau);
+          }
         }
 
         document.addEventListener("DOMContentLoaded", function () {
           if (estLocal && !porteForcee) {
-            /* L'édition locale passe par decap-server : pas de compte. */
-            var bandeau = document.createElement("p");
-            bandeau.className = "bandeau-local";
-            bandeau.textContent =
-              "Édition locale (decap-server) — sans compte. La porte à mot de passe garde le site en ligne.";
-            document.body.appendChild(bandeau);
-            ouvreCms();
+            ouvreCms(true);
             return;
           }
 
-          if (jetonInvitation) {
-            montre("mdp", "Bienvenue au Cerisier",
-              "Votre accès est lié à votre adresse : choisissez le mot de passe qui l’accompagnera.");
-          } else if (jetonRenouvellement) {
-            montre("mdp", "Nouveau mot de passe",
-              "Choisissez le mot de passe qui accompagnera désormais votre adresse.");
-          } else if (sessionPresente() && !porteForcee) {
-            ouvreCms();
-            return;
-          } else {
-            montre("connexion");
-          }
+          fetch("/api/admin/session")
+            .then(function (r) {
+              if (r.status === 204) ouvreCms(false);
+              else porte.classList.remove("cache");
+            })
+            .catch(function () {
+              porte.classList.remove("cache");
+              erreur("La porte ne répond pas — le site en ligne est-il déployé ?");
+            });
 
-          dessineRegles("");
-          $("m-mdp").addEventListener("input", function () { dessineRegles(this.value); });
-
-          $("lien-oubli").addEventListener("click", function () {
-            montre("oubli", "Mot de passe oublié",
-              "Nous envoyons à votre adresse un lien de renouvellement.");
-          });
-          $("lien-retour").addEventListener("click", function () {
-            montre("connexion", "L’arrière-boutique",
-              "L’espace de la maison. Chaque accès est lié à une adresse de courriel invitée.");
-          });
-
-          formulaires.connexion.addEventListener("submit", function (e) {
+          document.getElementById("f-porte").addEventListener("submit", function (e) {
             e.preventDefault();
             erreur(null);
-            enCours(this, true);
-            connecte($("c-courriel").value.trim(), $("c-mdp").value)
-              .catch(function (err) {
-                erreur(
-                  /invalid_grant|invalid grant|No user found/i.test(err.message)
-                    ? "Adresse ou mot de passe incorrect."
-                    : "La connexion n’a pas abouti (" + err.message + ").",
-                );
-              })
-              .finally(enCours.bind(null, formulaires.connexion, false));
-          });
-
-          formulaires.mdp.addEventListener("submit", function (e) {
-            e.preventDefault();
-            var courriel = $("m-courriel").value.trim();
-            var mdp = $("m-mdp").value;
-            var souci = verifieMdp(courriel, mdp, $("m-confirme").value);
-            if (souci) { erreur(souci); return; }
-            erreur(null);
-            enCours(this, true);
-
-            var suite;
-            if (jetonInvitation) {
-              /* L'invitation se scelle en un geste : le jeton du courriel
-                 et le mot de passe choisi. */
-              suite = appelle("/verify", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ token: jetonInvitation, type: "signup", password: mdp }),
-              }).then(rangeSession);
-            } else {
-              /* Le renouvellement ouvre d'abord la session du jeton, pose
-                 le nouveau mot de passe, puis entre normalement. */
-              suite = appelle("/verify", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ token: jetonRenouvellement, type: "recovery" }),
-              }).then(function (jeton) {
-                return appelle("/user", {
-                  method: "PUT",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + jeton.access_token,
-                  },
-                  body: JSON.stringify({ password: mdp }),
-                }).then(function () { return rangeSession(jeton); });
-              });
-            }
-            suite
-              .catch(function (err) {
-                erreur("Le lien du courriel semble périmé ou déjà utilisé (" + err.message + "). Repassez par « Mot de passe oublié »." );
-              })
-              .finally(enCours.bind(null, formulaires.mdp, false));
-          });
-
-          formulaires.oubli.addEventListener("submit", function (e) {
-            e.preventDefault();
-            erreur(null);
-            enCours(this, true);
-            appelle("/recover", {
+            var bouton = document.getElementById("entrer");
+            bouton.disabled = true;
+            fetch("/api/admin/session", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email: $("o-courriel").value.trim() }),
+              body: JSON.stringify({ motDePasse: document.getElementById("mdp").value }),
             })
-              .then(function () {
-                message("Si cette adresse est invitée, le courriel de renouvellement part à l’instant.");
+              .then(function (r) {
+                if (r.status === 204) {
+                  location.replace(location.pathname);
+                  return;
+                }
+                return r.json().catch(function () { return {}; }).then(function (corps) {
+                  erreur(corps.erreur || "La connexion n’a pas abouti (" + r.status + ").");
+                });
               })
               .catch(function () {
-                message("Si cette adresse est invitée, le courriel de renouvellement part à l’instant.");
+                erreur("La porte ne répond pas — réessayez dans un instant.");
               })
-              .finally(enCours.bind(null, formulaires.oubli, false));
+              .finally(function () {
+                bouton.disabled = false;
+              });
           });
         });
       })();
