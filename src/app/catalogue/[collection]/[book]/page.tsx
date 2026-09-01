@@ -9,6 +9,8 @@ import { books, booksOf, excerpt, getBook, getCollection } from "@/lib/content";
 import { CONTACT } from "@/lib/nav";
 import { DonneesStructurees } from "@/components/DonneesStructurees";
 import { schemaFilAriane, schemaLivre } from "@/lib/schema";
+import { AjoutPanierFiche } from "@/components/BoutonPanier";
+import { lienCommandeUnitaire } from "@/lib/panier";
 
 export function generateStaticParams() {
   return books.map((b) => ({ collection: b.collection, book: b.slug }));
@@ -146,12 +148,30 @@ export default async function BookPage({
             </dl>
           )}
 
+          {/* La commande part par courriel, comme toujours — mais la lettre
+              arrive toute rédigée (titre, prix, coordonnées à compléter),
+              adressée à la boîte des commandes. */}
           <a
-            href={`mailto:${CONTACT.email}?subject=${encodeURIComponent(`Commande : ${b.title}`)}`}
+            href={lienCommandeUnitaire({
+              titre: b.title,
+              collectionName: b.collectionName,
+              prix: b.price ?? null,
+            })}
             className="entree tempo-2 mt-6 block bg-cerise-400 px-5 py-3.5 text-center text-xs font-bold tracking-[0.16em] text-ecorce-900 uppercase transition-colors hover:bg-cerise-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ecorce-900"
           >
             Commander ce livre
           </a>
+          <div className="entree tempo-2">
+            <AjoutPanierFiche
+              livre={{
+                collection: b.collection,
+                slug: b.slug,
+                titre: b.title,
+                collectionName: b.collectionName,
+                prix: b.price ?? null,
+              }}
+            />
+          </div>
           <p className="mt-3 text-center text-xs text-ecorce-500">
             Envois franco de port · {CONTACT.phone}
           </p>

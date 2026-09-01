@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { nav } from "@/lib/nav";
 import { CherryLogo } from "./CherryLogo";
+import { PanierLien } from "./PanierLien";
 
 /**
  * L'en-tête est la frondaison : le vert profond enveloppe le site, le papier
@@ -108,7 +109,9 @@ export function Header() {
           ))}
         </nav>
 
-        <button
+        <div className="flex items-center gap-0.5">
+          <PanierLien />
+          <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
@@ -133,6 +136,7 @@ export function Header() {
             )}
           </svg>
         </button>
+        </div>
       </div>
 
       {open && (
