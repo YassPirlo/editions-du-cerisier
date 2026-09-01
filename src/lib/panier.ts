@@ -12,6 +12,8 @@
  * la page panier respirent ensemble, y compris entre deux onglets.
  */
 
+import { versGmail, versMailto } from "./courriel";
+
 /* L'adresse des commandes — orthographe donnée telle quelle par la maison
    (« ceriser », sans le deuxième i). */
 export const COURRIEL_COMMANDES = "editionsduceriser@gmail.com";
@@ -181,12 +183,12 @@ export function lienCommande(articles: ArticlePanier[]) {
 /* La même commande, mais dans Gmail au navigateur — pour tous ceux dont la
    messagerie est un onglet, pas une application installée. */
 export const brouillonGmail = (sujet: string, corps: string) =>
-  `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(COURRIEL_COMMANDES)}&su=${encodeURIComponent(sujet)}&body=${encodeURIComponent(corps)}`;
+  versGmail(COURRIEL_COMMANDES, sujet, corps);
 
 /* Le mailto équivalent, pour un corps déjà en main (la lettre retouchée
    sur la page du panier part telle que le lecteur l'a laissée). */
 export const brouillonMailto = (sujet: string, corps: string) =>
-  `mailto:${COURRIEL_COMMANDES}?subject=${encodeURIComponent(sujet)}&body=${encodeURIComponent(corps)}`;
+  versMailto(COURRIEL_COMMANDES, sujet, corps);
 
 export function lienCommandeGmail(articles: ArticlePanier[]) {
   const { sujet, corps } = composeCommande(articles);

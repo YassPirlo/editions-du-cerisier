@@ -124,6 +124,12 @@ const books = lireDossier("content/livres").map((f) => {
   };
 });
 
+/* Les vignettes de type de document héritées de SPIP (html.jpg, pdf.jpg :
+   le globe, le trombone) ne sont pas des images — on les écarte au build.
+   Mieux vaut pas de vignette du tout qu'une icône générique. */
+const imagesUtiles = (images) =>
+  (images ?? []).filter((i) => !/\/(?:html|pdf)\.(?:jpg|png|gif)$/i.test(i));
+
 const pages = Object.fromEntries(
   Object.entries(RUBRIQUES).map(([cle, dossier]) => [
     cle,
@@ -133,7 +139,7 @@ const pages = Object.fromEntries(
         title: f.data.title,
         html,
         text: texteDe(html),
-        images: f.data.images ?? [],
+        images: imagesUtiles(f.data.images),
         links: liensDe(html),
       };
     }),

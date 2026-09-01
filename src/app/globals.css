@@ -292,7 +292,25 @@
       animation-timeline: view();
       animation-range: entry 0% cover 40%;
     }
+    /* La pousse des grands feuillets (revue de presse, actualités) : ces
+       entrées font plusieurs écrans de haut, et une plage en pourcentage
+       de leur traversée les laisserait délavées pendant toute la lecture.
+       Ici la plage est une longueur : quel que soit le gabarit du bloc,
+       il est net après seize rem de défilement. */
+    .pousse-feuillet {
+      animation: pousse linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 16rem;
+    }
   }
+}
+
+/* Les longs sommaires (revue de presse : quarante entrées pleines de
+   texte) ne peignent que ce qu'on regarde, comme les étagères du
+   catalogue : le navigateur saute le rendu des feuillets hors champ. */
+.feuillet {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 26rem;
 }
 @keyframes pousse {
   from {
@@ -818,6 +836,7 @@ html[data-encre="nb"] {
 }
 html[data-encre="nb"] img,
 html[data-encre="nb"] canvas,
-html[data-encre="nb"] video {
+html[data-encre="nb"] video,
+html[data-encre="nb"] .icone-marque {
   filter: grayscale(1);
 }
