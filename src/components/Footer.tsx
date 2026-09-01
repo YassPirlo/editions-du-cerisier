@@ -99,9 +99,17 @@ export function Footer() {
 
       <div className="relative border-t border-ecorce-800">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-xs text-ecorce-300 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <p>
-            © {new Date().getFullYear()} Éditions du Cerisier — Société coopérative
-          </p>
+          <div className="space-y-1">
+            <p>
+              © {new Date().getFullYear()} Éditions du Cerisier — Société coopérative
+            </p>
+            {/* La signature de l'atelier : discrète, sans lien sortant — le
+                site de la maison ne renvoie nulle part ailleurs. Une ligne à
+                modifier, ici et nulle part ailleurs. */}
+            <p className="text-ecorce-400">
+              Conception et réalisation : Yassine Vitullo
+            </p>
+          </div>
           <div className="flex flex-wrap gap-5">
             <Link href="/liens-pratiques" className="hover:text-fleur-100">
               Liens pratiques
