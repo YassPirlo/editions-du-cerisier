@@ -81,7 +81,7 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} Éditions du Cerisier — Société coopérative
           </p>
-          <div className="flex gap-5">
+          <div className="flex flex-wrap gap-5">
             <Link href="/liens-pratiques" className="hover:text-fleur-100">
               Liens pratiques
             </Link>

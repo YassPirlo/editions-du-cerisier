@@ -6,7 +6,7 @@ export const dynamic = "force-static";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: "*", allow: "/", disallow: ["/admin/", "/apercu/"] },
+    rules: { userAgent: "*", allow: "/", disallow: ["/admin/", "/apercu/", "/api/"] },
     sitemap: "https://editions-du-cerisier.be/sitemap.xml",
   };
 }

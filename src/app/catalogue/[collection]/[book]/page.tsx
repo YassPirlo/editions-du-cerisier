@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Fleuron } from "@/components/Cerisier";
-import { epaisseurDe, Livre3D } from "@/components/Livre3D";
+import { VitrineLivre } from "@/components/VitrineLivre";
 import { RackCouvertures } from "@/components/RackCouvertures";
 import { Prose } from "@/components/Prose";
 import { books, booksOf, excerpt, getBook, getCollection } from "@/lib/content";
 import { CONTACT } from "@/lib/nav";
+import { DonneesStructurees } from "@/components/DonneesStructurees";
+import { schemaFilAriane, schemaLivre } from "@/lib/schema";
 
 export function generateStaticParams() {
   return books.map((b) => ({ collection: b.collection, book: b.slug }));
@@ -55,6 +57,18 @@ export default async function BookPage({
 
   return (
     <article className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+      {/* La fiche décrite aux moteurs : le livre (ISBN, prix, couverture,
+          éditeur) et le fil d'Ariane — c'est ce qui vaut à un titre de
+          sortir en résultat enrichi. */}
+      <DonneesStructurees donnees={schemaLivre(b)} />
+      <DonneesStructurees
+        donnees={schemaFilAriane([
+          { label: "Accueil", chemin: "/" },
+          { label: "Catalogue", chemin: "/catalogue" },
+          { label: b.collectionName, chemin: `/catalogue/${b.collection}` },
+          { label: b.title, chemin: `/catalogue/${b.collection}/${b.slug}` },
+        ])}
+      />
       <nav aria-label="Fil d’Ariane" className="mb-10">
         <ol className="flex flex-wrap items-center gap-1.5 text-sm text-ecorce-400">
           <li className="flex items-center gap-1.5">
@@ -86,19 +100,28 @@ export default async function BookPage({
 
       <div className="grid gap-12 lg:grid-cols-[minmax(0,320px)_1fr] lg:gap-16">
         <div className="lg:sticky lg:top-28 lg:self-start">
-          {/* Le livre est en volume ici aussi : c'est l'objet qu'on vend par
-              courrier, pas une vignette. Le survol le redresse pour montrer
-              la couverture bien en face. */}
+          {/* Le livre est en volume ici, et en main : c’est l’objet qu’on
+              vend par courrier, pas une vignette — la scène WebGL le laisse
+              saisir et retourner, le volume CSS assure l’affiche avant elle
+              et sans elle (voir VitrineLivre). */}
           <div
             className="entree tempo-1 mx-auto w-full max-w-[260px] pt-4"
             style={{ "--souleve": "3.5rem", "--pivote": "2.5deg" } as React.CSSProperties}
           >
-            <Livre3D
+            <VitrineLivre
               src={b.cover}
+              srcTexture={
+                /* La texture du canvas ne passe ni par next/image ni par le
+                   script de préfixe de l’aperçu GitHub Pages : le sous-chemin
+                   se préfixe ici, côté serveur. */
+                b.cover && b.cover.startsWith("/")
+                  ? `${process.env.PAGES_BASE ?? ""}${b.cover}`
+                  : b.cover
+              }
               titre={b.title}
               collection={b.collectionName}
+              pages={b.pages}
               sizes="(max-width: 1024px) 260px, 300px"
-              epaisseur={epaisseurDe(b.pages)}
             />
           </div>
 

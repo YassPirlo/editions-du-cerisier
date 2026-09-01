@@ -35,6 +35,13 @@ jobs:
 
       - run: npm ci
 
+      # L'aperçu est purement statique : l'API d'infolettre (route POST vers
+      # Brevo) ne peut pas s'y exporter — on l'écarte, le formulaire y
+      # affiche son message de repli. Le site définitif (Netlify) la sert
+      # normalement.
+      - name: Écarte l'API de l'export
+        run: rm -rf src/app/api
+
       - name: Export statique sous /editions-du-cerisier
         run: npm run build
         env:

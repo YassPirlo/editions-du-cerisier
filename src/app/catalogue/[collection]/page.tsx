@@ -5,6 +5,8 @@ import { BookCard } from "@/components/BookCard";
 import { PageHeader } from "@/components/PageHeader";
 import { Prose } from "@/components/Prose";
 import { booksOf, collections, excerpt, getCollection } from "@/lib/content";
+import { DonneesStructurees } from "@/components/DonneesStructurees";
+import { schemaFilAriane } from "@/lib/schema";
 
 export function generateStaticParams() {
   return collections.map((c) => ({ collection: c.slug }));
@@ -39,6 +41,13 @@ export default async function CollectionPage({
 
   return (
     <>
+      <DonneesStructurees
+        donnees={schemaFilAriane([
+          { label: "Accueil", chemin: "/" },
+          { label: "Catalogue", chemin: "/catalogue" },
+          { label: c.name, chemin: `/catalogue/${c.slug}` },
+        ])}
+      />
       <PageHeader
         title={c.name}
         intro={`${livres.length} ${livres.length > 1 ? "titres" : "titre"}`}

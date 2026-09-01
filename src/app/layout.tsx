@@ -3,6 +3,10 @@ import { Fraunces, Inter } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { InvitationNewsletter } from "@/components/InvitationNewsletter";
+import { AccesIdentite } from "@/components/AccesIdentite";
+import { Statistiques } from "@/components/Statistiques";
+import { DonneesStructurees } from "@/components/DonneesStructurees";
+import { MAISON, SITE } from "@/lib/schema";
 import "./globals.css";
 
 const inter = Inter({
@@ -40,7 +44,12 @@ export const metadata: Metadata = {
     description:
       "Maison d’édition coopérative et indépendante fondée en 1985 à Cuesmes (Mons).",
     url: "/",
+    /* L'image des partages (réseaux, messageries) quand la page n'en
+       apporte pas de plus précise — les fiches livre envoient leur
+       couverture à la place. */
+    images: [{ url: "/partage.png", width: 1200, height: 630 }],
   },
+  twitter: { card: "summary_large_image" },
   alternates: { canonical: "/" },
 };
 
@@ -68,13 +77,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </main>
         <Footer />
         <InvitationNewsletter />
-        {/* Formulaire statique jumeau du pop-up : Netlify ne détecte les
-            formulaires qu'en scannant le HTML publié, et le pop-up n'y est
-            pas (rendu client). */}
-        <form name="newsletter" data-netlify="true" netlify-honeypot="bot-field" hidden>
-          <input type="email" name="email" />
-          <input name="bot-field" />
-        </form>
+        {/* Le raccord des courriels Netlify Identity (invitation, mot de
+            passe oublié) vers /admin/, et la mesure d'audience sans cookies
+            (Umami — d'où l'absence de bannière) — deux composants qui
+            savent s'effacer. */}
+        <AccesIdentite />
+        <Statistiques />
+        {/* La maison et le site, décrits aux moteurs (schema.org). */}
+        <DonneesStructurees donnees={MAISON} />
+        <DonneesStructurees donnees={SITE} />
       </body>
     </html>
   );

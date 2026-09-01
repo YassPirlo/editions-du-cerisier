@@ -28,12 +28,18 @@ export function InvitationNewsletter() {
     e.preventDefault();
     setEtat("envoi");
     try {
-      const reponse = await fetch("/", {
+      /* L'adresse part vers la liste Brevo de la maison, via notre route
+         serveur (la clé d'API n'a rien à faire dans le navigateur) ; le
+         champ-piège « bot-field » voyage avec, sous le nom que la route
+         attend. */
+      const donnees = new FormData(e.currentTarget);
+      const reponse = await fetch("/api/infolettre", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(
-          new FormData(e.currentTarget) as unknown as Record<string, string>,
-        ).toString(),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          courriel: donnees.get("email"),
+          verger: donnees.get("bot-field") ?? "",
+        }),
       });
       if (!reponse.ok) throw new Error(String(reponse.status));
       localStorage.setItem(CLE, "inscrit");
@@ -83,7 +89,6 @@ export function InvitationNewsletter() {
             </p>
 
             <form onSubmit={envoie} className="mt-6">
-              <input type="hidden" name="form-name" value="newsletter" />
               <p className="hidden">
                 <label>
                   Ne pas remplir : <input name="bot-field" />

@@ -19,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/a-la-une/nouveautes",
     "/a-la-une/revue-de-presse",
     "/catalogue",
+    "/catalogue/tous-les-titres",
     "/contact",
     "/contact/commander",
     "/liens-pratiques",
