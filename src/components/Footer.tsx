@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BasculeEncre } from "@/components/BasculeEncre";
 import { Branche } from "@/components/Cerisier";
 import { collections } from "@/lib/content";
 import { CONTACT } from "@/lib/nav";
@@ -91,6 +92,7 @@ export function Footer() {
             <Link href="/confidentialite" className="hover:text-fleur-100">
               Confidentialité
             </Link>
+            <BasculeEncre />
           </div>
         </div>
       </div>

@@ -59,9 +59,27 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  /* suppressHydrationWarning : le serveur ne connaît pas la préférence
+     noir et blanc — data-encre est posé avant l'hydratation par le script
+     en tête de body, et React s'alarmerait de cet attribut qu'il n'a pas
+     peint lui-même. L'écart est voulu, l'attribut reste en place. */
   return (
-    <html lang="fr" className={`${inter.variable} ${fraunces.variable}`}>
+    <html
+      lang="fr"
+      className={`${inter.variable} ${fraunces.variable}`}
+      suppressHydrationWarning
+    >
       <body className="flex min-h-dvh flex-col font-sans">
+        {/* L'édition noir et blanc, rétablie avant le premier coup de
+            pinceau : le choix dort dans le navigateur (localStorage), ce
+            script le réveille avant que la page ne se peigne — sans lui,
+            elle arriverait en couleurs puis se raviserait d'un éclair.
+            Voir BasculeEncre.tsx et globals.css. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(localStorage.getItem("cerisier-encre")==="nb")document.documentElement.dataset.encre="nb"}catch(e){}`,
+          }}
+        />
         <a
           href="#contenu"
           className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-60 focus:rounded-md focus:bg-ecorce-900 focus:px-4 focus:py-2 focus:text-sm focus:text-white"
