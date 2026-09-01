@@ -9,6 +9,7 @@ import {
   COURRIEL_COMMANDES,
   enEuros,
   lienCommande,
+  lienCommandeGmail,
   lisPanier,
   lisPanierServeur,
   poseQuantite,
@@ -150,26 +151,52 @@ export function ContenuPanier() {
         </p>
       )}
 
-      <a
-        href={lienCommande(articles)}
-        className="mt-8 block bg-cerise-400 px-6 py-4 text-center text-xs font-bold tracking-[0.16em] text-ecorce-900 uppercase transition-colors hover:bg-cerise-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ecorce-900"
-      >
-        Commander par courriel
-      </a>
+      {/* La lettre elle-même, posée sur la page : chacun voit ce qui va
+          partir, et peut aussi la copier telle quelle vers n'importe quelle
+          messagerie. */}
+      <div className="mt-10 border border-ecorce-200 bg-white p-5 sm:p-6">
+        <div className="flex items-baseline justify-between gap-4 border-b border-ecorce-200 pb-3">
+          <p className="text-xs font-bold tracking-[0.14em] text-ecorce-600 uppercase">
+            La lettre de commande
+          </p>
+          <button
+            type="button"
+            onClick={copieCommande}
+            className="shrink-0 text-xs text-ecorce-600 underline decoration-cerise-400 decoration-2 underline-offset-4 transition-colors hover:text-griotte-500"
+          >
+            {copie ? "Copiée ✓" : "Copier"}
+          </button>
+        </div>
+        <p className="mt-1 text-xs text-ecorce-500">
+          À : {COURRIEL_COMMANDES} — complétez vos coordonnées avant l’envoi.
+        </p>
+        <pre className="mt-4 font-sans text-sm leading-relaxed whitespace-pre-wrap text-ecorce-800">
+          {composeCommande(articles).corps}
+        </pre>
+      </div>
+
+      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+        <a
+          href={lienCommandeGmail(articles)}
+          target="_blank"
+          rel="noreferrer"
+          className="block bg-cerise-400 px-6 py-4 text-center text-xs font-bold tracking-[0.16em] text-ecorce-900 uppercase transition-colors hover:bg-cerise-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ecorce-900"
+        >
+          Envoyer via Gmail
+        </a>
+        <a
+          href={lienCommande(articles)}
+          className="block border border-ecorce-300 bg-white px-6 py-4 text-center text-xs font-bold tracking-[0.16em] text-ecorce-800 uppercase transition-colors hover:border-cerise-400 hover:bg-cerise-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cerise-400"
+        >
+          Via votre messagerie
+        </a>
+      </div>
       <p className="mt-3 text-center text-xs leading-relaxed text-ecorce-500">
-        Votre messagerie s’ouvre avec la commande toute rédigée, adressée à{" "}
-        {COURRIEL_COMMANDES} — relisez, complétez vos coordonnées, envoyez.
-        Envois franco de port.
+        « Gmail » ouvre le brouillon dans le navigateur ; « votre messagerie »
+        ouvre l’application de courriel de l’appareil. Envois franco de port.
       </p>
 
-      <div className="mt-6 flex items-center justify-center gap-6 text-sm">
-        <button
-          type="button"
-          onClick={copieCommande}
-          className="text-ecorce-600 underline decoration-cerise-400 decoration-2 underline-offset-4 transition-colors hover:text-griotte-500"
-        >
-          {copie ? "Commande copiée ✓" : "Copier la commande"}
-        </button>
+      <div className="mt-6 text-center text-sm">
         <button
           type="button"
           onClick={() => {

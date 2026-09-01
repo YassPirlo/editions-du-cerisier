@@ -10,7 +10,7 @@ import { CONTACT } from "@/lib/nav";
 import { DonneesStructurees } from "@/components/DonneesStructurees";
 import { schemaFilAriane, schemaLivre } from "@/lib/schema";
 import { AjoutPanierFiche } from "@/components/BoutonPanier";
-import { lienCommandeUnitaire } from "@/lib/panier";
+import { lienCommandeGmailUnitaire, lienCommandeUnitaire } from "@/lib/panier";
 
 export function generateStaticParams() {
   return books.map((b) => ({ collection: b.collection, book: b.slug }));
@@ -161,6 +161,23 @@ export default async function BookPage({
           >
             Commander ce livre
           </a>
+          {/* La même lettre, dans Gmail au navigateur — pour les appareils
+              sans messagerie installée. */}
+          <p className="entree tempo-2 mt-2 text-center text-xs text-ecorce-500">
+            ou{" "}
+            <a
+              href={lienCommandeGmailUnitaire({
+                titre: b.title,
+                collectionName: b.collectionName,
+                prix: b.price ?? null,
+              })}
+              target="_blank"
+              rel="noreferrer"
+              className="underline decoration-cerise-400 decoration-2 underline-offset-2 transition-colors hover:text-griotte-500"
+            >
+              via Gmail, dans le navigateur ↗
+            </a>
+          </p>
           <div className="entree tempo-2">
             <AjoutPanierFiche
               livre={{

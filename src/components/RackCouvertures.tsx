@@ -80,17 +80,42 @@ export function RackCouvertures({
 
     /* La molette verticale tourne le présentoir. Aux extrémités on ne
        retient pas la page : rien n'est plus agaçant qu'un carrousel qui
-       confisque le défilement. */
+       confisque le défilement.
+
+       Les molettes à crans envoient ±100 px d'un coup : posé brut sur
+       scrollLeft, le rack bondissait. On vise donc une cible et on y
+       glisse par amorti (rAF) — chaque cran devient une glissade, les
+       crans rapprochés s'additionnent en élan. */
+    let cibleMolette: number | null = null;
+    let glissade: number | null = null;
+
+    const glisseVersLaCible = () => {
+      glissade = null;
+      if (cibleMolette === null) return;
+      const ecart = cibleMolette - rack.scrollLeft;
+      if (Math.abs(ecart) < 0.6) {
+        rack.scrollLeft = cibleMolette;
+        cibleMolette = null;
+        return;
+      }
+      rack.scrollLeft += ecart * 0.22;
+      glissade = requestAnimationFrame(glisseVersLaCible);
+    };
+
     const surMolette = (e: WheelEvent) => {
       let delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
       if (e.deltaMode === 1) delta *= 24; // molettes « par lignes »
       if (delta === 0) return;
       const max = rack.scrollWidth - rack.clientWidth;
-      const peutTourner =
-        delta > 0 ? rack.scrollLeft < max - 1 : rack.scrollLeft > 1;
-      if (!peutTourner) return;
+      const depuis = cibleMolette ?? rack.scrollLeft;
+      const peutTourner = delta > 0 ? depuis < max - 1 : depuis > 1;
+      if (!peutTourner) {
+        cibleMolette = null;
+        return;
+      }
       e.preventDefault();
-      rack.scrollLeft += delta;
+      cibleMolette = Math.max(0, Math.min(max, depuis + delta * 1.2));
+      if (glissade === null) glissade = requestAnimationFrame(glisseVersLaCible);
     };
 
     /* Le cliquer-glisser. Au-delà de quelques pixels, le geste devient un
@@ -101,6 +126,8 @@ export function RackCouvertures({
 
     const surPresse = (e: PointerEvent) => {
       if (e.pointerType !== "mouse" || e.button !== 0) return;
+      /* La main prend le pas sur la glissade de molette en cours. */
+      cibleMolette = null;
       ancreX = e.clientX;
       parcouru = 0;
       rack.setPointerCapture(e.pointerId);
@@ -134,6 +161,7 @@ export function RackCouvertures({
     rack.addEventListener("click", surClic, true);
     rack.addEventListener("dragstart", sansTraine);
     return () => {
+      if (glissade !== null) cancelAnimationFrame(glissade);
       rack.removeEventListener("wheel", surMolette);
       rack.removeEventListener("pointerdown", surPresse);
       rack.removeEventListener("pointermove", surGlisse);
