@@ -1,4 +1,5 @@
-import { getStore } from "@netlify/blobs";
+import { promises as fs } from "node:fs";
+import path from "node:path";
 import { jetonValide, litJetonDesCookies } from "@/lib/jeton";
 
 /**
@@ -6,21 +7,20 @@ import { jetonValide, litJetonDesCookies } from "@/lib/jeton";
  *
  * POST : la balise du site (src/components/Statistiques.tsx) dépose une vue
  * — chemin + provenance. On y ajoute ici le jour (heure de Bruxelles), le
- * pays (l'en-tête géographique que Netlify joint à la requête) et une
- * empreinte de visiteur anonyme : un condensé à sens unique de
- * l'adresse IP et du navigateur, salé et daté — elle change chaque jour,
- * ne permet de suivre personne, et l'adresse elle-même n'est jamais
- * conservée. Pas de cookie, pas de donnée personnelle : c'est ce qui
- * dispense le site de bannière de consentement.
+ * pays (quand le serveur de devant le renseigne) et une empreinte de
+ * visiteur anonyme : un condensé à sens unique de l'adresse IP et du
+ * navigateur, salé et daté — elle change chaque jour, ne permet de suivre
+ * personne, et l'adresse elle-même n'est jamais conservée. Pas de cookie,
+ * pas de donnée personnelle : c'est ce qui dispense le site de bannière de
+ * consentement.
  *
  * GET : les agrégats pour le tableau de bord de l'admin
- * (public/admin/stats.html). Réservé aux éditeurs : le jeton de session
- * Netlify Identity est exigé et revérifié auprès du service.
+ * (public/admin/stats.html), réservés à la session de la maison.
  *
- * Le tout est rangé dans les Blobs de Netlify — le stockage attaché au
- * site, sans compte ni clé supplémentaires. En local ou sur l'aperçu
- * GitHub Pages, pas de Blobs : la route répond poliment qu'elle est de
- * repos.
+ * Les comptes sont rangés en fichiers, à côté du site (dossier .data, ou
+ * celui que désigne STATS_DIR) : rien à ouvrir, rien à payer. Sur un
+ * hébergement sans disque persistant, ils repartiraient de zéro à chaque
+ * déploiement — c'est le seul endroit du site qui demande un disque.
  */
 
 type Compteurs = Record<string, number>;
@@ -35,46 +35,51 @@ const ROBOTS =
   /bot|crawl|spider|slurp|bingpreview|headless|lighthouse|pingdom|facebookexternalhit|preview|scan/i;
 
 const HOTES_MAISON =
-  /(^|\.)editions-du-cerisier\.be$|\.netlify\.app$|(^|\.)github\.io$|^localhost$/;
+  /(^|\.)editions-du-cerisier\.be$|(^|\.)github\.io$|^localhost$/;
 
-const magasin = () => {
+const DOSSIER = path.resolve(
+  process.env.STATS_DIR || path.join(process.cwd(), ".data", "frequentation"),
+);
+
+async function lis<T>(fichier: string, defaut: T): Promise<T> {
   try {
-    return getStore({ name: "frequentation", consistency: "strong" });
+    return JSON.parse(await fs.readFile(path.join(DOSSIER, fichier), "utf8")) as T;
   } catch {
-    /* Pas de Blobs ici (poste local, aperçu statique) : on compte pour rien. */
-    return null;
+    return defaut;
   }
-};
+}
+
+/* L'écriture passe par un fichier temporaire : une visite au mauvais
+   moment ne doit pas laisser un JSON à moitié écrit. */
+async function ecris(fichier: string, donnees: unknown) {
+  const cible = path.join(DOSSIER, fichier);
+  await fs.mkdir(path.dirname(cible), { recursive: true });
+  const provisoire = `${cible}.${process.pid}.tmp`;
+  await fs.writeFile(provisoire, JSON.stringify(donnees));
+  await fs.rename(provisoire, cible);
+}
 
 /* Le jour, vu de Bruxelles — c'est le fuseau des lecteurs de la maison. */
 const aujourdHui = () =>
   new Date().toLocaleDateString("fr-CA", { timeZone: "Europe/Brussels" });
 
-const clefMois = (jour: string) => `mois/${jour.slice(0, 7)}.json`;
+const clefMois = (jour: string) => `mois-${jour.slice(0, 7)}.json`;
 
-/* L'en-tête géographique de Netlify : du JSON, parfois encodé en base64
-   selon le chemin — on tente les deux, et « ?? » sinon (le tableau de bord
-   l'affiche en « Inconnu »). */
+/* Le pays, quand le serveur de devant le joint à la requête (les en-têtes
+   usuels des répartiteurs et des CDN). Sinon « ?? » — le tableau de bord
+   l'affiche en « Inconnu », et personne n'est pisté pour si peu. */
+const ENTETES_PAYS = [
+  "cf-ipcountry",
+  "x-vercel-ip-country",
+  "x-country-code",
+  "x-geo-country",
+  "x-client-geo-country",
+];
+
 function litPays(entetes: Headers): string {
-  const brut = entetes.get("x-nf-geo");
-  if (!brut) return "??";
-  for (const texte of [
-    brut,
-    (() => {
-      try {
-        return Buffer.from(brut, "base64").toString("utf8");
-      } catch {
-        return "";
-      }
-    })(),
-  ]) {
-    try {
-      const geo = JSON.parse(texte);
-      const code = geo?.country?.code;
-      if (typeof code === "string" && /^[A-Z]{2}$/i.test(code)) {
-        return code.toUpperCase();
-      }
-    } catch {}
+  for (const nom of ENTETES_PAYS) {
+    const brut = (entetes.get(nom) || "").trim();
+    if (/^[A-Za-z]{2}$/.test(brut)) return brut.toUpperCase();
   }
   return "??";
 }
@@ -119,9 +124,6 @@ export async function POST(request: Request) {
   provenance = provenance.replace(/^www\./, "").slice(0, 100).toLowerCase();
   if (HOTES_MAISON.test(provenance)) provenance = "";
 
-  const blobs = magasin();
-  if (!blobs) return new Response(null, { status: 202 });
-
   const jour = aujourdHui();
 
   try {
@@ -129,10 +131,10 @@ export async function POST(request: Request) {
        visiteurs sans compter deux fois la même personne. Réécrit à chaque
        aube, plafonné par prudence. */
     const empreinte = await empreinteDe(request.headers, jour);
-    const carnet = ((await blobs.get("jour-courant.json", { type: "json" })) ?? {
-      date: jour,
-      empreintes: [],
-    }) as { date: string; empreintes: string[] };
+    const carnet = await lis<{ date: string; empreintes: string[] }>(
+      "jour-courant.json",
+      { date: jour, empreintes: [] },
+    );
     if (carnet.date !== jour) {
       carnet.date = jour;
       carnet.empreintes = [];
@@ -141,16 +143,16 @@ export async function POST(request: Request) {
       !carnet.empreintes.includes(empreinte) && carnet.empreintes.length < 5000;
     if (nouveauVisiteur) {
       carnet.empreintes.push(empreinte);
-      await blobs.setJSON("jour-courant.json", carnet);
+      await ecris("jour-courant.json", carnet);
     }
 
     const clef = clefMois(jour);
-    const mois = ((await blobs.get(clef, { type: "json" })) ?? {
+    const mois = await lis<Mois>(clef, {
       jours: {},
       pages: {},
       pays: {},
       provenances: {},
-    }) as Mois;
+    });
 
     const duJour = (mois.jours[jour] ??= { vues: 0, visiteurs: 0 });
     duJour.vues += 1;
@@ -159,7 +161,7 @@ export async function POST(request: Request) {
     incremente(mois.pays, litPays(request.headers));
     if (provenance) incremente(mois.provenances, provenance);
 
-    await blobs.setJSON(clef, mois);
+    await ecris(clef, mois);
   } catch {
     /* Une vue perdue ne vaut pas une erreur montrée au lecteur. */
   }
@@ -184,14 +186,6 @@ export async function GET(request: Request) {
     );
   }
 
-  const blobs = magasin();
-  if (!blobs) {
-    return Response.json(
-      { erreur: "Les statistiques ne vivent que sur le site en ligne." },
-      { status: 503 },
-    );
-  }
-
   /* Trente jours glissants : le mois courant et le précédent suffisent. */
   const jour = aujourdHui();
   const dates: string[] = [];
@@ -201,10 +195,11 @@ export async function GET(request: Request) {
     dates.push(d.toLocaleDateString("fr-CA", { timeZone: "Europe/Brussels" }));
   }
 
-  const vide: Mois = { jours: {}, pages: {}, pays: {}, provenances: {} };
   const clefs = [...new Set([clefMois(dates[0]), clefMois(jour)])];
   const lus = await Promise.all(
-    clefs.map(async (c) => ((await blobs.get(c, { type: "json" })) ?? vide) as Mois),
+    clefs.map((c) =>
+      lis<Mois>(c, { jours: {}, pages: {}, pays: {}, provenances: {} }),
+    ),
   );
 
   const pages: Compteurs = {};

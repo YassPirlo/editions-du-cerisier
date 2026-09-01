@@ -33,19 +33,18 @@ entièrement statique, généré au build.
 
 ## Administration, infolettre, statistiques
 
-- **CMS (Decap)** sur `/admin/` : la maison édite les livres, collections et
-  rubriques de `content/` ; chaque enregistrement est un commit, chaque
-  commit reconstruit le site. En local : `npm run cms-local` dans un
-  terminal, `npm run dev` dans un autre — pas de compte requis
-  (`local_backend`).
+- **CMS (Decap)** sur `/admin/` : la maison édite les livres, collections
+  et rubriques de `content/`. Le CMS n'écrit nulle part ailleurs que
+  chez nous — son guichet est `/api/cms` (`src/app/api/cms/route.ts`,
+  protocole du serveur de fichiers de Decap), qui pose les fichiers puis
+  refait `src/data/*.json` avec le script du build. Aucun service
+  extérieur, aucun dépôt distant : `npm run dev` suffit.
 - **Authentification** : un seul mot de passe, celui de la maison, posé
   dans `ADMIN_PASSWORD` — pas de comptes ni d'adresses. La porte de
   `public/admin/index.html` le vérifie via `/api/admin/session`
   (comparaison en temps constant, cookie signé de sept jours,
-  `src/lib/jeton.ts`) ; le CMS écrit ensuite dans le dépôt avec le jeton
-  GitHub de la maison (`GITHUB_CMS_TOKEN`, fine-grained limité au dépôt),
-  remis aux sessions valides par le guichet `/api/decap/auth`. Pas-à-pas
-  dans `GUIDE-CONFIGURATION.md`.
+  `src/lib/jeton.ts`) ; la même session garde le guichet du CMS et les
+  statistiques. Pas-à-pas dans `GUIDE-CONFIGURATION.md`.
 - **Infolettre** : le pop-up « La lettre du Cerisier » poste vers
   `/api/infolettre`, qui range l'adresse dans la liste Brevo de la maison
   (clé côté serveur, pot de miel, réponses en français) — les campagnes
@@ -58,11 +57,12 @@ entièrement statique, généré au build.
   (régénérable par `scripts/genere-partage.mjs`), sitemap et robots tenus.
 - **Fréquentation** : comptée par la maison elle-même, sans service
   tiers — la balise (`Statistiques.tsx`) dépose chaque vue sur
-  `/api/frequentation`, qui agrège dans les Blobs Netlify (jours, pages,
-  pays via l'en-tête géographique de Netlify, provenances ; visiteurs
-  par empreinte anonyme quotidienne — pas de cookies ni de données
-  personnelles, donc pas de bannière). Tableau de bord dans l'admin :
-  `/admin/stats.html`, réservé aux sessions Identity.
+  `/api/frequentation`, qui agrège en fichiers (dossier `.data`, ou
+  `STATS_DIR`) : jours, pages, pays quand le serveur de devant le
+  renseigne, provenances ; visiteurs par empreinte anonyme quotidienne —
+  pas de cookies ni de données personnelles, donc pas de bannière.
+  Tableau de bord dans l'admin : `/admin/stats.html`, gardé par la même
+  session.
 
 ## Arborescence
 
@@ -90,6 +90,8 @@ npm run start  # servir le build
 
 ## Reste à faire
 
-Créer le site Netlify et y activer Identity + Git Gateway + Forms (le
-pas-à-pas est dans `GUIDE-CONFIGURATION.md`), créer la propriété Google
-Analytics, vrai logo vectoriel, en-têtes de sécurité.
+Choisir l'hébergeur définitif (n'importe lequel sachant exécuter Node :
+`npm run build` puis `npm run start`) et y reporter les réglages,
+brancher la liste Brevo, vrai logo vectoriel, en-têtes de sécurité. Le
+contenu étant cuit au build, une édition faite depuis l'administration
+en ligne demande une reconstruction pour paraître — voir le guide.

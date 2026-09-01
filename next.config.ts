@@ -22,8 +22,8 @@ const nextConfig: NextConfig = base
       /* L'administration Decap est un fichier de public/ : Next ne sert pas
          les index.html de dossiers (les hébergeurs statiques, si — d'où
          l'absence de cette règle dans la branche export). Sans elle, /admin
-         rend la page 404 du site en local comme derrière le runtime Next
-         de Netlify. */
+         rend la page 404 du site, en local comme derrière un serveur
+         Next. */
       async rewrites() {
         return [{ source: "/admin", destination: "/admin/index.html" }];
       },

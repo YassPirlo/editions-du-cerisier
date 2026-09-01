@@ -147,19 +147,17 @@
     <script>
       /**
        * La porte : un mot de passe, celui de la maison (ADMIN_PASSWORD dans
-       * les variables d'environnement — pas de comptes, pas d'adresses).
-       * La session tient sept jours dans un cookie signé ; le CMS écrit
-       * ensuite dans le dépôt via le guichet /api/decap/auth, qui remet le
-       * jeton GitHub de la maison aux sessions valides.
+       * les variables d'environnement — pas de comptes, pas d'adresses,
+       * aucun service extérieur). La session tient sept jours dans un
+       * cookie signé ; le CMS écrit ensuite les fichiers par le guichet
+       * /api/cms, qui exige la même session.
        *
-       * En local (decap-server), pas de mot de passe : la porte s'efface —
-       * ajouter ?porte=1 à l'adresse pour la voir quand même.
+       * Une seule porte, la même partout — sur le poste de travail comme
+       * sur le site en ligne : il n'y a qu'un mot de passe à connaître.
        */
       (function () {
         "use strict";
         var porte = document.getElementById("porte");
-        var estLocal = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
-        var porteForcee = /(^|[?&])porte=1(&|$)/.test(location.search);
 
         function erreur(texte) {
           var el = document.getElementById("porte-erreur");
@@ -177,43 +175,48 @@
           document.body.appendChild(el);
         }
 
-        function ouvreCms(local) {
+        /* Le CMS demande encore un clic pour « entrer » : son guichet
+           n'ayant pas de compte à vérifier, le clic n'a plus de sens —
+           on le donne pour l'éditeur, une fois, dès que le bouton paraît. */
+        function passeLaFormalite() {
+          var essais = 0;
+          var minuterie = setInterval(function () {
+            var bouton = document.querySelector("#nc-root button, #nc-root [role=button]");
+            if (bouton && /connecter|login/i.test(bouton.textContent || "")) {
+              bouton.click();
+              clearInterval(minuterie);
+            } else if (++essais > 40) {
+              clearInterval(minuterie);
+            }
+          }, 150);
+        }
+
+        function ouvreCms() {
           porte.classList.add("cache");
-          if (window.CMS) window.CMS.init();
-          bouton("Fréquentation", "1rem", "/admin/stats.html");
-          if (!local) {
-            bouton("Se déconnecter", "11.5rem", function () {
-              fetch("/api/admin/session", { method: "DELETE" }).finally(function () {
-                try {
-                  localStorage.removeItem("decap-cms.user");
-                  localStorage.removeItem("netlify-cms-user");
-                } catch (e) {}
-                location.replace(location.pathname);
-              });
-            });
-          } else {
-            var bandeau = document.createElement("p");
-            bandeau.className = "bandeau-local";
-            bandeau.textContent =
-              "Édition locale (decap-server) — sans mot de passe. La porte garde le site en ligne.";
-            document.body.appendChild(bandeau);
+          if (window.CMS) {
+            window.CMS.init();
+            passeLaFormalite();
           }
+          bouton("Fréquentation", "1rem", "/admin/stats.html");
+          bouton("Se déconnecter", "11.5rem", function () {
+            fetch("/api/admin/session", { method: "DELETE" }).finally(function () {
+              try {
+                localStorage.removeItem("decap-cms.user");
+              } catch (e) {}
+              location.replace(location.pathname);
+            });
+          });
         }
 
         document.addEventListener("DOMContentLoaded", function () {
-          if (estLocal && !porteForcee) {
-            ouvreCms(true);
-            return;
-          }
-
           fetch("/api/admin/session")
             .then(function (r) {
-              if (r.status === 204) ouvreCms(false);
+              if (r.status === 204) ouvreCms();
               else porte.classList.remove("cache");
             })
             .catch(function () {
               porte.classList.remove("cache");
-              erreur("La porte ne répond pas — le site en ligne est-il déployé ?");
+              erreur("La porte ne répond pas — le serveur du site tourne-t-il ?");
             });
 
           document.getElementById("f-porte").addEventListener("submit", function (e) {

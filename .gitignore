@@ -46,5 +46,5 @@ next-env.d.ts
 # sauvegarde temporaire de la migration CMS
 /.migration-originaux/
 
-# Local Netlify folder
-.netlify
+# comptes de fréquentation écrits par le site
+/.data/

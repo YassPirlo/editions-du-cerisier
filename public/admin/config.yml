@@ -4,26 +4,14 @@
 # scripts/construire-donnees.mjs les retransforme en src/data/*.json.
 # Le champ « ordre » pilote l'ordre d'affichage (pas de tirer-déposer).
 
-# Le CMS écrit dans le dépôt GitHub avec le jeton de la maison, remis par
-# notre propre guichet (api/decap/auth) à qui a passé la porte à mot de
-# passe — pas de comptes, pas de Netlify Identity. base_url est le domaine
-# définitif : c'est là que la petite fenêtre d'autorisation s'ouvre.
+# Le CMS écrit par notre propre guichet (/api/cms), gardé par le mot de
+# passe de la maison — aucun compte, aucun service extérieur. Le guichet
+# pose les fichiers de content/ et refait les données du site dans la
+# foulée (voir src/app/api/cms/route.ts).
 backend:
-  name: github
-  repo: YassPirlo/editions-du-cerisier
+  name: proxy
+  proxy_url: /api/cms
   branch: main
-  base_url: https://editions-du-cerisier.be
-  auth_endpoint: api/decap/auth
-  commit_messages:
-    create: "Contenu : ajout de « {{slug}} » ({{collection}})"
-    update: "Contenu : mise à jour de « {{slug}} » ({{collection}})"
-    delete: "Contenu : suppression de « {{slug}} » ({{collection}})"
-    uploadMedia: "Média : ajout de {{path}}"
-    deleteMedia: "Média : suppression de {{path}}"
-
-# En local (npm run cms-local + npm run dev), pas besoin de compte :
-# Decap parle directement au dépôt via le proxy decap-server.
-local_backend: true
 
 locale: "fr"
 
