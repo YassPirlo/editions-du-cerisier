@@ -103,11 +103,20 @@ export function Footer() {
             <p>
               © {new Date().getFullYear()} Éditions du Cerisier — Société coopérative
             </p>
-            {/* La signature de l'atelier : discrète, sans lien sortant — le
-                site de la maison ne renvoie nulle part ailleurs. Une ligne à
-                modifier, ici et nulle part ailleurs. */}
+            {/* La signature de l'atelier : discrète, le nom seul cliquable.
+                Le lien sort vers un profil professionnel — « noreferrer »
+                pour que la maison ne dise à personne d'où vient son
+                visiteur. Une ligne à modifier, ici et nulle part ailleurs. */}
             <p className="text-ecorce-400">
-              Conception et réalisation : Yassine Vitullo
+              Conception et réalisation :{" "}
+              <a
+                href="https://www.linkedin.com/in/yassine-vitullo/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline decoration-transparent decoration-2 underline-offset-2 transition-colors hover:text-fleur-100 hover:decoration-cerise-400"
+              >
+                Yassine Vitullo
+              </a>
             </p>
           </div>
           <div className="flex flex-wrap gap-5">
