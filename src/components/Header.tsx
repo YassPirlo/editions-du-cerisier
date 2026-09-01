@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { nav } from "@/lib/nav";
 import { CherryLogo } from "./CherryLogo";
+import { ChoixSaison } from "./ChoixSaison";
 import { PanierLien } from "./PanierLien";
 
 /**
@@ -110,6 +111,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-0.5">
+          <ChoixSaison />
           <Link
             href="/recherche"
             aria-label="Chercher un livre"

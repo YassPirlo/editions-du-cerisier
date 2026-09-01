@@ -70,14 +70,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="flex min-h-dvh flex-col font-sans">
-        {/* L'édition noir et blanc, rétablie avant le premier coup de
-            pinceau : le choix dort dans le navigateur (localStorage), ce
-            script le réveille avant que la page ne se peigne — sans lui,
-            elle arriverait en couleurs puis se raviserait d'un éclair.
-            Voir BasculeEncre.tsx et globals.css. */}
+        {/* L'ambiance — saison du verger et édition noir et blanc —
+            rétablie avant le premier coup de pinceau : les choix dorment
+            dans le navigateur (localStorage), ce script les réveille
+            avant que la page ne se peigne — sans lui, elle arriverait en
+            été puis se raviserait d'un éclair. Voir lib/ambiance.ts,
+            ChoixSaison.tsx et globals.css. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{if(localStorage.getItem("cerisier-encre")==="nb")document.documentElement.dataset.encre="nb"}catch(e){}`,
+            __html: `try{var s=localStorage.getItem("cerisier-saison");if(s==="printemps"||s==="automne"||s==="hiver")document.documentElement.dataset.saison=s;if(localStorage.getItem("cerisier-encre")==="nb")document.documentElement.dataset.encre="nb"}catch(e){}`,
           }}
         />
         <a

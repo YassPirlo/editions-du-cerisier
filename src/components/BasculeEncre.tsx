@@ -1,53 +1,22 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { abonneAmbiance, basculeNoirEtBlanc, lisEncre } from "@/lib/ambiance";
 
 /**
- * L'édition noir et blanc : un geste au pied de page et tout le site
- * passe en nuances d'encre — jetons de couleur remappés vers leurs gris
- * de luminance, images et canvas au grain argentique (globals.css,
- * `html[data-encre="nb"]`). Le choix est retenu dans le navigateur et
- * rétabli avant le premier rendu par le petit script du layout, pour que
- * la page n'arrive jamais en couleurs avant de se raviser.
+ * L'édition noir et blanc, version pied de page : la bascule rapide —
+ * un geste pour passer au gris, le même pour rendre les couleurs de la
+ * saison en cours. Le grand choix (les quatre saisons) vit dans le menu
+ * de l'en-tête ; les deux parlent au même magasin (lib/ambiance.ts) et
+ * restent d'accord.
  */
-
-const CLE = "cerisier-encre";
-const EVENEMENT = "cerisier-encre";
-
-function lisMode(): boolean {
-  return document.documentElement.dataset.encre === "nb";
-}
-
-function abonne(rappel: () => void) {
-  window.addEventListener(EVENEMENT, rappel);
-  window.addEventListener("storage", rappel);
-  return () => {
-    window.removeEventListener(EVENEMENT, rappel);
-    window.removeEventListener("storage", rappel);
-  };
-}
-
-function bascule() {
-  const racine = document.documentElement;
-  const versNb = racine.dataset.encre !== "nb";
-  if (versNb) racine.dataset.encre = "nb";
-  else delete racine.dataset.encre;
-  try {
-    if (versNb) localStorage.setItem(CLE, "nb");
-    else localStorage.removeItem(CLE);
-  } catch {
-    /* Navigation privée : le mode vaut pour la page, sans mémoire. */
-  }
-  window.dispatchEvent(new Event(EVENEMENT));
-}
-
 export function BasculeEncre() {
-  const nb = useSyncExternalStore(abonne, lisMode, () => false);
+  const nb = useSyncExternalStore(abonneAmbiance, lisEncre, () => false);
 
   return (
     <button
       type="button"
-      onClick={bascule}
+      onClick={basculeNoirEtBlanc}
       aria-pressed={nb}
       className="inline-flex items-center gap-2 transition-colors hover:text-fleur-100"
     >

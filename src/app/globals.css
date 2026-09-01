@@ -790,12 +790,116 @@
   animation: releve-suggestion 0.45s var(--ease-verger) both;
 }
 
+/* ------------------------------------------------------------------------
+   LES SAISONS DU VERGER. Le bois demeure, la frondaison passe : chaque
+   saison remappe les jetons vivants — cerise, griotte, feuille, fleur —
+   et ne touche JAMAIS à l'écorce : l'encre du texte, les fonds sombres,
+   les contrastes restent les mêmes toute l'année. L'été est la base
+   (@theme, sans attribut) : l'or de la récolte. Menu dans l'en-tête
+   (ChoixSaison.tsx), retenu dans le navigateur, rétabli avant peinture
+   par le script du layout.
+   ------------------------------------------------------------------------ */
+
+/* Le printemps : le cerisier en fleur. La cerise n'est pas encore un
+   fruit, c'est un pétale — roses de floraison, feuilles tendres à peine
+   dépliées, papier rosé d'avril. */
+html[data-saison="printemps"] {
+  --color-cerise-50: #fdf2f7;
+  --color-cerise-100: #fce6ef;
+  --color-cerise-200: #f8cee0;
+  --color-cerise-300: #f4adc9;
+  --color-cerise-400: #ef8db3;
+  --color-cerise-500: #d9648f;
+  --color-cerise-600: #b13f6b;
+  --color-griotte-300: #f06a9b;
+  --color-griotte-400: #d63d7e;
+  --color-griotte-500: #b32562;
+  --color-griotte-600: #8a1747;
+  --color-feuille-50: #f2f8ec;
+  --color-feuille-100: #e3f0d5;
+  --color-feuille-200: #c9e2b2;
+  --color-feuille-300: #a9cd89;
+  --color-feuille-400: #86b263;
+  --color-feuille-500: #669247;
+  --color-feuille-600: #4d7334;
+  --color-feuille-700: #3a5827;
+  --color-feuille-800: #293d1c;
+  --color-feuille-900: #1b2a11;
+  --color-fleur-50: #fdf6f8;
+  --color-fleur-100: #fae9ee;
+  --color-fleur-200: #f3d3dd;
+  --color-fleur-300: #e7b3c3;
+}
+
+/* L'automne : le feuillage tourne. La cerise d'or devient cuivre, la
+   feuille passe à l'olive dorée, le papier prend l'ivoire des feuilles
+   mortes ; la griotte vire à la rouille. */
+html[data-saison="automne"] {
+  --color-cerise-50: #fdf6ec;
+  --color-cerise-100: #fae9cf;
+  --color-cerise-200: #f5d5a0;
+  --color-cerise-300: #eeb864;
+  --color-cerise-400: #e39730;
+  --color-cerise-500: #c47a1d;
+  --color-cerise-600: #9c5e12;
+  --color-griotte-300: #e46a45;
+  --color-griotte-400: #c2441f;
+  --color-griotte-500: #a23414;
+  --color-griotte-600: #7b240c;
+  --color-feuille-50: #f8f5ea;
+  --color-feuille-100: #eee8d0;
+  --color-feuille-200: #ded1a9;
+  --color-feuille-300: #c6b17b;
+  --color-feuille-400: #a98f55;
+  --color-feuille-500: #8b713e;
+  --color-feuille-600: #6e572d;
+  --color-feuille-700: #524021;
+  --color-feuille-800: #392c16;
+  --color-feuille-900: #261d0e;
+  --color-fleur-50: #fcf7ee;
+  --color-fleur-100: #f8ecdd;
+  --color-fleur-200: #efdabf;
+  --color-fleur-300: #e1c29c;
+}
+
+/* L'hiver : le verger nu sous givre. La cerise se fait glace bleutée, la
+   feuille rejoint le sapin, le papier blanchit de froid — et la griotte
+   reste la braise du houx, seul fruit de la saison. */
+html[data-saison="hiver"] {
+  --color-cerise-50: #f4f8fb;
+  --color-cerise-100: #e6eff5;
+  --color-cerise-200: #cfe1ec;
+  --color-cerise-300: #b1cfe0;
+  --color-cerise-400: #93bdd3;
+  --color-cerise-500: #6d9cba;
+  --color-cerise-600: #4e7995;
+  --color-griotte-300: #dc7268;
+  --color-griotte-400: #b23c40;
+  --color-griotte-500: #942a31;
+  --color-griotte-600: #701d24;
+  --color-feuille-50: #f1f5f3;
+  --color-feuille-100: #e0e9e4;
+  --color-feuille-200: #c3d4cb;
+  --color-feuille-300: #9cb5a9;
+  --color-feuille-400: #739384;
+  --color-feuille-500: #557567;
+  --color-feuille-600: #41594f;
+  --color-feuille-700: #31433c;
+  --color-feuille-800: #222f2a;
+  --color-feuille-900: #17201c;
+  --color-fleur-50: #f8fafc;
+  --color-fleur-100: #edf3f7;
+  --color-fleur-200: #dbe6ee;
+  --color-fleur-300: #c1d2de;
+}
+
 /* L'édition noir et blanc : chaque encre de la palette rejoint son gris
    de luminance exacte (les contrastes et la hiérarchie ne bougent pas),
    et les images passent au grain argentique. On remappe les jetons plutôt
    que de filtrer la page entière : un filtre posé sur un ancêtre casserait
-   les positions fixes (le grain du papier, entre autres). Bascule au pied
-   de page (BasculeEncre.tsx), retenue dans le navigateur. */
+   les positions fixes (le grain du papier, entre autres). Déclaré APRÈS
+   les saisons : posé par-dessus l'une d'elles, c'est lui qui l'emporte.
+   Bascule au pied de page (BasculeEncre.tsx) et dans le menu des saisons. */
 html[data-encre="nb"] {
   --color-cerise-50: #fbfbfb;
   --color-cerise-100: #f2f2f2;
