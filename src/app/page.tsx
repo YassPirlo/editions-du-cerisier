@@ -67,7 +67,7 @@ export default function Home() {
           boucle — la vitrine d'une librairie qui n'en finit pas (adapté de
           l'Image Stream Hero de ruixen.ui). Les pétales d'avril tombent
           par-dessus, le titre se compose ligne à ligne au centre. */}
-      <section className="relative overflow-hidden bg-ecorce-950 text-fleur-100">
+      <section className="deja-nuit relative overflow-hidden bg-ecorce-950 text-fleur-100">
         <FluxCouvertures
           couvertures={flux.map((b) => b.cover)}
           duree={22}
@@ -196,7 +196,7 @@ export default function Home() {
           une étagère qu'on fait défiler à la main. */}
       <section
         aria-label="Quelques couvertures du catalogue"
-        className="rayon-fenetre border-y border-ecorce-800 bg-ecorce-900 py-12"
+        className="deja-nuit rayon-fenetre border-y border-ecorce-800 bg-ecorce-900 py-12"
       >
         <div className="rayon-defilant flex w-max">
           {[0, 1].map((copie) => (
@@ -233,7 +233,7 @@ export default function Home() {
 
       {/* Le tronc : la citation, reprise mot pour mot du site. Elle se pose
           en scène, puis la lumière la traverse au fil de la lecture. */}
-      <LampeDeLecture className="bg-ecorce-900">
+      <LampeDeLecture className="deja-nuit bg-ecorce-900">
         <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
           <div className="pousse-scene">
             <blockquote className="balayage-lumiere titre-verger max-w-4xl text-4xl leading-[1.08] text-balance text-fleur-50 sm:text-6xl">
@@ -327,7 +327,7 @@ export default function Home() {
       {/* La récolte : les dernières parutions. Chaque volume se redresse en
           entrant dans le champ — le geste du libraire qui met un livre
           debout (.poser). */}
-      <LampeDeLecture className="border-y border-ecorce-800 bg-ecorce-950 text-fleur-100">
+      <LampeDeLecture className="deja-nuit border-y border-ecorce-800 bg-ecorce-950 text-fleur-100">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
           <h2 className="pousse titre-verger text-2xl text-fleur-50 sm:text-3xl">
             Vient de paraître

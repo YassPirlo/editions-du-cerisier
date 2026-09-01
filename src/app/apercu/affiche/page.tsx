@@ -62,7 +62,7 @@ export default function VarianteAffiche() {
       </section>
 
       {/* Bandeau noir : citation reprise mot pour mot du site */}
-      <section className="bg-ecorce-900 text-white">
+      <section className="deja-nuit bg-ecorce-900 text-white">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
           <blockquote className="text-4xl leading-[0.95] font-black tracking-tight uppercase sm:text-6xl lg:text-7xl">
             Ni dieu,
@@ -117,7 +117,7 @@ export default function VarianteAffiche() {
       </section>
 
       {/* Couvertures serrées, calées sur le noir */}
-      <section className="bg-ecorce-900">
+      <section className="deja-nuit bg-ecorce-900">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
           <h2 className="text-xs font-bold tracking-[0.24em] text-cerise-400 uppercase">
             Vient de paraître

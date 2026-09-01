@@ -794,153 +794,369 @@
    LES SAISONS DU VERGER. Le bois demeure, la frondaison passe : chaque
    saison remappe les jetons vivants — cerise, griotte, feuille, fleur —
    et ne touche JAMAIS à l'écorce : l'encre du texte, les fonds sombres,
-   les contrastes restent les mêmes toute l'année. L'été est la base
-   (@theme, sans attribut) : l'or de la récolte. Menu dans l'en-tête
-   (ChoixSaison.tsx), retenu dans le navigateur, rétabli avant peinture
-   par le script du layout.
+   les contrastes restent les mêmes toute l'année. L'été est la base :
+   l'or de la récolte.
+
+   L'architecture se lit en trois couches :
+   1. les références --jour-* : la palette de jour de chaque saison
+      (ci-dessous), plus l'écorce, constante — et les fonds de nuit
+      propres à chaque saison (--nuit-*) ;
+   2. les jetons publics --color-* valent le jour par défaut ;
+   3. la nuit (html[data-nuit], plus bas) les inverse en PUISANT dans les
+      références jour — l'inversion suit donc la saison toute seule.
+   Menu dans l'en-tête (ChoixSaison.tsx), retenu dans le navigateur,
+   rétabli avant peinture par le script du layout.
    ------------------------------------------------------------------------ */
+
+/* L'été, base de toutes les références — et l'écorce, qui ne change avec
+   aucune saison : c'est le bois, et le bois demeure. Chaque saison porte
+   aussi sa nuit : le fond que prend le papier quand on éteint le jour. */
+:root {
+  --jour-cerise-50: #fffbeb;
+  --jour-cerise-100: #fff3c4;
+  --jour-cerise-200: #ffe68a;
+  --jour-cerise-300: #ffd75c;
+  --jour-cerise-400: #ffc107;
+  --jour-cerise-500: #e6ac00;
+  --jour-cerise-600: #b88900;
+  --jour-griotte-300: #e63946;
+  --jour-griotte-400: #c2183a;
+  --jour-griotte-500: #a5112b;
+  --jour-griotte-600: #7d0c20;
+  --jour-feuille-50: #f3f7ee;
+  --jour-feuille-100: #e3ecd8;
+  --jour-feuille-200: #c8d9b6;
+  --jour-feuille-300: #a3bb8c;
+  --jour-feuille-400: #7c9a63;
+  --jour-feuille-500: #5c7a46;
+  --jour-feuille-600: #466034;
+  --jour-feuille-700: #334926;
+  --jour-feuille-800: #22331a;
+  --jour-feuille-900: #17240f;
+  --jour-fleur-50: #fdf8f5;
+  --jour-fleur-100: #f7ece5;
+  --jour-fleur-200: #ecd8ce;
+  --jour-fleur-300: #ddbdb1;
+  --jour-ecorce-50: #f8f5f1;
+  --jour-ecorce-100: #ece3d8;
+  --jour-ecorce-200: #d8c7b1;
+  --jour-ecorce-300: #bfa483;
+  --jour-ecorce-400: #a4855f;
+  --jour-ecorce-500: #8b6f47;
+  --jour-ecorce-600: #6f5838;
+  --jour-ecorce-700: #52412a;
+  --jour-ecorce-800: #3a2e1e;
+  --jour-ecorce-900: #241d13;
+  --jour-ecorce-950: #171008;
+  /* La nuit d'été : l'encre chaude de la maison. */
+  --nuit-fond: #1a1309;
+  --nuit-fond-2: #221a0d;
+  --nuit-fond-3: #2b2113;
+  --nuit-fond-4: #362a19;
+  --nuit-carte: #251c0f;
+  --nuit-lavis: #2b2110;
+  --nuit-lavis-2: #342914;
+}
 
 /* Le printemps : le cerisier en fleur. La cerise n'est pas encore un
    fruit, c'est un pétale — roses de floraison, feuilles tendres à peine
-   dépliées, papier rosé d'avril. */
+   dépliées, papier rosé d'avril. Sa nuit est une nuit de prune. */
 html[data-saison="printemps"] {
-  --color-cerise-50: #fdf2f7;
-  --color-cerise-100: #fce6ef;
-  --color-cerise-200: #f8cee0;
-  --color-cerise-300: #f4adc9;
-  --color-cerise-400: #ef8db3;
-  --color-cerise-500: #d9648f;
-  --color-cerise-600: #b13f6b;
-  --color-griotte-300: #f06a9b;
-  --color-griotte-400: #d63d7e;
-  --color-griotte-500: #b32562;
-  --color-griotte-600: #8a1747;
-  --color-feuille-50: #f2f8ec;
-  --color-feuille-100: #e3f0d5;
-  --color-feuille-200: #c9e2b2;
-  --color-feuille-300: #a9cd89;
-  --color-feuille-400: #86b263;
-  --color-feuille-500: #669247;
-  --color-feuille-600: #4d7334;
-  --color-feuille-700: #3a5827;
-  --color-feuille-800: #293d1c;
-  --color-feuille-900: #1b2a11;
-  --color-fleur-50: #fdf6f8;
-  --color-fleur-100: #fae9ee;
-  --color-fleur-200: #f3d3dd;
-  --color-fleur-300: #e7b3c3;
+  --jour-cerise-50: #fdf2f7;
+  --jour-cerise-100: #fce6ef;
+  --jour-cerise-200: #f8cee0;
+  --jour-cerise-300: #f4adc9;
+  --jour-cerise-400: #ef8db3;
+  --jour-cerise-500: #d9648f;
+  --jour-cerise-600: #b13f6b;
+  --jour-griotte-300: #f06a9b;
+  --jour-griotte-400: #d63d7e;
+  --jour-griotte-500: #b32562;
+  --jour-griotte-600: #8a1747;
+  --jour-feuille-50: #f2f8ec;
+  --jour-feuille-100: #e3f0d5;
+  --jour-feuille-200: #c9e2b2;
+  --jour-feuille-300: #a9cd89;
+  --jour-feuille-400: #86b263;
+  --jour-feuille-500: #669247;
+  --jour-feuille-600: #4d7334;
+  --jour-feuille-700: #3a5827;
+  --jour-feuille-800: #293d1c;
+  --jour-feuille-900: #1b2a11;
+  --jour-fleur-50: #fdf6f8;
+  --jour-fleur-100: #fae9ee;
+  --jour-fleur-200: #f3d3dd;
+  --jour-fleur-300: #e7b3c3;
+  --nuit-fond: #1c1117;
+  --nuit-fond-2: #241823;
+  --nuit-fond-3: #2e1f2b;
+  --nuit-fond-4: #392834;
+  --nuit-carte: #271a24;
+  --nuit-lavis: #2d1e29;
+  --nuit-lavis-2: #372532;
 }
 
 /* L'automne : le feuillage tourne. La cerise d'or devient cuivre, la
    feuille passe à l'olive dorée, le papier prend l'ivoire des feuilles
-   mortes ; la griotte vire à la rouille. */
+   mortes ; la griotte vire à la rouille. Sa nuit : la braise sous la
+   cendre. */
 html[data-saison="automne"] {
-  --color-cerise-50: #fdf6ec;
-  --color-cerise-100: #fae9cf;
-  --color-cerise-200: #f5d5a0;
-  --color-cerise-300: #eeb864;
-  --color-cerise-400: #e39730;
-  --color-cerise-500: #c47a1d;
-  --color-cerise-600: #9c5e12;
-  --color-griotte-300: #e46a45;
-  --color-griotte-400: #c2441f;
-  --color-griotte-500: #a23414;
-  --color-griotte-600: #7b240c;
-  --color-feuille-50: #f8f5ea;
-  --color-feuille-100: #eee8d0;
-  --color-feuille-200: #ded1a9;
-  --color-feuille-300: #c6b17b;
-  --color-feuille-400: #a98f55;
-  --color-feuille-500: #8b713e;
-  --color-feuille-600: #6e572d;
-  --color-feuille-700: #524021;
-  --color-feuille-800: #392c16;
-  --color-feuille-900: #261d0e;
-  --color-fleur-50: #fcf7ee;
-  --color-fleur-100: #f8ecdd;
-  --color-fleur-200: #efdabf;
-  --color-fleur-300: #e1c29c;
+  --jour-cerise-50: #fdf6ec;
+  --jour-cerise-100: #fae9cf;
+  --jour-cerise-200: #f5d5a0;
+  --jour-cerise-300: #eeb864;
+  --jour-cerise-400: #e39730;
+  --jour-cerise-500: #c47a1d;
+  --jour-cerise-600: #9c5e12;
+  --jour-griotte-300: #e46a45;
+  --jour-griotte-400: #c2441f;
+  --jour-griotte-500: #a23414;
+  --jour-griotte-600: #7b240c;
+  --jour-feuille-50: #f8f5ea;
+  --jour-feuille-100: #eee8d0;
+  --jour-feuille-200: #ded1a9;
+  --jour-feuille-300: #c6b17b;
+  --jour-feuille-400: #a98f55;
+  --jour-feuille-500: #8b713e;
+  --jour-feuille-600: #6e572d;
+  --jour-feuille-700: #524021;
+  --jour-feuille-800: #392c16;
+  --jour-feuille-900: #261d0e;
+  --jour-fleur-50: #fcf7ee;
+  --jour-fleur-100: #f8ecdd;
+  --jour-fleur-200: #efdabf;
+  --jour-fleur-300: #e1c29c;
+  --nuit-fond: #1b1208;
+  --nuit-fond-2: #241809;
+  --nuit-fond-3: #2e1f0c;
+  --nuit-fond-4: #392810;
+  --nuit-carte: #271b0b;
+  --nuit-lavis: #2d200c;
+  --nuit-lavis-2: #372810;
 }
 
 /* L'hiver : le verger nu sous givre. La cerise se fait glace bleutée, la
    feuille rejoint le sapin, le papier blanchit de froid — et la griotte
-   reste la braise du houx, seul fruit de la saison. */
+   reste la braise du houx, seul fruit de la saison. Sa nuit est un bleu
+   de minuit. */
 html[data-saison="hiver"] {
-  --color-cerise-50: #f4f8fb;
-  --color-cerise-100: #e6eff5;
-  --color-cerise-200: #cfe1ec;
-  --color-cerise-300: #b1cfe0;
-  --color-cerise-400: #93bdd3;
-  --color-cerise-500: #6d9cba;
-  --color-cerise-600: #4e7995;
-  --color-griotte-300: #dc7268;
-  --color-griotte-400: #b23c40;
-  --color-griotte-500: #942a31;
-  --color-griotte-600: #701d24;
-  --color-feuille-50: #f1f5f3;
-  --color-feuille-100: #e0e9e4;
-  --color-feuille-200: #c3d4cb;
-  --color-feuille-300: #9cb5a9;
-  --color-feuille-400: #739384;
-  --color-feuille-500: #557567;
-  --color-feuille-600: #41594f;
-  --color-feuille-700: #31433c;
-  --color-feuille-800: #222f2a;
-  --color-feuille-900: #17201c;
-  --color-fleur-50: #f8fafc;
-  --color-fleur-100: #edf3f7;
-  --color-fleur-200: #dbe6ee;
-  --color-fleur-300: #c1d2de;
+  --jour-cerise-50: #f4f8fb;
+  --jour-cerise-100: #e6eff5;
+  --jour-cerise-200: #cfe1ec;
+  --jour-cerise-300: #b1cfe0;
+  --jour-cerise-400: #93bdd3;
+  --jour-cerise-500: #6d9cba;
+  --jour-cerise-600: #4e7995;
+  --jour-griotte-300: #dc7268;
+  --jour-griotte-400: #b23c40;
+  --jour-griotte-500: #942a31;
+  --jour-griotte-600: #701d24;
+  --jour-feuille-50: #f1f5f3;
+  --jour-feuille-100: #e0e9e4;
+  --jour-feuille-200: #c3d4cb;
+  --jour-feuille-300: #9cb5a9;
+  --jour-feuille-400: #739384;
+  --jour-feuille-500: #557567;
+  --jour-feuille-600: #41594f;
+  --jour-feuille-700: #31433c;
+  --jour-feuille-800: #222f2a;
+  --jour-feuille-900: #17201c;
+  --jour-fleur-50: #f8fafc;
+  --jour-fleur-100: #edf3f7;
+  --jour-fleur-200: #dbe6ee;
+  --jour-fleur-300: #c1d2de;
+  --nuit-fond: #0f151b;
+  --nuit-fond-2: #151d25;
+  --nuit-fond-3: #1c2731;
+  --nuit-fond-4: #24313d;
+  --nuit-carte: #17212b;
+  --nuit-lavis: #1c2833;
+  --nuit-lavis-2: #233240;
 }
 
-/* L'édition noir et blanc : chaque encre de la palette rejoint son gris
-   de luminance exacte (les contrastes et la hiérarchie ne bougent pas),
-   et les images passent au grain argentique. On remappe les jetons plutôt
-   que de filtrer la page entière : un filtre posé sur un ancêtre casserait
-   les positions fixes (le grain du papier, entre autres). Déclaré APRÈS
-   les saisons : posé par-dessus l'une d'elles, c'est lui qui l'emporte.
-   Bascule au pied de page (BasculeEncre.tsx) et dans le menu des saisons. */
-html[data-encre="nb"] {
-  --color-cerise-50: #fbfbfb;
-  --color-cerise-100: #f2f2f2;
-  --color-cerise-200: #e5e5e5;
-  --color-cerise-300: #d7d7d7;
-  --color-cerise-400: #c1c1c1;
-  --color-cerise-500: #acacac;
-  --color-cerise-600: #898989;
-  --color-ecorce-50: #f5f5f5;
-  --color-ecorce-100: #e4e4e4;
-  --color-ecorce-200: #c9c9c9;
-  --color-ecorce-300: #a7a7a7;
-  --color-ecorce-400: #898989;
-  --color-ecorce-500: #727272;
-  --color-ecorce-600: #5b5b5b;
-  --color-ecorce-700: #434343;
-  --color-ecorce-800: #2f2f2f;
-  --color-ecorce-900: #1e1e1e;
-  --color-ecorce-950: #111111;
-  --color-griotte-300: #5f5f5f;
-  --color-griotte-400: #3f3f3f;
-  --color-griotte-500: #323232;
-  --color-griotte-600: #262626;
-  --color-feuille-50: #f5f5f5;
-  --color-feuille-100: #e9e9e9;
-  --color-feuille-200: #d3d3d3;
-  --color-feuille-300: #b3b3b3;
-  --color-feuille-400: #909090;
-  --color-feuille-500: #707070;
-  --color-feuille-600: #575757;
-  --color-feuille-700: #424242;
-  --color-feuille-800: #2e2e2e;
-  --color-feuille-900: #202020;
-  --color-fleur-50: #f9f9f9;
-  --color-fleur-100: #eeeeee;
-  --color-fleur-200: #dcdcdc;
-  --color-fleur-300: #c3c3c3;
+/* Le jour : les jetons publics valent leurs références. (Cette couche,
+   hors @layer, l'emporte sur le @theme de Tailwind ; la nuit, plus bas,
+   l'emporte sur elle par l'ordre du fichier.) */
+:root {
+  --color-cerise-50: var(--jour-cerise-50);
+  --color-cerise-100: var(--jour-cerise-100);
+  --color-cerise-200: var(--jour-cerise-200);
+  --color-cerise-300: var(--jour-cerise-300);
+  --color-cerise-400: var(--jour-cerise-400);
+  --color-cerise-500: var(--jour-cerise-500);
+  --color-cerise-600: var(--jour-cerise-600);
+  --color-griotte-300: var(--jour-griotte-300);
+  --color-griotte-400: var(--jour-griotte-400);
+  --color-griotte-500: var(--jour-griotte-500);
+  --color-griotte-600: var(--jour-griotte-600);
+  --color-feuille-50: var(--jour-feuille-50);
+  --color-feuille-100: var(--jour-feuille-100);
+  --color-feuille-200: var(--jour-feuille-200);
+  --color-feuille-300: var(--jour-feuille-300);
+  --color-feuille-400: var(--jour-feuille-400);
+  --color-feuille-500: var(--jour-feuille-500);
+  --color-feuille-600: var(--jour-feuille-600);
+  --color-feuille-700: var(--jour-feuille-700);
+  --color-feuille-800: var(--jour-feuille-800);
+  --color-feuille-900: var(--jour-feuille-900);
+  --color-fleur-50: var(--jour-fleur-50);
+  --color-fleur-100: var(--jour-fleur-100);
+  --color-fleur-200: var(--jour-fleur-200);
+  --color-fleur-300: var(--jour-fleur-300);
+  --color-ecorce-50: var(--jour-ecorce-50);
+  --color-ecorce-100: var(--jour-ecorce-100);
+  --color-ecorce-200: var(--jour-ecorce-200);
+  --color-ecorce-300: var(--jour-ecorce-300);
+  --color-ecorce-400: var(--jour-ecorce-400);
+  --color-ecorce-500: var(--jour-ecorce-500);
+  --color-ecorce-600: var(--jour-ecorce-600);
+  --color-ecorce-700: var(--jour-ecorce-700);
+  --color-ecorce-800: var(--jour-ecorce-800);
+  --color-ecorce-900: var(--jour-ecorce-900);
+  --color-ecorce-950: var(--jour-ecorce-950);
 }
-html[data-encre="nb"] img,
-html[data-encre="nb"] canvas,
-html[data-encre="nb"] video,
-html[data-encre="nb"] .icone-marque {
-  filter: grayscale(1);
+
+/* ------------------------------------------------------------------------
+   LA NUIT. La lecture à la lampe : le papier rejoint l'encre de la
+   saison, le texte devient crème, et l'or des accents reste allumé.
+   L'inversion PUISE dans les références --jour-* — elle suit donc la
+   saison toute seule : nuit de prune au printemps, encre chaude en été,
+   braise sous la cendre en automne, bleu de minuit en hiver.
+
+   Les surfaces qui vivaient déjà dans le sombre (en-tête, héros, pied de
+   page, bandeaux) portent la classe .deja-nuit : à l'intérieur, les
+   jetons reprennent leurs valeurs de jour — la nuit ne change rien à ce
+   qui était déjà la nuit.
+   ------------------------------------------------------------------------ */
+html[data-nuit] {
+  /* Le papier devient le fond de nuit de la saison. */
+  --color-fleur-50: var(--nuit-fond);
+  --color-fleur-100: var(--nuit-fond-2);
+  --color-fleur-200: var(--nuit-fond-3);
+  --color-fleur-300: var(--nuit-fond-4);
+  /* L'écorce se retourne : les encres deviennent les crèmes, les filets
+     clairs deviennent des filets sombres. Le 400, mitoyen, passe les
+     deux mondes sans bouger. */
+  --color-ecorce-50: #2a2015;
+  --color-ecorce-100: #322619;
+  --color-ecorce-200: var(--jour-ecorce-800);
+  --color-ecorce-300: var(--jour-ecorce-700);
+  --color-ecorce-400: var(--jour-ecorce-400);
+  --color-ecorce-500: var(--jour-ecorce-300);
+  --color-ecorce-600: var(--jour-ecorce-200);
+  --color-ecorce-700: #e0d3c2;
+  --color-ecorce-800: var(--jour-ecorce-100);
+  --color-ecorce-900: #f3ede3;
+  --color-ecorce-950: var(--jour-ecorce-50);
+  /* Les cartes et champs blancs prennent l'encre douce de la saison. */
+  --color-white: var(--nuit-carte);
+  /* Les lavis clairs de la cerise deviennent des lavis d'ombre ; les
+     vifs (300-500) restent allumés — ce sont les lampes. Le 600, encre
+     d'accent le jour, s'éclaircit pour rester lisible. */
+  --color-cerise-50: var(--nuit-lavis);
+  --color-cerise-100: var(--nuit-lavis-2);
+  --color-cerise-200: var(--nuit-lavis-2);
+  --color-cerise-300: var(--jour-cerise-300);
+  --color-cerise-400: var(--jour-cerise-400);
+  --color-cerise-500: var(--jour-cerise-500);
+  --color-cerise-600: var(--jour-cerise-300);
+  /* La griotte monte d'un ton : ses encres profondes seraient perdues
+     sur le fond de nuit. */
+  --color-griotte-400: var(--jour-griotte-300);
+  --color-griotte-500: var(--jour-griotte-300);
+  --color-griotte-600: var(--jour-griotte-400);
+  /* Le feuillage se retourne comme l'écorce. */
+  --color-feuille-50: var(--jour-feuille-900);
+  --color-feuille-100: var(--jour-feuille-800);
+  --color-feuille-200: var(--jour-feuille-700);
+  --color-feuille-300: var(--jour-feuille-500);
+  --color-feuille-500: var(--jour-feuille-300);
+  --color-feuille-600: var(--jour-feuille-200);
+  --color-feuille-700: var(--jour-feuille-200);
+  --color-feuille-800: var(--jour-feuille-100);
+  --color-feuille-900: var(--jour-feuille-50);
+}
+
+/* Les îlots déjà-nuit : l'en-tête, le héros, les bandeaux, le pied de
+   page. Dedans, tout reprend les valeurs de jour de la saison — ces
+   surfaces n'ont pas besoin qu'on leur éteigne la lumière. */
+html[data-nuit] .deja-nuit {
+  --color-cerise-50: var(--jour-cerise-50);
+  --color-cerise-100: var(--jour-cerise-100);
+  --color-cerise-200: var(--jour-cerise-200);
+  --color-cerise-300: var(--jour-cerise-300);
+  --color-cerise-400: var(--jour-cerise-400);
+  --color-cerise-500: var(--jour-cerise-500);
+  --color-cerise-600: var(--jour-cerise-600);
+  --color-griotte-300: var(--jour-griotte-300);
+  --color-griotte-400: var(--jour-griotte-400);
+  --color-griotte-500: var(--jour-griotte-500);
+  --color-griotte-600: var(--jour-griotte-600);
+  --color-feuille-50: var(--jour-feuille-50);
+  --color-feuille-100: var(--jour-feuille-100);
+  --color-feuille-200: var(--jour-feuille-200);
+  --color-feuille-300: var(--jour-feuille-300);
+  --color-feuille-400: var(--jour-feuille-400);
+  --color-feuille-500: var(--jour-feuille-500);
+  --color-feuille-600: var(--jour-feuille-600);
+  --color-feuille-700: var(--jour-feuille-700);
+  --color-feuille-800: var(--jour-feuille-800);
+  --color-feuille-900: var(--jour-feuille-900);
+  --color-fleur-50: var(--jour-fleur-50);
+  --color-fleur-100: var(--jour-fleur-100);
+  --color-fleur-200: var(--jour-fleur-200);
+  --color-fleur-300: var(--jour-fleur-300);
+  --color-ecorce-50: var(--jour-ecorce-50);
+  --color-ecorce-100: var(--jour-ecorce-100);
+  --color-ecorce-200: var(--jour-ecorce-200);
+  --color-ecorce-300: var(--jour-ecorce-300);
+  --color-ecorce-400: var(--jour-ecorce-400);
+  --color-ecorce-500: var(--jour-ecorce-500);
+  --color-ecorce-600: var(--jour-ecorce-600);
+  --color-ecorce-700: var(--jour-ecorce-700);
+  --color-ecorce-800: var(--jour-ecorce-800);
+  --color-ecorce-900: var(--jour-ecorce-900);
+  --color-ecorce-950: var(--jour-ecorce-950);
+  --color-white: #fff;
+}
+
+/* Les boutons d'or sont des lampes : la nuit, leur texte reste l'encre
+   du jour — sans quoi l'écorce retournée poserait de la crème sur de
+   l'or. Le sélecteur attrape toute classe bg-cerise-300/400/500, états
+   de survol compris. */
+html[data-nuit] [class*="bg-cerise-300"],
+html[data-nuit] [class*="bg-cerise-400"],
+html[data-nuit] [class*="bg-cerise-500"] {
+  --color-ecorce-900: var(--jour-ecorce-900);
+  --color-ecorce-950: var(--jour-ecorce-950);
+  --color-white: #fff;
+}
+
+/* Les blancs de Tailwind sont des littéraux (#fff), pas des jetons — la
+   nuit les rattrape ici : la carte blanche prend l'encre douce de la
+   saison, le texte blanc prend l'encre du jour (il vit sur des fonds que
+   l'inversion a rendus clairs). Dans les îlots, ils restent blancs. */
+html[data-nuit] .bg-white {
+  background-color: var(--nuit-carte);
+}
+html[data-nuit] .text-white {
+  color: var(--jour-ecorce-900);
+}
+html[data-nuit] .hover\:bg-white:hover {
+  background-color: var(--jour-ecorce-100);
+}
+html[data-nuit] .focus\:text-white:focus {
+  color: var(--jour-ecorce-900);
+}
+html[data-nuit] .deja-nuit .bg-white {
+  background-color: #fff;
+}
+html[data-nuit] .deja-nuit .text-white {
+  color: #fff;
+}
+
+/* Le voile derrière les dialogues : la nuit, il reste une ombre — le
+   jeton retourné en ferait un voile de crème. */
+html[data-nuit] dialog::backdrop {
+  background-color: rgb(8 5 2 / 0.65);
 }

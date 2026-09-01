@@ -4,20 +4,23 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import {
   SAISONS,
   abonneAmbiance,
+  basculeNuit,
   choisisSaison,
-  lisAmbiance,
-  passeEnNoirEtBlanc,
+  lisNuit,
+  lisSaison,
 } from "@/lib/ambiance";
 
 /**
- * Le choix de la saison, en haut à droite : une cerise-témoin remplie de
- * la couleur du moment (elle suit les jetons — rose au printemps, or en
- * été, grise en noir et blanc), et un menu dans le style des sous-menus
- * de navigation. Une seule ambiance cochée à la fois : les quatre
- * saisons, ou l'édition noir et blanc posée par-dessus.
+ * Le choix de l'ambiance, en haut à droite : une cerise-témoin remplie
+ * de la couleur du moment (elle suit les jetons — rose au printemps, or
+ * en été), et un menu dans le style des sous-menus de navigation. Deux
+ * réglages qui se croisent : la saison (une seule cochée) et la nuit,
+ * qui se pose sur n'importe laquelle — la nuit de printemps n'est pas
+ * celle d'hiver.
  */
 export function ChoixSaison() {
-  const ambiance = useSyncExternalStore(abonneAmbiance, lisAmbiance, () => "ete" as const);
+  const saison = useSyncExternalStore(abonneAmbiance, lisSaison, () => "ete" as const);
+  const nuit = useSyncExternalStore(abonneAmbiance, lisNuit, () => false);
   const [ouvert, setOuvert] = useState(false);
 
   useEffect(() => {
@@ -93,7 +96,7 @@ export function ChoixSaison() {
                 key={s.valeur}
                 type="button"
                 role="menuitemradio"
-                aria-checked={ambiance === s.valeur}
+                aria-checked={saison === s.valeur}
                 onClick={() => {
                   choisisSaison(s.valeur);
                   setOuvert(false);
@@ -109,30 +112,35 @@ export function ChoixSaison() {
                   <span className="block text-sm text-fleur-100">{s.nom}</span>
                   <span className="block text-xs text-ecorce-300">{s.sousTitre}</span>
                 </span>
-                {ambiance === s.valeur && coche}
+                {saison === s.valeur && coche}
               </button>
             ))}
             <div className="my-1.5 border-t border-ecorce-800" />
             <button
               type="button"
-              role="menuitemradio"
-              aria-checked={ambiance === "nb"}
+              role="menuitemcheckbox"
+              aria-checked={nuit}
               onClick={() => {
-                passeEnNoirEtBlanc();
+                basculeNuit();
                 setOuvert(false);
               }}
               className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-ecorce-800 focus-visible:bg-ecorce-800 focus-visible:outline-none"
             >
+              {/* La lampe dans la nuit : un point d'or sur l'encre. */}
               <span
                 aria-hidden="true"
                 className="h-3 w-3 shrink-0 border border-black/25"
-                style={{ background: "linear-gradient(90deg, #241d13 50%, #fdf8f5 50%)" }}
+                style={{
+                  background: "radial-gradient(circle at 32% 32%, #ffc107 0 26%, #171008 30%)",
+                }}
               />
               <span className="min-w-0 flex-1">
-                <span className="block text-sm text-fleur-100">Noir et blanc</span>
-                <span className="block text-xs text-ecorce-300">l’édition imprimée</span>
+                <span className="block text-sm text-fleur-100">Nuit</span>
+                <span className="block text-xs text-ecorce-300">
+                  la lecture à la lampe, dans la saison en cours
+                </span>
               </span>
-              {ambiance === "nb" && coche}
+              {nuit && coche}
             </button>
           </div>
         </>

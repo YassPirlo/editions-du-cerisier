@@ -4,7 +4,7 @@ import { Cerise } from "@/components/Cerisier";
 /* La cerise est tombée de la branche : la page demandée n'est plus là. */
 export default function NotFound() {
   return (
-    <div className="flex min-h-[70vh] items-center bg-ecorce-950 text-fleur-100">
+    <div className="deja-nuit flex min-h-[70vh] items-center bg-ecorce-950 text-fleur-100">
       <div className="mx-auto flex max-w-xl flex-col items-center px-4 py-24 text-center sm:px-6">
         <Cerise
           filled

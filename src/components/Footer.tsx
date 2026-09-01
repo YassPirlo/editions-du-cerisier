@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BasculeEncre } from "@/components/BasculeEncre";
+import { BasculeNuit } from "@/components/BasculeNuit";
 import { Branche } from "@/components/Cerisier";
 import { collections } from "@/lib/content";
 import { CONTACT } from "@/lib/nav";
@@ -12,7 +12,7 @@ import { CherryLogo } from "./CherryLogo";
  */
 export function Footer() {
   return (
-    <footer className="relative mt-24 overflow-hidden border-t border-ecorce-800 bg-ecorce-950 text-fleur-200">
+    <footer className="deja-nuit relative mt-24 overflow-hidden border-t border-ecorce-800 bg-ecorce-950 text-fleur-200">
       <div
         className="pointer-events-none absolute -top-24 -right-24 h-[20rem] w-[44rem] text-ecorce-900"
         aria-hidden="true"
@@ -92,7 +92,7 @@ export function Footer() {
             <Link href="/confidentialite" className="hover:text-fleur-100">
               Confidentialité
             </Link>
-            <BasculeEncre />
+            <BasculeNuit />
           </div>
         </div>
       </div>

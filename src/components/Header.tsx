@@ -40,7 +40,7 @@ export function Header() {
   const isActive = (href: string) => href === actif;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-ecorce-800 bg-ecorce-950/95 text-fleur-100 backdrop-blur">
+    <header className="deja-nuit sticky top-0 z-50 border-b border-ecorce-800 bg-ecorce-950/95 text-fleur-100 backdrop-blur">
       <div className="mx-auto flex h-18 max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <Link
           href="/"

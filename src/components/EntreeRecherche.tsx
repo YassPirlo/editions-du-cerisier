@@ -71,9 +71,12 @@ export function EntreeRecherche({
       return;
     }
     const style = getComputedStyle(input);
+    /* L'encre des particules est celle du champ : crème sur les champs
+       de nuit, encre sur le papier du jour. */
+    const teinte = style.color || "#241d13";
     encre.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
     encre.textBaseline = "middle";
-    encre.fillStyle = "#241d13";
+    encre.fillStyle = teinte;
     encre.fillText(requete, parseFloat(style.paddingLeft) || 16, cadre.height / 2);
 
     const pixels = encre.getImageData(0, 0, canvas.width, canvas.height).data;
@@ -116,7 +119,7 @@ export function EntreeRecherche({
         if (p.vie <= 0 || p.x < -4) continue;
         vivantes++;
         encre.globalAlpha = Math.max(0, p.vie);
-        encre.fillStyle = "#241d13";
+        encre.fillStyle = teinte;
         encre.beginPath();
         encre.arc(p.x, p.y, p.r * p.vie, 0, Math.PI * 2);
         encre.fill();

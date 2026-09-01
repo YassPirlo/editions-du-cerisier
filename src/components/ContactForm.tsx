@@ -9,12 +9,10 @@ const field =
 const label = "block text-sm font-medium text-ecorce-700";
 
 /* Les enseignes des deux messageries, redessinées à l'économie — juste ce
-   qu'il faut de silhouette pour être reconnues d'un coup d'œil. La classe
-   icone-marque les fait passer au gris avec l'édition noir et blanc :
-   leurs couleurs sont en dur, les jetons ne les rattrapent pas. */
+   qu'il faut de silhouette pour être reconnues d'un coup d'œil. */
 function IconeOutlook() {
   return (
-    <svg viewBox="0 0 24 24" className="icone-marque h-4 w-4 shrink-0" aria-hidden="true">
+    <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" aria-hidden="true">
       <path fill="#28a8ea" d="M9 5h13l-6.5 4.7Z" />
       <path fill="#0078d4" d="M9 7.2 15.5 11 22 7.2V17a1.6 1.6 0 0 1-1.6 1.6H9Z" />
       <rect x="1" y="4.4" width="12.6" height="15.2" rx="1.4" fill="#0f6cbd" />
@@ -25,7 +23,7 @@ function IconeOutlook() {
 
 function IconeGmail() {
   return (
-    <svg viewBox="0 0 48 36" className="icone-marque h-3.5 w-auto shrink-0" aria-hidden="true">
+    <svg viewBox="0 0 48 36" className="h-3.5 w-auto shrink-0" aria-hidden="true">
       <path fill="#4285f4" d="M3.3 36h7.4V17.8L0 9.8v22.9C0 34.5 1.5 36 3.3 36Z" />
       <path fill="#34a853" d="M37.3 36h7.4c1.8 0 3.3-1.5 3.3-3.3V9.8l-10.7 8Z" />
       <path fill="#fbbc04" d="M37.3 3.3v14.5L48 9.8V5c0-4.1-4.7-6.4-8-4Z" />

@@ -59,10 +59,10 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
-  /* suppressHydrationWarning : le serveur ne connaît pas la préférence
-     noir et blanc — data-encre est posé avant l'hydratation par le script
-     en tête de body, et React s'alarmerait de cet attribut qu'il n'a pas
-     peint lui-même. L'écart est voulu, l'attribut reste en place. */
+  /* suppressHydrationWarning : le serveur ne connaît pas l'ambiance du
+     lecteur — data-saison et data-nuit sont posés avant l'hydratation par
+     le script en tête de body, et React s'alarmerait de ces attributs
+     qu'il n'a pas peints lui-même. L'écart est voulu, ils restent. */
   return (
     <html
       lang="fr"
@@ -70,15 +70,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="flex min-h-dvh flex-col font-sans">
-        {/* L'ambiance — saison du verger et édition noir et blanc —
-            rétablie avant le premier coup de pinceau : les choix dorment
-            dans le navigateur (localStorage), ce script les réveille
-            avant que la page ne se peigne — sans lui, elle arriverait en
-            été puis se raviserait d'un éclair. Voir lib/ambiance.ts,
-            ChoixSaison.tsx et globals.css. */}
+        {/* L'ambiance — saison du verger et nuit — rétablie avant le
+            premier coup de pinceau : les choix dorment dans le navigateur
+            (localStorage), ce script les réveille avant que la page ne se
+            peigne — sans lui, elle arriverait en plein été puis se
+            raviserait d'un éclair. Voir lib/ambiance.ts, ChoixSaison.tsx
+            et globals.css. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var s=localStorage.getItem("cerisier-saison");if(s==="printemps"||s==="automne"||s==="hiver")document.documentElement.dataset.saison=s;if(localStorage.getItem("cerisier-encre")==="nb")document.documentElement.dataset.encre="nb"}catch(e){}`,
+            __html: `try{var s=localStorage.getItem("cerisier-saison");if(s==="printemps"||s==="automne"||s==="hiver")document.documentElement.dataset.saison=s;if(localStorage.getItem("cerisier-nuit")==="nuit")document.documentElement.dataset.nuit=""}catch(e){}`,
           }}
         />
         <a

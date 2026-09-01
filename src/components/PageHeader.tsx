@@ -17,7 +17,7 @@ export function PageHeader({
   breadcrumb?: { label: string; href: string }[];
 }) {
   return (
-    <div className="relative overflow-hidden border-b border-ecorce-800 bg-ecorce-950 text-fleur-100">
+    <div className="deja-nuit relative overflow-hidden border-b border-ecorce-800 bg-ecorce-950 text-fleur-100">
       {/* La branche se trace à l'or sur l'encre : le bandeau historique de
           la maison, or sur brun, devenu geste. */}
       <div

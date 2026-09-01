@@ -1,5 +1,5 @@
 /**
- * L'ambiance du site — deux axes qui ne se marchent pas dessus :
+ * L'ambiance du site — deux axes qui se croisent sans se gêner :
  *
  * la SAISON (data-saison) tourne la frondaison : printemps en fleur, été
  * de la récolte (la base, sans attribut), automne cuivré, hiver sous
@@ -7,9 +7,11 @@
  * feuille, fleur) — l'écorce, elle, ne change jamais : le bois demeure,
  * et avec lui l'encre du texte et la lisibilité (globals.css).
  *
- * l'ENCRE (data-encre="nb") est l'édition noir et blanc, posée par-dessus
- * n'importe quelle saison. Choisir une saison depuis le menu rend les
- * couleurs ; le pied de page garde sa bascule rapide.
+ * la NUIT (data-nuit) éteint le jour : le papier rejoint l'encre de la
+ * saison en cours, le texte devient crème, l'or des accents reste
+ * allumé. Elle se combine avec chaque saison — nuit de prune au
+ * printemps, encre chaude en été, braise sous la cendre en automne,
+ * bleu de minuit en hiver.
  *
  * Tout passe par ici : le menu de l'en-tête, la bascule du pied de page
  * et le script d'avant-peinture du layout lisent et écrivent les mêmes
@@ -17,7 +19,6 @@
  */
 
 export type Saison = "printemps" | "ete" | "automne" | "hiver";
-export type Ambiance = Saison | "nb";
 
 /* Les pastilles du menu montrent chaque saison par sa cerise — en dur,
    forcément : les jetons ne connaissent que la saison en cours. */
@@ -34,7 +35,7 @@ export const SAISONS: {
 ];
 
 const CLE_SAISON = "cerisier-saison";
-const CLE_ENCRE = "cerisier-encre";
+const CLE_NUIT = "cerisier-nuit";
 const EVENEMENT = "cerisier-ambiance";
 
 const estSaison = (v: unknown): v is Saison =>
@@ -45,14 +46,8 @@ export function lisSaison(): Saison {
   return estSaison(posee) ? posee : "ete";
 }
 
-export function lisEncre(): boolean {
-  return document.documentElement.dataset.encre === "nb";
-}
-
-/* Ce que le menu affiche comme actif : le noir et blanc quand il couvre
-   tout, la saison sinon. */
-export function lisAmbiance(): Ambiance {
-  return lisEncre() ? "nb" : lisSaison();
+export function lisNuit(): boolean {
+  return document.documentElement.dataset.nuit !== undefined;
 }
 
 function notifie() {
@@ -77,28 +72,21 @@ function retiens(cle: string, valeur: string | null) {
   }
 }
 
+/* Changer de saison ne touche pas à la nuit : on peut feuilleter les
+   quatre nuits comme les quatre jours. */
 export function choisisSaison(saison: Saison) {
   const racine = document.documentElement;
   if (saison === "ete") delete racine.dataset.saison;
   else racine.dataset.saison = saison;
-  /* Revenir à une saison, c'est demander ses couleurs : l'édition noir
-     et blanc se retire d'elle-même. */
-  delete racine.dataset.encre;
   retiens(CLE_SAISON, saison === "ete" ? null : saison);
-  retiens(CLE_ENCRE, null);
   notifie();
 }
 
-export function passeEnNoirEtBlanc() {
-  document.documentElement.dataset.encre = "nb";
-  retiens(CLE_ENCRE, "nb");
-  notifie();
-}
-
-export function basculeNoirEtBlanc() {
-  const versNb = !lisEncre();
-  if (versNb) document.documentElement.dataset.encre = "nb";
-  else delete document.documentElement.dataset.encre;
-  retiens(CLE_ENCRE, versNb ? "nb" : null);
+export function basculeNuit() {
+  const racine = document.documentElement;
+  const versLaNuit = !lisNuit();
+  if (versLaNuit) racine.dataset.nuit = "";
+  else delete racine.dataset.nuit;
+  retiens(CLE_NUIT, versLaNuit ? "nuit" : null);
   notifie();
 }
