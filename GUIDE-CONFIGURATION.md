@@ -17,8 +17,12 @@ Un seul mot de passe, celui de la maison. Il ouvre `/admin` : le CMS
    remplace le mot de passe d'essai :
 
    ```
-   ADMIN_PASSWORD=une-phrase-longue-et-a-toi
+   ADMIN_PASSWORD="une-phrase-longue-et-a-toi"
    ```
+
+   Garde les guillemets : sans eux, un `#` dans le mot de passe est pris
+   pour le début d'un commentaire et tout ce qui suit est ignoré — le
+   mot de passe serait alors refusé sans que rien ne l'explique.
 
 2. Lance le site et va sur `http://localhost:3000/admin/` :
 
