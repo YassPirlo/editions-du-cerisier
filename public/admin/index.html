@@ -10,107 +10,12 @@
          viserait la racine du site. -->
     <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
     <style>
-      /* La porte de l'arrière-boutique, aux couleurs de la maison. Un seul
-         mot de passe — celui posé dans ADMIN_PASSWORD — vérifié par la
-         route /api/admin/session, qui pose un cookie signé de sept jours. */
-      .porte * { box-sizing: border-box; }
-      .porte {
-        position: fixed;
-        inset: 0;
-        z-index: 100;
-        display: flex;
-        overflow-y: auto;
-        padding: 1.5rem;
-        background: #fdf8f5;
-        color: #241d13;
-        font-family: ui-sans-serif, system-ui, sans-serif;
-        line-height: 1.6;
-      }
-      .porte-carte {
-        margin: auto;
-        width: 100%;
-        max-width: 22rem;
-        border-top: 4px solid #ffc107;
-        background: #fff;
-        box-shadow: 0 22px 45px rgba(36, 29, 19, 0.14);
-        padding: 2.1rem 1.9rem 2.2rem;
-      }
-      .porte h1 {
-        margin: 0.9rem 0 0;
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: 1.6rem;
-        font-weight: 600;
-        line-height: 1.15;
-      }
-      .porte p { margin: 0.55rem 0 0; font-size: 0.9rem; color: #6f5838; }
-      .porte label {
-        display: block;
-        margin-top: 1.15rem;
-        font-size: 0.7rem;
-        font-weight: 700;
-        letter-spacing: 0.13em;
-        text-transform: uppercase;
-        color: #6f5838;
-      }
-      .porte input {
-        width: 100%;
-        margin-top: 0.45rem;
-        border: 1px solid #bfa483;
-        background: #fff;
-        padding: 0.65rem 0.9rem;
-        font: inherit;
-        color: #241d13;
-      }
-      .porte input:focus-visible,
-      .porte button:focus-visible {
-        outline: 2px solid #ffc107;
-        outline-offset: 2px;
-      }
-      .porte button {
-        width: 100%;
-        margin-top: 1.4rem;
-        border: 0;
-        background: #ffc107;
-        padding: 0.8rem 1rem;
-        font-size: 0.72rem;
-        font-weight: 800;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: #241d13;
-        cursor: pointer;
-        transition: background 0.15s;
-      }
-      .porte button:hover { background: #ffd75c; }
-      .porte button[disabled] { opacity: 0.6; cursor: default; }
-      .porte-erreur {
-        margin-top: 1rem;
-        border-left: 4px solid #a5112b;
-        background: #fdf1f0;
-        padding: 0.6rem 0.85rem;
-        font-size: 0.86rem;
-        color: #7d1c22;
-      }
-      .cerises { display: inline-flex; gap: 4px; }
-      .cerises span { width: 9px; height: 9px; border-radius: 50%; background: #a5112b; }
-      .cerises span + span { background: #ffc107; }
-      .cache { display: none !important; }
-      .bandeau-local {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 90;
-        background: #171008;
-        color: #f7ece5;
-        font: 0.78rem ui-sans-serif, system-ui, sans-serif;
-        padding: 0.35rem 0.9rem;
-        text-align: center;
-      }
       /* Les outils se rangent en bas à GAUCHE : le coin droit est occupé
          par le badge de l'hébergeur, qui recouvrait « Fréquentation ». */
       .outil {
         position: fixed;
         bottom: 1rem;
+        left: 1rem;
         z-index: 99999;
         background: #171008;
         color: #f7ece5;
@@ -126,134 +31,44 @@
     </style>
   </head>
   <body>
+    <!--
+      La porte est désormais celle de Decap, ouverte par DecapBridge : la
+      maison se connecte avec son adresse de courriel et son mot de passe,
+      et DecapBridge écrit dans le dépôt à sa place.
+
+      Cette page portait auparavant un écran de connexion sur mesure, adossé
+      à /api/admin/session et au guichet /api/cms. Ce guichet écrivait sur le
+      disque du serveur ; en ligne ce disque est en lecture seule, et les
+      enregistrements se perdaient en silence. L'écran de Decap, ouvert par
+      DecapBridge, le remplace : ce qui est enregistré part dans le dépôt.
+
+      L'ancienne version reste dans l'historique du dépôt :
+      git show HEAD:public/admin/index.html
+    -->
+    <script src="https://unpkg.com/decap-cms@%5E3.8.3/dist/decap-cms.js"></script>
     <script>
-      /* Le CMS attendra qu'on lui ouvre : la porte décide d'abord. */
-      window.CMS_MANUAL_INIT = true;
+      CMS.registerPreviewStyle("/admin/preview.css");
     </script>
 
-    <div id="porte" class="porte cache" role="main">
-      <div class="porte-carte">
-        <span class="cerises" aria-hidden="true"><span></span><span></span></span>
-        <h1>L’arrière-boutique</h1>
-        <p>L’espace de la maison : le catalogue s’y tient à jour, la
-        fréquentation s’y consulte.</p>
-        <form id="f-porte">
-          <label for="mdp">Mot de passe</label>
-          <input id="mdp" type="password" autocomplete="current-password" required />
-          <p id="porte-erreur" class="porte-erreur cache" role="alert"></p>
-          <button id="entrer" type="submit">Entrer</button>
-        </form>
-      </div>
-    </div>
-
+    <!-- Les chiffres de fréquentation vivent dans leur propre page : le lien
+         n'apparaît qu'une fois le CMS ouvert, pour ne pas s'afficher
+         par-dessus l'écran de connexion. -->
     <script>
-      /**
-       * La porte : un mot de passe, celui de la maison (ADMIN_PASSWORD dans
-       * les variables d'environnement — pas de comptes, pas d'adresses,
-       * aucun service extérieur). La session tient sept jours dans un
-       * cookie signé ; le CMS écrit ensuite les fichiers par le guichet
-       * /api/cms, qui exige la même session.
-       *
-       * Une seule porte, la même partout — sur le poste de travail comme
-       * sur le site en ligne : il n'y a qu'un mot de passe à connaître.
-       */
       (function () {
         "use strict";
-        var porte = document.getElementById("porte");
-
-        function erreur(texte) {
-          var el = document.getElementById("porte-erreur");
-          el.classList.toggle("cache", !texte);
-          if (texte) el.textContent = texte;
-        }
-
-        function bouton(texte, gauche, action) {
-          var el = document.createElement(typeof action === "string" ? "a" : "button");
-          el.className = "outil";
-          el.style.left = gauche;
-          el.textContent = texte;
-          if (typeof action === "string") el.href = action;
-          else el.addEventListener("click", action);
-          document.body.appendChild(el);
-        }
-
-        /* Le CMS demande encore un clic pour « entrer » : son guichet
-           n'ayant pas de compte à vérifier, le clic n'a plus de sens —
-           on le donne pour l'éditeur, une fois, dès que le bouton paraît. */
-        function passeLaFormalite() {
-          var essais = 0;
-          var minuterie = setInterval(function () {
-            var bouton = document.querySelector("#nc-root button, #nc-root [role=button]");
-            if (bouton && /connecter|login/i.test(bouton.textContent || "")) {
-              bouton.click();
-              clearInterval(minuterie);
-            } else if (++essais > 40) {
-              clearInterval(minuterie);
-            }
-          }, 150);
-        }
-
-        function ouvreCms() {
-          porte.classList.add("cache");
-          if (window.CMS) {
-            window.CMS.init();
-            passeLaFormalite();
-          }
-          bouton("Fréquentation", "1rem", "/admin/stats.html");
-          bouton("Se déconnecter", "11.5rem", function () {
-            fetch("/api/admin/session", { method: "DELETE" }).finally(function () {
-              try {
-                localStorage.removeItem("decap-cms.user");
-              } catch (e) {}
-              location.replace(location.pathname);
-            });
-          });
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-          fetch("/api/admin/session")
-            .then(function (r) {
-              if (r.status === 204) ouvreCms();
-              else porte.classList.remove("cache");
-            })
-            .catch(function () {
-              porte.classList.remove("cache");
-              erreur("La porte ne répond pas — le serveur du site tourne-t-il ?");
-            });
-
-          document.getElementById("f-porte").addEventListener("submit", function (e) {
-            e.preventDefault();
-            erreur(null);
-            var bouton = document.getElementById("entrer");
-            bouton.disabled = true;
-            fetch("/api/admin/session", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ motDePasse: document.getElementById("mdp").value }),
-            })
-              .then(function (r) {
-                if (r.status === 204) {
-                  location.replace(location.pathname);
-                  return;
-                }
-                return r.json().catch(function () { return {}; }).then(function (corps) {
-                  erreur(corps.erreur || "La connexion n’a pas abouti (" + r.status + ").");
-                });
-              })
-              .catch(function () {
-                erreur("La porte ne répond pas — réessayez dans un instant.");
-              })
-              .finally(function () {
-                bouton.disabled = false;
-              });
-          });
+        if (!window.CMS || !CMS.registerEventListener) return;
+        CMS.registerEventListener({
+          name: "login",
+          handler: function () {
+            if (document.querySelector(".outil")) return;
+            var lien = document.createElement("a");
+            lien.className = "outil";
+            lien.href = "/admin/stats.html";
+            lien.textContent = "Fréquentation";
+            document.body.appendChild(lien);
+          },
         });
       })();
-    </script>
-
-    <script src="https://unpkg.com/decap-cms@%5E3.0.0/dist/decap-cms.js"></script>
-    <script>
-      CMS.registerPreviewStyle("preview.css");
     </script>
   </body>
 </html>

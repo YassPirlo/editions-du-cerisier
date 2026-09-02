@@ -109,10 +109,30 @@
       </div>
     </div>
 
+    <script src="./services.js"></script>
     <script>
       (function () {
         "use strict";
         var $ = function (id) { return document.getElementById(id); };
+
+        var POINT = window.POINT_FREQUENTATION || "/api/frequentation";
+
+        /* Le mot de passe des chiffres, retenu par le navigateur de la
+           maison pour ne pas le redemander à chaque visite. Il ne donne
+           accès qu'aux compteurs — aucune donnée personnelle derrière. */
+        var CLE = "cerisier-mot-de-passe-chiffres";
+        function motDePasse() {
+          try { return localStorage.getItem(CLE) || ""; } catch (e) { return ""; }
+        }
+        function retiens(valeur) {
+          try { valeur ? localStorage.setItem(CLE, valeur) : localStorage.removeItem(CLE); } catch (e) {}
+        }
+        function demande() {
+          var saisi = window.prompt("Mot de passe des chiffres :");
+          if (saisi === null) return false;
+          retiens(saisi.trim());
+          return true;
+        }
 
         function message(texte, rouge) {
           var el = $("message");
@@ -181,13 +201,31 @@
           $("contenu").classList.remove("cache");
         }
 
-        function charge() {
+        /* « redemande » vaut faux au second passage : si le mot de passe
+           fraîchement saisi est refusé lui aussi, on s'arrête là plutôt que
+           de rouvrir la fenêtre indéfiniment. */
+        function charge(redemande) {
           message(null);
-          /* La session est le cookie signé de la porte : le navigateur le
-             joint tout seul. */
-          fetch("/api/frequentation")
+
+          var mot = motDePasse();
+          if (!mot && redemande !== false) {
+            if (!demande()) {
+              message("Les chiffres demandent un mot de passe.", true);
+              return;
+            }
+            mot = motDePasse();
+          }
+
+          /* Le mot de passe voyage en en-tête, jamais dans l'adresse : une
+             adresse se retrouve dans l'historique et les journaux du
+             serveur, pas un en-tête. */
+          fetch(POINT, { headers: mot ? { Authorization: "Bearer " + mot } : {} })
             .then(function (r) { return r.json().then(function (corps) { return { ok: r.ok, statut: r.status, corps: corps }; }); })
             .then(function (r) {
+              if (r.statut === 401) {
+                retiens("");
+                if (redemande !== false && demande()) { charge(false); return; }
+              }
               if (!r.ok) {
                 message(r.corps && r.corps.erreur ? r.corps.erreur : "Les chiffres ne répondent pas (" + r.statut + ").", r.statut === 401);
                 return;
@@ -199,7 +237,9 @@
             });
         }
 
-        $("rafraichir").addEventListener("click", charge);
+        /* Sans l'enveloppe, le clic passerait l'événement en argument — et
+           un objet Event n'est pas « false ». */
+        $("rafraichir").addEventListener("click", function () { charge(); });
         charge();
       })();
     </script>

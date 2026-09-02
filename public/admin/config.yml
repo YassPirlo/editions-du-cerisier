@@ -4,16 +4,33 @@
 # scripts/construire-donnees.mjs les retransforme en src/data/*.json.
 # Le champ « ordre » pilote l'ordre d'affichage (pas de tirer-déposer).
 
-# Le CMS écrit par notre propre guichet (/api/cms), gardé par le mot de
-# passe de la maison — aucun compte, aucun service extérieur. Le guichet
-# pose les fichiers de content/ et refait les données du site dans la
-# foulée (voir src/app/api/cms/route.ts).
+# Notre guichet maison (/api/cms) écrivait sur le disque du serveur : en
+# ligne ce disque est en lecture seule, et les enregistrements se perdaient
+# en silence. Les modifications passent donc par le dépôt, et DecapBridge
+# tient la porte : la maison se connecte avec une adresse de courriel et un
+# mot de passe, sans avoir à ouvrir de compte ailleurs. Chaque
+# enregistrement écrit dans content/ et relance la reconstruction du site.
 backend:
-  name: proxy
-  proxy_url: /api/cms
+  name: git-gateway
+  repo: YassPirlo/editions-du-cerisier
   branch: main
+  identity_url: https://auth.decapbridge.com/sites/df67013a-c12d-4abb-a0a1-941ee16ffc93
+  gateway_url: https://gateway.decapbridge.com
+
+  # Qui a fait quoi, lisible dans l'historique du dépôt.
+  commit_messages:
+    create: "Ajout — {{collection}} « {{slug}} » — {{author-name}}"
+    update: "Modification — {{collection}} « {{slug}} » — {{author-name}}"
+    delete: "Suppression — {{collection}} « {{slug}} » — {{author-name}}"
+    uploadMedia: "Ajout de l’image « {{path}} » — {{author-name}}"
+    deleteMedia: "Retrait de l’image « {{path}} » — {{author-name}}"
+    openAuthoring: "{{message}} — {{author-name}}"
 
 locale: "fr"
+
+# L'adresse du site, pour les liens « voir en ligne » de l'éditeur. À changer
+# le jour où le domaine définitif prend la place de l'adresse d'essai.
+site_url: "https://editionsducerisier.netlify.app"
 
 media_folder: "public/covers"
 public_folder: "/covers"

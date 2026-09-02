@@ -1,6 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { jetonValide, litJetonDesCookies } from "@/lib/jeton";
+import { motDePasseValide } from "@/lib/jeton";
 
 /**
  * La fréquentation, comptée par la maison elle-même — aucun service tiers.
@@ -15,7 +15,8 @@ import { jetonValide, litJetonDesCookies } from "@/lib/jeton";
  * consentement.
  *
  * GET : les agrégats pour le tableau de bord de l'admin
- * (public/admin/stats.html), réservés à la session de la maison.
+ * (public/admin/stats.html), réservés à la maison — le mot de passe voyage
+ * dans l'en-tête Authorization, jamais dans l'adresse.
  *
  * Les comptes sont rangés en fichiers, à côté du site (dossier .data, ou
  * celui que désigne STATS_DIR) : rien à ouvrir, rien à payer. Sur un
@@ -175,13 +176,21 @@ const tri = (table: Compteurs, garde: number) =>
     .sort((a, b) => b[1] - a[1])
     .slice(0, garde);
 
+/* Le mot de passe des chiffres, tel que public/admin/stats.html le
+   transmet — le même geste que serveur/frequentation.php, pour que le
+   tableau de bord se comporte pareil en développement et en ligne. */
+function motDePasseDeLEntete(entetes: Headers): string | null {
+  const trouve = (entetes.get("authorization") ?? "")
+    .trim()
+    .match(/^Bearer\s+(.+)$/i);
+  return trouve ? trouve[1] : null;
+}
+
 export async function GET(request: Request) {
-  /* Réservé à la maison : le cookie de session signé de la porte
-     (/api/admin/session) fait foi — pas de session, pas de chiffres. */
-  const connecte = await jetonValide(litJetonDesCookies(request.headers));
-  if (!connecte) {
+  const essai = motDePasseDeLEntete(request.headers);
+  if (!essai || !(await motDePasseValide(essai))) {
     return Response.json(
-      { erreur: "Session requise ou expirée — repassez par la porte de l’admin." },
+      { erreur: "Mot de passe requis pour consulter les chiffres." },
       { status: 401 },
     );
   }
