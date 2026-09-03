@@ -52,22 +52,37 @@
 
     <!-- Les chiffres de fréquentation vivent dans leur propre page : le lien
          n'apparaît qu'une fois le CMS ouvert, pour ne pas s'afficher
-         par-dessus l'écran de connexion. -->
+         par-dessus l'écran de connexion.
+
+         Decap n'annonce pas la connexion : ses seuls événements portent sur
+         l'enregistrement et la publication d'une fiche. On lit donc l'écran
+         lui-même. Une fois la porte passée, Decap dresse sa colonne de
+         collections, dont les liens mènent à « #/collections/… » ; cette
+         adresse fait partie de son plan de route, et bouge donc moins que
+         ses noms de classes, engendrés à la volée. Se déconnecter ramène
+         l'écran de connexion : le lien s'efface alors de lui-même. -->
     <script>
       (function () {
         "use strict";
-        if (!window.CMS || !CMS.registerEventListener) return;
-        CMS.registerEventListener({
-          name: "login",
-          handler: function () {
-            if (document.querySelector(".outil")) return;
-            var lien = document.createElement("a");
-            lien.className = "outil";
-            lien.href = "/admin/stats.html";
-            lien.textContent = "Fréquentation";
-            document.body.appendChild(lien);
-          },
+        var SIGNE_DE_CONNEXION = 'a[href*="#/collections/"]';
+
+        function accorde() {
+          var ouvert = !!document.querySelector(SIGNE_DE_CONNEXION);
+          var lien = document.querySelector(".outil");
+          if (ouvert === !!lien) return;
+          if (!ouvert) return lien.remove();
+          lien = document.createElement("a");
+          lien.className = "outil";
+          lien.href = "/admin/stats.html";
+          lien.textContent = "Fréquentation";
+          document.body.appendChild(lien);
+        }
+
+        new MutationObserver(accorde).observe(document.body, {
+          childList: true,
+          subtree: true,
         });
+        accorde();
       })();
     </script>
   </body>
