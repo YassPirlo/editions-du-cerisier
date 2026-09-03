@@ -1,5 +1,5 @@
 ---
-title: Bienvenue aux Editions du Cerisierrr
+title: Bienvenue aux Editions du Cerisier
 ordre: 10
 ---
 
