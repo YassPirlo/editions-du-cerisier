@@ -1,6 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { motDePasseValide } from "@/lib/jeton";
+import { motDePasseValide } from "@/lib/mot-de-passe";
 
 /**
  * La fréquentation, comptée par la maison elle-même — aucun service tiers.

@@ -34,17 +34,18 @@ entièrement statique, généré au build.
 ## Administration, infolettre, statistiques
 
 - **CMS (Decap)** sur `/admin/` : la maison édite les livres, collections
-  et rubriques de `content/`. Le CMS n'écrit nulle part ailleurs que
-  chez nous — son guichet est `/api/cms` (`src/app/api/cms/route.ts`,
-  protocole du serveur de fichiers de Decap), qui pose les fichiers puis
-  refait `src/data/*.json` avec le script du build. Aucun service
-  extérieur, aucun dépôt distant : `npm run dev` suffit.
-- **Authentification** : un seul mot de passe, celui de la maison, posé
-  dans `ADMIN_PASSWORD` — pas de comptes ni d'adresses. La porte de
-  `public/admin/index.html` le vérifie via `/api/admin/session`
-  (comparaison en temps constant, cookie signé de sept jours,
-  `src/lib/jeton.ts`) ; la même session garde le guichet du CMS et les
-  statistiques. Pas-à-pas dans `GUIDE-CONFIGURATION.md`.
+  et rubriques de `content/`. Chaque enregistrement part dans le dépôt et
+  relance la construction du site. Un guichet maison écrivait autrefois
+  ces fichiers directement, mais le disque de l'hébergeur est en lecture
+  seule : les enregistrements s'y perdaient en silence.
+- **Authentification du CMS** : DecapBridge tient la porte
+  (`identity_url` dans `public/admin/config.yml`). La maison se connecte
+  avec une adresse de courriel et un mot de passe, sans compte à ouvrir
+  ailleurs, et l'historique du dépôt dit qui a fait quoi.
+- **Authentification des chiffres** : la page de fréquentation porte son
+  propre mot de passe, celui de `ADMIN_PASSWORD`, transmis en en-tête
+  `Authorization` et vérifié en temps constant (`src/lib/mot-de-passe.ts`).
+  Pas-à-pas dans `GUIDE-CONFIGURATION.md`.
 - **Infolettre** : le pop-up « La lettre du Cerisier » poste vers
   `/api/infolettre`, qui range l'adresse dans la liste Brevo de la maison
   (clé côté serveur, pot de miel, réponses en français) — les campagnes
