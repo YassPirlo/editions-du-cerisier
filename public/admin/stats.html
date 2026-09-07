@@ -95,6 +95,10 @@
               <table id="table-pays"></table>
             </div>
             <div class="carte">
+              <h2>Sur quel appareil</h2>
+              <table id="table-appareils"></table>
+            </div>
+            <div class="carte">
               <h2>Ils arrivent de…</h2>
               <table id="table-provenances"></table>
             </div>
@@ -160,6 +164,17 @@
           try { return (nomsPays && nomsPays.of(code)) || code; } catch (e) { return code; }
         }
 
+        /* Les trois cases telles que le serveur les nomme, rendues à la
+           langue de la maison — et à un dessin, qui se lit plus vite. */
+        var APPAREILS = {
+          ordinateur: "🖥️ Ordinateur",
+          mobile: "📱 Téléphone",
+          tablette: "📖 Tablette",
+        };
+        function nomAppareil(clef) {
+          return APPAREILS[clef] || clef;
+        }
+
         function table(id, lignes, libelle) {
           var t = $(id);
           t.innerHTML = "";
@@ -197,6 +212,7 @@
 
           table("table-pages", d.pages);
           table("table-pays", d.pays, function (code) { return drapeau(code) + " " + nomPays(code); });
+          table("table-appareils", d.appareils || [], nomAppareil);
           table("table-provenances", d.provenances);
           $("contenu").classList.remove("cache");
         }

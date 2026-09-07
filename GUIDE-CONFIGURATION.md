@@ -95,11 +95,15 @@ glisser-déposer (couverture, deux phrases, lien vers la fiche) →
 ## Étape 4 — Les statistiques (rien à créer)
 
 La fréquentation est comptée **par le site lui-même**. Chaque page lue
-dépose un signal minuscule, rangé en fichiers à côté du site (dossier
-`.data`, ou celui que désigne `STATS_DIR`) : jours, pages les plus lues,
-pays quand le serveur le renseigne, provenances. Pas de cookies ni de
-données personnelles (les visiteurs sont comptés par une empreinte
-anonyme qui change chaque nuit) — donc pas de bannière de consentement.
+dépose un signal minuscule : jours, pages les plus lues, pays quand le
+serveur le renseigne, provenances. Pas de cookies ni de données
+personnelles (les visiteurs sont comptés par une empreinte anonyme qui
+change chaque nuit) — donc pas de bannière de consentement.
+
+Ces comptes se rangent dans le magasin de l'hébergeur, qui les garde
+d'un déploiement à l'autre : rien à créer, rien à payer. Sur la machine
+de qui développe, où ce magasin n'existe pas, ils retombent dans des
+fichiers (dossier `.data`, ou celui que désigne `STATS_DIR`).
 
 Les chiffres se lisent **dans l'administration** : bouton
 « Fréquentation » en bas à droite du CMS, ou `…/admin/stats.html`.
@@ -120,8 +124,7 @@ Les chiffres se lisent **dans l'administration** : bouton
 | Réglage | Rôle | Où le trouver |
 |---|---|---|
 | `ADMIN_PASSWORD` | ouvre `/admin` (CMS + statistiques) | toi |
-| `SESSION_SECRET` | signe les sessions (facultatif) | une longue phrase de ton cru |
 | `BREVO_API_KEY` | inscriptions à l'infolettre | Brevo → SMTP & API |
 | `BREVO_LIST_ID` | numéro de la liste | Brevo → Contacts → Listes |
-| `STATS_DIR` | où ranger les comptes (facultatif) | un dossier du serveur |
+| `STATS_DIR` | où ranger les comptes en développement (facultatif) | un dossier de ta machine |
 | `STATS_SEL` | sel des empreintes anonymes (facultatif) | une longue phrase |

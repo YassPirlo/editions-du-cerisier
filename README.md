@@ -25,7 +25,8 @@ datée du 19 août 2026 (`src/data/`) sert de copie de référence.
 Next.js (App Router), React, TypeScript, Tailwind CSS v4 — les jetons de
 couleur vivent dans le bloc `@theme` de `src/app/globals.css`, il n'y a pas de
 `tailwind.config.js`. Les dépendances de production restent comptées :
-`gray-matter` + `marked` (le contenu Markdown au build) et, exception
+`gray-matter` + `marked` (le contenu Markdown au build), `@netlify/blobs`
+(le magasin où se rangent les comptes de fréquentation) et, exception
 assumée, `three` + `@react-three/fiber` + `@react-three/drei` — le livre en
 main des fiches (`VitrineLivre.tsx`), chargé dynamiquement sur ces pages
 seulement, avec le volume CSS en affiche et en repli. Le site public reste
@@ -58,7 +59,8 @@ entièrement statique, généré au build.
   (régénérable par `scripts/genere-partage.mjs`), sitemap et robots tenus.
 - **Fréquentation** : comptée par la maison elle-même, sans service
   tiers — la balise (`Statistiques.tsx`) dépose chaque vue sur
-  `/api/frequentation`, qui agrège en fichiers (dossier `.data`, ou
+  `/api/frequentation`, qui agrège dans le magasin de l'hébergeur — et,
+  là où ce magasin n'existe pas, en fichiers (dossier `.data`, ou
   `STATS_DIR`) : jours, pages, pays quand le serveur de devant le
   renseigne, provenances ; visiteurs par empreinte anonyme quotidienne —
   pas de cookies ni de données personnelles, donc pas de bannière.
