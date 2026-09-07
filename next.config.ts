@@ -1,3 +1,4 @@
+import { withSentryConfig } from "@sentry/nextjs/config";
 import type { NextConfig } from "next";
 
 /* Aperçu public sur GitHub Pages : un hébergeur purement statique, qui sert
@@ -29,4 +30,25 @@ const nextConfig: NextConfig = base
       },
     };
 
-export default nextConfig;
+/* Sentry n'intervient au build que pour une chose : téléverser les plans
+   du code compilé, sans lesquels une erreur arrive illisible — « a.b is not
+   a function », ligne 1, colonne 40000. Ce téléversement demande un jeton ;
+   tant qu'il n'est pas posé chez l'hébergeur, l'étape se saute d'elle-même
+   et la surveillance fonctionne quand même, en moins lisible.
+
+   sentryUrl : le compte est hébergé dans la région européenne (le « .de. »
+   du DSN) ; l'outil viserait les États-Unis par défaut et ne trouverait pas
+   le projet. Les rapports restent donc en Europe — ce qui vaut mieux pour
+   une maison belge.
+
+   org et project sont les noms courts du compte, pas ceux du site : à
+   vérifier dans l'adresse de Sentry si un jour le téléversement refuse. */
+export default withSentryConfig(nextConfig, {
+  org: process.env.SENTRY_ORG || "yassine-vitullo",
+  project: process.env.SENTRY_PROJECT || "editions-du-cerisier",
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  sentryUrl: "https://de.sentry.io/",
+  silent: true,
+  /* Pas de statistiques d'usage renvoyées à Sentry par le build. */
+  telemetry: false,
+});
