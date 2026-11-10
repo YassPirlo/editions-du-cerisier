@@ -24,6 +24,10 @@ const fraunces = Fraunces({
   subsets: ["latin", "latin-ext"],
   variable: "--font-fraunces",
   display: "swap",
+  /* L'italique est chargée pour de bon : le chapô du héros, les citations
+     et les signatures sont composés en italique — sans ce fichier, le
+     navigateur penche le romain à la machine, et ça se voit. */
+  style: ["normal", "italic"],
   axes: ["SOFT", "WONK", "opsz"],
 });
 

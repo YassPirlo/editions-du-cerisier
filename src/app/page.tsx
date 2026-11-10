@@ -76,20 +76,28 @@ export default function Home() {
         >
           {/* Le voile : une pénombre radiale sous le texte, pour que le
               titre reste net au-dessus du défilé. */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 z-[4] bg-[radial-gradient(ellipse_55%_60%_at_50%_46%,rgba(23,16,8,0.9)_0%,rgba(23,16,8,0.45)_55%,transparent_78%)]"
-          />
           {/* L'enseigne veille sur le couloir : la branche se trace à l'or
-              au-dessus des couvertures, et dérive au défilement. */}
+              au-dessus des couvertures, et dérive au défilement. Le cadre
+              garde les proportions du dessin (4/1) : aucun fruit n'est
+              tranché par le bord. Elle passe SOUS le voile — là où elle
+              croiserait le titre, elle s'efface dans la pénombre. */}
           <div
             aria-hidden="true"
-            className="entree-opacite tempo-1 pointer-events-none absolute inset-0 z-[5] text-cerise-600/60"
+            className="entree-opacite tempo-1 pointer-events-none absolute inset-0 z-[3] text-cerise-600/70"
           >
-            <div className="branche-derive absolute -top-10 left-[-8%] h-[12rem] w-[135%] sm:-top-16 sm:h-[18rem]">
+            <div className="branche-derive absolute -top-9 left-[-40%] aspect-[4/1] w-[180%] sm:-top-24 sm:left-[-6%] sm:w-[112%] lg:-top-36">
               <Branche className="branche-trace h-full w-full" />
             </div>
           </div>
+          {/* Le voile : une pénombre pleine sous tout le bloc de texte, qui
+              ne se dissipe que vers les bords — le titre, le chapô et la
+              recherche se lisent sur l'encre, les couvertures défilent sur
+              les flancs. Sur téléphone le texte occupe toute la largeur :
+              le voile aussi. */}
+          <div
+            aria-hidden="true"
+            className="voile-heros absolute inset-0 z-[4]"
+          />
           {/* Les pétales d'avril. */}
           <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-[6]">
             {petales.map((p, i) => (
@@ -145,7 +153,7 @@ export default function Home() {
                 </span>
               </span>
             </h1>
-            <p className="entree tempo-3 mt-9 max-w-2xl font-serif text-lg leading-relaxed text-fleur-200 italic sm:text-xl">
+            <p className="entree tempo-3 mt-9 max-w-xl font-serif text-lg leading-relaxed text-pretty text-fleur-200 italic sm:text-xl">
               Petites, mais obstinées, les Éditions du Cerisier cherchent, avant
               tout, à rendre publics les livres qui relatent, imaginent,
               témoignent des peuples, de leurs cultures, de leurs luttes, de
@@ -433,7 +441,9 @@ export default function Home() {
       )}
 
       {/* Le jaune imposé garde le dernier mot. */}
-      <section className="bg-cerise-400 text-ecorce-900">
+      {/* -mb-24 : annule la marge haute du pied de page — le jaune se pose
+          directement sur l'encre, sans liseré de papier entre les deux. */}
+      <section className="-mb-24 bg-cerise-400 text-ecorce-900">
         <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-16 sm:px-6 sm:py-20 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 className="titre-verger text-3xl leading-tight sm:text-4xl">
