@@ -18,7 +18,7 @@ export function Footer() {
         className="pointer-events-none absolute -top-24 -right-24 h-[20rem] w-[44rem] text-ecorce-900"
         aria-hidden="true"
       >
-        <Branche className="h-full w-full -scale-x-100" />
+        <Branche className="branche-sourde h-full w-full -scale-x-100" />
       </div>
 
       <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 lg:grid-cols-4">

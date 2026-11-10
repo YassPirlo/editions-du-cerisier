@@ -41,17 +41,17 @@ export function Header() {
 
   return (
     <header className="deja-nuit sticky top-0 z-50 border-b border-ecorce-800 bg-ecorce-950/95 text-fleur-100 backdrop-blur">
-      <div className="mx-auto flex h-18 max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+      <div className="mx-auto flex h-18 max-w-6xl items-center justify-between gap-2 px-4 py-3 sm:gap-4 sm:px-6">
         <Link
           href="/"
-          className="flex shrink-0 items-center gap-2.5 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cerise-400"
+          className="flex min-w-0 items-center gap-2 rounded-md sm:gap-2.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cerise-400"
         >
-          <CherryLogo className="h-9 w-9 text-fleur-300" />
-          <span className="flex flex-col leading-none">
-            <span className="font-serif text-lg font-semibold tracking-tight text-fleur-50">
+          <CherryLogo className="h-8 w-8 shrink-0 text-fleur-300 sm:h-9 sm:w-9" />
+          <span className="flex min-w-0 flex-col leading-none">
+            <span className="font-serif text-base font-semibold tracking-tight whitespace-nowrap text-fleur-50 sm:text-lg">
               Éditions du Cerisier
             </span>
-            <span className="mt-0.5 text-[0.6875rem] tracking-[0.14em] text-ecorce-300 uppercase">
+            <span className="mt-0.5 text-[0.6875rem] tracking-[0.14em] whitespace-nowrap text-ecorce-300 uppercase">
               Cuesmes · Belgique
             </span>
           </span>
@@ -113,8 +113,13 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-0.5">
-          <ChoixSaison />
+        {/* Sous 380 px de large, les quatre boutons ne tiennent plus à côté
+            de l'enseigne : le choix de saison, seul réglage d'agrément,
+            cède la place à la recherche, au panier et au menu. */}
+        <div className="flex shrink-0 items-center sm:gap-0.5">
+          <span className="contents max-[379px]:hidden">
+            <ChoixSaison />
+          </span>
           <Link
             href="/recherche"
             aria-label="Chercher un livre"
@@ -136,7 +141,7 @@ export function Header() {
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
-          className="-mr-1 rounded-md p-2 text-fleur-100 transition-colors hover:bg-ecorce-900 focus-visible:outline-2 focus-visible:outline-cerise-400 lg:hidden"
+          className="-mr-2 rounded-md p-2 text-fleur-100 transition-colors hover:bg-ecorce-900 focus-visible:outline-2 focus-visible:outline-cerise-400 lg:hidden"
         >
           <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden="true">
             {open ? (

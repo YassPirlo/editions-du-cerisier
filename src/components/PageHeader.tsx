@@ -21,7 +21,7 @@ export function PageHeader({
       {/* La branche se trace à l'or sur l'encre : le bandeau historique de
           la maison, or sur brun, devenu geste. */}
       <div
-        className="pointer-events-none absolute -top-20 -right-16 h-[16rem] w-[34rem] text-cerise-600/70"
+        className="pointer-events-none absolute -top-16 -right-28 h-[9rem] w-[19rem] text-cerise-600/70 sm:-top-20 sm:-right-16 sm:h-[16rem] sm:w-[34rem]"
         aria-hidden="true"
       >
         {/* La branche se dessine à chaque arrivée sur la page (.branche-trace). */}

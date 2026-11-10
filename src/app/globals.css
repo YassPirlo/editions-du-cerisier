@@ -198,6 +198,39 @@
   border-bottom-color: var(--color-ecorce-700);
 }
 
+/* Le voile du premier écran : la pénombre où se pose le texte du héros.
+   Pleine sous le titre, le chapô et la recherche, elle ne s'éclaircit que
+   sur les flancs, là où les couvertures passent en grand. Sur téléphone, le
+   texte prend toute la largeur : le voile couvre tout et laisse le couloir
+   en filigrane. */
+.voile-heros {
+  background: radial-gradient(
+    ellipse 120% 62% at 50% 52%,
+    rgb(23 16 8 / 0.88) 0%,
+    rgb(23 16 8 / 0.82) 60%,
+    transparent 100%
+  );
+}
+@media (min-width: 40rem) {
+  .voile-heros {
+    background: radial-gradient(
+      ellipse 46% 58% at 50% 50%,
+      rgb(23 16 8 / 0.96) 0%,
+      rgb(23 16 8 / 0.92) 58%,
+      rgb(23 16 8 / 0.5) 82%,
+      transparent 100%
+    );
+  }
+}
+
+/* La branche en sourdine : au pied de page elle passe derrière les colonnes
+   de liens — les fruits y gardent leur rouge, mais éteint, pour ne pas
+   cercler un numéro de téléphone. */
+.branche-sourde circle {
+  stroke: var(--color-griotte-600);
+  opacity: 0.45;
+}
+
 /* Le couloir de couvertures ne s'affiche que si le navigateur comprend les
    unités de conteneur (cqw) : sans elles, mieux vaut pas de décor qu'un
    décor démesuré. */
